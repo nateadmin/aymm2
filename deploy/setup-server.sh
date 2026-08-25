@@ -84,7 +84,6 @@ SQL
     cat > "${env_file}" <<EOF
 DATABASE_URL=postgresql://${db_user}:${db_password}@127.0.0.1:5432/${db_name}
 EOF
-    chmod 600 "${env_file}"
     chown root:deploy "${env_file}"
     chmod 640 "${env_file}"
     log "Created ${env_file}; add DATABASE_URL to Infisical prod when ready."
@@ -108,7 +107,6 @@ INFISICAL_CLIENT_SECRET=${INFISICAL_CLIENT_SECRET}
 INFISICAL_PROJECT_ID=${INFISICAL_PROJECT_ID}
 INFISICAL_ENV=${INFISICAL_ENV}
 EOF
-    chmod 600 "${bootstrap_file}"
     chown root:deploy "${bootstrap_file}"
     chmod 640 "${bootstrap_file}"
   fi

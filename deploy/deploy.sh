@@ -6,6 +6,7 @@ APP_ROOT="/opt/${PROJECT}"
 REPO_DIR="${APP_ROOT}/repo"
 RELEASES_DIR="${APP_ROOT}/releases"
 CURRENT_LINK="${APP_ROOT}/current"
+DEPLOY_USER="deploy"
 LIVE_BRANCH="${LIVE_BRANCH:-main}"
 
 log() {
