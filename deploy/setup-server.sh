@@ -6,8 +6,7 @@ APP_ROOT="/opt/${PROJECT}"
 REPO_URL="https://github.com/nateadmin/aymm2.git"
 DEPLOY_USER="deploy"
 INFISICAL_PROJECT_ID="a8d5abac-f12d-4f70-9ba0-064c63d927f4"
-INFISICAL_ENV="prod"
-PUBLIC_KEY_FILE="/tmp/contabo_public_key.pub"
+LIVE_BRANCH="${LIVE_BRANCH:-main}"
 
 log() {
   echo "[setup-server] $*"
@@ -56,6 +55,8 @@ configure_deploy_user() {
 
   install -d -m 755 "${APP_ROOT}"
   chown "${DEPLOY_USER}:${DEPLOY_USER}" "${APP_ROOT}"
+  git config --global --add safe.directory "${APP_ROOT}/repo"
+  sudo -u "${DEPLOY_USER}" git config --global --add safe.directory "${APP_ROOT}/repo"
 }
 
 configure_postgres() {
@@ -114,6 +115,9 @@ install_repo() {
   if [[ ! -d "${APP_ROOT}/repo/.git" ]]; then
     sudo -u "${DEPLOY_USER}" git clone "${REPO_URL}" "${APP_ROOT}/repo"
   fi
+  sudo -u "${DEPLOY_USER}" git -C "${APP_ROOT}/repo" fetch origin "${LIVE_BRANCH}"
+  sudo -u "${DEPLOY_USER}" git -C "${APP_ROOT}/repo" checkout "${LIVE_BRANCH}"
+  sudo -u "${DEPLOY_USER}" git -C "${APP_ROOT}/repo" pull --ff-only origin "${LIVE_BRANCH}"
 }
 
 install_systemd() {
