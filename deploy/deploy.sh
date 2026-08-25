@@ -38,7 +38,8 @@ write_version_env() {
   sha="$(git -C "${REPO_DIR}" rev-parse HEAD)"
   umask 077
   printf 'GIT_SHA=%s\n' "${sha}" > "/etc/${PROJECT}/version.env"
-  chmod 600 "/etc/${PROJECT}/version.env"
+  chown root:deploy "/etc/${PROJECT}/version.env"
+  chmod 640 "/etc/${PROJECT}/version.env"
 }
 
 restart_service() {
