@@ -1,5 +1,12 @@
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
 import pg from 'pg';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const webDist = path.resolve(__dirname, '../../web/dist');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -30,13 +37,24 @@ app.get('/api/version', (_req, res) => {
   res.json({ version });
 });
 
-app.get('/login', (_req, res) => {
-  res.status(200).send('<!doctype html><html><body><h1>AYMM</h1><p>Login coming soon.</p></body></html>');
-});
+if (fs.existsSync(webDist)) {
+  app.use(express.static(webDist, { index: false }));
 
-app.get('/', (_req, res) => {
-  res.redirect('/login');
-});
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    return res.sendFile(path.join(webDist, 'index.html'));
+  });
+} else {
+  app.get('/login', (_req, res) => {
+    res.status(200).send('<!doctype html><html><body><h1>AYMM</h1><p>Web build missing. Run npm run build in web/.</p></body></html>');
+  });
+
+  app.get('/', (_req, res) => {
+    res.redirect('/login');
+  });
+}
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'not_found' });

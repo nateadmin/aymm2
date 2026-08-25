@@ -25,6 +25,10 @@ deploy_release() {
     --exclude .git \
     "${REPO_DIR}/" "${release_dir}/"
 
+  cd "${release_dir}/web"
+  npm ci
+  npm run build
+
   cd "${release_dir}/server"
   npm ci --omit=dev
   cd - >/dev/null
