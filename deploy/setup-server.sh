@@ -65,7 +65,7 @@ configure_postgres() {
   local db_name="${PROJECT}"
   local env_file="/etc/${PROJECT}/database.env"
 
-  install -d -m 700 "/etc/${PROJECT}"
+  install -d -m 750 -o root -g deploy "/etc/${PROJECT}"
   if [[ ! -f "${env_file}" ]]; then
     local db_password
     db_password="$(openssl rand -hex 24)"
