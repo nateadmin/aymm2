@@ -4,14 +4,14 @@ Are You My Mother (AYMM) custom stack on Contabo, rebuilt from the Base44 app in
 
 Server: 185.198.27.3 (shared with Aldvin Gomes WordPress at aldvingomes.com)
 
-Planned public URL: https://aymm.wefoundd.com (DNS must point to 185.198.27.3 before HTTPS cert issuance)
+Public URLs: https://aymm.app and https://aymmapp.com (DNS A records → 185.198.27.3)
 
 ## Stack
 
 - React web shell in `web/` (mobile bottom nav + desktop sidebar/right rail)
 - Node.js API + static SPA host on 127.0.0.1:3000 (`systemd` unit `aymm.service`)
 - PostgreSQL database `aymm` on localhost
-- Apache reverse proxy vhost for `aymm.wefoundd.com` (WordPress stays on its own vhost)
+- Apache reverse proxy vhost for `aymm.app`, `www.aymm.app`, and `aymmapp.com` (WordPress stays on `aldvingomes.com`)
 - Secrets from Infisical project AYMM, prod environment
 
 Brand identity PDFs belong in `docs/brand-identity/`. The web theme is implemented in `web/src/theme/` using those specs (colors, Patrick Hand, Kalam, button/input sizes).
@@ -57,8 +57,8 @@ Or clone the repo and run `deploy/setup-server.sh` with the Infisical machine cr
 Platform follow-up after first boot:
 
 1. Add `DATABASE_URL` from `/etc/aymm/database.env` into Infisical AYMM prod.
-2. Point DNS `aymm.wefoundd.com` to `185.198.27.3`.
-3. Run `certbot --apache -d aymm.wefoundd.com` on the server.
+2. Point DNS `@` and `www` for `aymm.app` and `aymmapp.com` to `185.198.27.3`.
+3. Run `certbot --apache -d aymm.app -d www.aymm.app -d aymmapp.com` on the server.
 
 ## Deploy
 
@@ -91,7 +91,8 @@ Agents: do not report a deploy job complete until every post-deploy URL below re
 - GET `http://127.0.0.1:3000/api/version` on server → 200, `version` equals deployed git SHA
 - GET `http://127.0.0.1:3000/Welcome` on server → 200 SPA shell
 - GET `http://127.0.0.1:3000/Home` on server → 200 SPA shell
-- After DNS + cert: GET `https://aymm.wefoundd.com/api/health` → 200
+- GET `https://aymm.app/api/health` → 200
+- GET `https://aymm.app/Welcome` → 200
 - WordPress unchanged: GET `https://aldvingomes.com/` → 200
 
 ### Log check
