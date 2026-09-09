@@ -3,6 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import pg from 'pg';
 import { fileURLToPath } from 'url';
+import authRoutes from './routes/auth.js';
+import entityRoutes from './routes/entities.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +16,7 @@ const version = process.env.GIT_SHA || 'dev';
 const databaseUrl = process.env.DATABASE_URL;
 
 app.disable('x-powered-by');
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '2mb' }));
 
 app.get('/api/health', async (_req, res) => {
   if (!databaseUrl) {
@@ -36,6 +38,9 @@ app.get('/api/health', async (_req, res) => {
 app.get('/api/version', (_req, res) => {
   res.json({ version });
 });
+
+app.use('/api/auth', authRoutes);
+app.use('/api/entities', entityRoutes);
 
 if (fs.existsSync(webDist)) {
   app.use(express.static(webDist, { index: false }));

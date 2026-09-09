@@ -31,6 +31,15 @@ deploy_release() {
 
   cd "${release_dir}/server"
   npm ci --omit=dev
+  if [[ -f /etc/${PROJECT}/database.env ]]; then
+    set -a
+    # shellcheck disable=SC1090
+    source "/etc/${PROJECT}/database.env"
+    set +a
+    npm run migrate
+  else
+    log "Skipping migrations; /etc/${PROJECT}/database.env not found"
+  fi
   cd - >/dev/null
 
   ln -sfn "${release_dir}" "${CURRENT_LINK}"
