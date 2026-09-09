@@ -14,7 +14,9 @@ Planned public URL: https://aymm.wefoundd.com (DNS must point to 185.198.27.3 be
 - Apache reverse proxy vhost for `aymm.wefoundd.com` (WordPress stays on its own vhost)
 - Secrets from Infisical project AYMM, prod environment
 
-Brand identity PDFs belong in `docs/brand-identity/`.
+Brand identity PDFs belong in `docs/brand-identity/`. The web theme is implemented in `web/src/theme/` using those specs (colors, Patrick Hand, Kalam, button/input sizes).
+
+Licensed `Two Turtle Doves` files belong in `web/public/fonts/two-turtle-doves.woff2` for splash/welcome wordmark rendering.
 
 ## Local web dev
 
