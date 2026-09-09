@@ -22,8 +22,12 @@
   --input-height: 54px;
   --bottom-nav-height: 66px;
   --shell-max-mobile: 24.5625rem;
+  --shell-max-public: 28rem;
+  --shell-max-public-wide: 36rem;
+  --shell-max-content: 42rem;
   --shell-sidebar-width: 18rem;
   --shell-right-sidebar-width: 20rem;
+  --shell-breakpoint: 48rem;
 
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;

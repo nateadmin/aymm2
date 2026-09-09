@@ -19,27 +19,21 @@ export default function AppLayout() {
 
   return (
     <div className="app-layout">
-      <div className="app-layout__desktop">
-        <aside className="app-sidebar">
-          <div className="app-sidebar__brand">
-            <BrandLockup compact showSubtitle={false} />
-          </div>
-          <AppNavLinks />
-          <div className="app-sidebar__footer">Finding your family</div>
-        </aside>
+      <aside className="app-sidebar" aria-label="Primary navigation">
+        <div className="app-sidebar__brand">
+          <BrandLockup compact showSubtitle={false} />
+        </div>
+        <AppNavLinks />
+        <div className="app-sidebar__footer">Finding your family</div>
+      </aside>
 
+      <div className="app-layout__body">
         <main className="app-main">
           <div className="app-main__content">
             <Outlet />
           </div>
           <RightSidebarShell />
         </main>
-      </div>
-
-      <div className="app-layout__mobile">
-        <div className="app-layout__mobile-content">
-          <Outlet />
-        </div>
         <BottomNav />
       </div>
     </div>

@@ -10,7 +10,7 @@ export default function Home() {
       <div className="page-shell__grid">
         <div className="aymm-panel aymm-panel--surface">Profile carousel selector</div>
         <div className="aymm-panel">Selected profile detail</div>
-        <div className="page-shell__grid" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
+        <div className="page-shell__grid page-shell__grid--actions">
           <button type="button" className="aymm-pill-action">Msg</button>
           <button type="button" className="aymm-pill-action">Challenge</button>
           <button type="button" className="aymm-pill-action">Recommend</button>
