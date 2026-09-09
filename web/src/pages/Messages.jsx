@@ -5,10 +5,13 @@ export default function Messages() {
     <PageShell
       eyebrow="Inbox"
       title="Letters"
-      description="Conversation list, message requests, and thread view from production."
+      description="Read and reply to family letters. Messaging is always called Letters in AYMM."
     >
-      <div className="page-shell__panel">Conversation list shell</div>
-      <div className="page-shell__panel">Thread / reply composer shell</div>
+      <div className="page-shell__grid">
+        <div className="aymm-panel aymm-panel--surface">Conversation list</div>
+        <div className="aymm-panel" style={{ background: 'var(--aymm-blush)' }}>Sent message bubble preview</div>
+        <div className="aymm-panel">Thread composer</div>
+      </div>
     </PageShell>
   );
 }

@@ -1,11 +1,10 @@
 export default function RightSidebarShell() {
   return (
     <aside className="app-right-sidebar" aria-label="Secondary">
-      <p className="right-sidebar-shell__title">Right sidebar shell</p>
+      <h2 className="right-sidebar-shell__title">At a glance</h2>
       <div className="page-shell__grid">
-        <div className="right-sidebar-shell__slot">At a glance panel</div>
-        <div className="right-sidebar-shell__slot">Suggested connections panel</div>
-        <div className="right-sidebar-shell__slot">Profile detail / message modals mount here later</div>
+        <div className="right-sidebar-shell__slot aymm-panel">Connections summary</div>
+        <div className="right-sidebar-shell__slot aymm-panel">Suggested profiles</div>
       </div>
     </aside>
   );

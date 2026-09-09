@@ -4,11 +4,11 @@ export default function AboutUs() {
   return (
     <main className="public-page">
       <PageShell
-        eyebrow="Public"
-        title="About us"
-        description="Static content page from production."
+        eyebrow="About"
+        title="About AYMM"
+        description="Are You My Mother connects people seeking family, guidance, and belonging."
       >
-        <div className="page-shell__panel">About content shell.</div>
+        <div className="aymm-panel">About content area</div>
       </PageShell>
     </main>
   );

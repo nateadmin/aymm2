@@ -12,7 +12,7 @@ export const APP_NAME = 'Are You My Mother?';
 export const NAV_ITEMS = [
   { path: '/Home', icon: Home, label: 'Home', hideForFamily: true },
   { path: '/Messages', icon: Mail, label: 'Letters' },
-  { path: '/FamilyTables', icon: Users, label: 'Tables' },
+  { path: '/FamilyTables', icon: Users, label: 'Family Tables' },
   { path: '/Newsfeed', icon: Newspaper, label: 'Feed' },
   { path: '/Profile', icon: User, label: 'Profile' },
 ];

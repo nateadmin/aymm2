@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { APP_NAME } from '@/lib/navigation';
+import BrandLockup from '@/components/brand/BrandLockup';
 import { useAuth } from '@/lib/auth';
 import AppNavLinks from './AppNavLinks';
 import BottomNav from './BottomNav';
@@ -22,11 +22,10 @@ export default function AppLayout() {
       <div className="app-layout__desktop">
         <aside className="app-sidebar">
           <div className="app-sidebar__brand">
-            <h1 className="app-sidebar__brand-title">{APP_NAME}</h1>
-            <p className="app-sidebar__brand-subtitle">Desktop shell</p>
+            <BrandLockup compact showSubtitle={false} />
           </div>
           <AppNavLinks />
-          <div className="app-sidebar__footer">Navigation matches production routes.</div>
+          <div className="app-sidebar__footer">Finding your family</div>
         </aside>
 
         <main className="app-main">

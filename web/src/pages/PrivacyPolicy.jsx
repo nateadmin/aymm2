@@ -4,11 +4,11 @@ export default function PrivacyPolicy() {
   return (
     <main className="public-page">
       <PageShell
-        eyebrow="Public"
+        eyebrow="Legal"
         title="Privacy policy"
-        description="Static legal content page from production."
+        description="How AYMM collects, uses, and protects your information."
       >
-        <div className="page-shell__panel">Privacy policy content shell.</div>
+        <div className="aymm-panel">Privacy policy content area</div>
       </PageShell>
     </main>
   );

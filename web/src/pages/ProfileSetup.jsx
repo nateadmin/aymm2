@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import BrandLockup from '@/components/brand/BrandLockup';
+import Button from '@/components/ui/Button';
+import TextField from '@/components/ui/TextField';
 import PageShell from '@/components/PageShell';
 import { useAuth } from '@/lib/auth';
 
@@ -9,33 +12,30 @@ export default function ProfileSetup() {
 
   return (
     <main className="public-page">
+      <BrandLockup showSubtitle={false} />
+
       <PageShell
         eyebrow="Onboarding"
-        title="Profile setup"
-        description="First-run profile wizard from production. Form fields and photo upload will mount in this panel."
+        title="Set up your profile"
+        description="Tell us who you are so we can match you with the right family connections."
       >
-        <div className="page-shell__panel page-shell__grid">
-          <label>
-            Display name
-            <input type="text" placeholder="Display name" />
-          </label>
-          <label>
-            Identity type
-            <select defaultValue="individual">
+        <div className="page-shell__grid">
+          <TextField label="Display name" name="displayName" placeholder="Your name" />
+          <label className="aymm-field">
+            <span className="aymm-label">Identity type</span>
+            <select className="aymm-select" defaultValue="individual">
               <option value="individual">Individual</option>
               <option value="family">Family</option>
             </select>
           </label>
-          <button
-            type="button"
-            className="shell-button shell-button--primary"
+          <Button
             onClick={() => {
               setHasProfile(true);
               navigate('/Home');
             }}
           >
-            Save profile shell
-          </button>
+            Continue
+          </Button>
         </div>
       </PageShell>
     </main>

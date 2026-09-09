@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import BrandLockup from '@/components/brand/BrandLockup';
+import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 
 export default function Welcome() {
@@ -7,32 +9,32 @@ export default function Welcome() {
   const { login } = useAuth();
 
   return (
-    <main className="public-page">
-      <div>
-        <p className="page-shell__eyebrow">Public entry</p>
-        <h1 className="page-shell__title">Welcome</h1>
-        <p className="page-shell__description">
-          Production landing route. Brand visuals will replace this shell later.
-        </p>
-      </div>
+    <main className="public-page public-page--welcome">
+      <BrandLockup large />
 
-      <div className="page-shell__panel page-shell__grid">
-        <p>Login / register action mounts here.</p>
-        <button
-          type="button"
-          className="shell-button shell-button--primary"
+      <div className="public-page__actions">
+        <Button
           onClick={() => {
             login();
             navigate('/Home');
           }}
         >
-          Continue with demo session
-        </button>
+          Get Started
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            login();
+            navigate('/Home');
+          }}
+        >
+          Sign In
+        </Button>
       </div>
 
-      <div className="public-page__actions">
-        <Link className="shell-link" to="/AboutUs">About us</Link>
-        <Link className="shell-link" to="/PrivacyPolicy">Privacy policy</Link>
+      <div className="public-page__links">
+        <Link className="aymm-button aymm-button--ghost" to="/AboutUs">About us</Link>
+        <Link className="aymm-button aymm-button--ghost" to="/PrivacyPolicy">Privacy policy</Link>
       </div>
     </main>
   );

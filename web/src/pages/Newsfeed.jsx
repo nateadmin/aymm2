@@ -5,11 +5,13 @@ export default function Newsfeed() {
     <PageShell
       eyebrow="Community"
       title="Feed"
-      description="Category tabs, post cards, reactions, and create-post flow from production."
+      description="Share stories, photos, and updates with your AYMM community."
     >
-      <div className="page-shell__panel">Category tabs shell</div>
-      <div className="page-shell__panel">Post list shell</div>
-      <div className="page-shell__panel">Create post sheet shell</div>
+      <div className="page-shell__grid">
+        <div className="aymm-panel aymm-panel--surface">Category tabs</div>
+        <div className="aymm-panel">Post cards</div>
+        <div className="aymm-panel">Create post sheet</div>
+      </div>
     </PageShell>
   );
 }

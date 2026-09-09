@@ -1,0 +1,51 @@
+:root {
+  --aymm-red: #fe5658;
+  --aymm-purple: #3f214d;
+  --aymm-muted-purple: #6f6575;
+  --aymm-warm-gray: #c8bec5;
+  --aymm-light-border: #e2dae0;
+  --aymm-surface: #f5f3f6;
+  --aymm-disabled: #f0ecee;
+  --aymm-white: #ffffff;
+  --aymm-blush: #fff8f8;
+  --aymm-facebook: #1877f2;
+  --aymm-error: #fe5658;
+
+  --font-body: 'Patrick Hand', cursive;
+  --font-heading: 'Kalam', cursive;
+  --font-brand: 'Two Turtle Doves', 'Patrick Hand', cursive;
+
+  --radius-button: 8px;
+  --radius-input: 6px;
+  --button-height: 61px;
+  --button-max-width: 345px;
+  --input-height: 54px;
+  --bottom-nav-height: 66px;
+  --shell-max-mobile: 24.5625rem;
+  --shell-sidebar-width: 18rem;
+  --shell-right-sidebar-width: 20rem;
+
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 2.5rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.625rem;
+  --text-3xl: 1.875rem;
+  --text-hero: 3.25rem;
+  --text-splash: 8.125rem;
+
+  color-scheme: light;
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: 1.45;
+  color: var(--aymm-purple);
+  background: var(--aymm-white);
+}

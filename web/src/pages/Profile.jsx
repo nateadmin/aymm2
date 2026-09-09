@@ -1,4 +1,5 @@
 import PageShell from '@/components/PageShell';
+import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 
 export default function Profile() {
@@ -8,22 +9,22 @@ export default function Profile() {
     <PageShell
       eyebrow="Account"
       title="Profile"
-      description="Profile summary, settings, connections, blocks, reports, and logout from production."
+      description="Manage your profile, connections, and account settings."
     >
-      <div className="page-shell__panel page-shell__grid">
-        <p>Signed in as {user?.email}</p>
-        <button type="button" className="shell-button" onClick={() => setIdentityType('family')}>
-          Switch shell to family identity
-        </button>
-        <button type="button" className="shell-button" onClick={() => setIdentityType('individual')}>
-          Switch shell to individual identity
-        </button>
-        <button type="button" className="shell-button" onClick={() => setRole('admin')}>
-          Enable admin nav shell
-        </button>
-        <button type="button" className="shell-button shell-button--primary" onClick={logout}>
+      <div className="page-shell__grid">
+        <div className="aymm-panel">Signed in as {user?.email}</div>
+        <Button variant="outline" onClick={() => setIdentityType('family')}>
+          Preview family navigation
+        </Button>
+        <Button variant="outline" onClick={() => setIdentityType('individual')}>
+          Preview individual navigation
+        </Button>
+        <Button variant="purple" onClick={() => setRole('admin')}>
+          AYMM?
+        </Button>
+        <Button variant="outline" onClick={logout}>
           Log out
-        </button>
+        </Button>
       </div>
     </PageShell>
   );
