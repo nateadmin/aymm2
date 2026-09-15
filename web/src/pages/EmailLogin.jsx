@@ -5,6 +5,7 @@ import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
+import { getPostAuthPath } from '@/lib/session';
 import { useToast } from '@/lib/toast';
 
 export default function EmailLogin() {
@@ -23,7 +24,7 @@ export default function EmailLogin() {
     setSubmitting(true);
     try {
       const session = await login(email.trim(), password);
-      navigate(session?.hasProfile ? '/Home' : '/ProfileSetup/upload-photo', { replace: true });
+      navigate(getPostAuthPath(session), { replace: true });
     } catch (error) {
       const message = error.payload?.error === 'invalid_credentials'
         ? 'Email or password is incorrect.'

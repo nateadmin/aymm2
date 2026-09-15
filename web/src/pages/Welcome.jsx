@@ -4,16 +4,17 @@ import MobileScreen from '@/components/mobile/MobileScreen';
 import SplashBrand from '@/components/mobile/SplashBrand';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
+import { getPostAuthPath } from '@/lib/session';
 
 export default function Welcome() {
   const navigate = useNavigate();
-  const { isAuthenticated, hasProfile } = useAuth();
+  const { isAuthenticated, hasProfile, profile } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(hasProfile ? '/Home' : '/ProfileSetup/upload-photo', { replace: true });
+      navigate(getPostAuthPath({ hasProfile, profile }), { replace: true });
     }
-  }, [isAuthenticated, hasProfile, navigate]);
+  }, [isAuthenticated, hasProfile, profile, navigate]);
 
   return (
     <MobileScreen>

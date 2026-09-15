@@ -18,6 +18,12 @@ import {
   getStepIndex,
   stepStorageKey,
 } from '@/lib/onboarding';
+import { buildProfilePayload } from '@/lib/onboardingPayload';
+import {
+  isOnboardingEntryPath,
+  isProfileEditPath,
+  mergeProfileState,
+} from '@/lib/session';
 import { CHILD_IDENTITIES, PARENT_IDENTITIES } from '@/lib/constants';
 
 const ProfileSetupContext = createContext(null);
@@ -69,62 +75,11 @@ function loadSavedStep(email) {
   return localStorage.getItem(stepStorageKey(email));
 }
 
-function buildPayload(form, { setupComplete = false, includeSetupComplete = false } = {}) {
-  const payload = {
-    display_name: form.display_name,
-    age: form.age ? Number(form.age) : null,
-    zipcode: form.zipcode || null,
-    location: form.location || null,
-    lat: form.lat,
-    lon: form.lon,
-    identity_type: form.identity_type,
-    seeking_type: form.seeking_types[0] || null,
-    seeking_types: form.seeking_types,
-    religion: form.religion || null,
-    religion_private: form.religion_private,
-    profile_photos: form.profile_photos,
-    real_life_visits: form.real_life_visits,
-    seeking_for: form.seeking_for,
-    grow_up_goal: form.grow_up_goal || null,
-    working_towards: form.working_towards || null,
-    favorite_foods: form.favorite_foods || null,
-    hobbies: form.hobbies || null,
-    last_book: form.last_book || null,
-    last_movie: form.last_movie || null,
-    favorite_childhood_memory: form.favorite_childhood_memory || null,
-    has_biological_kids: form.has_biological_kids,
-    enjoy_feeding_youth: form.enjoy_feeding_youth,
-    can_host_visitors: form.can_host_visitors,
-    favorite_books: form.favorite_books || null,
-    myths_about_my_day: form.myths_about_my_day || null,
-    if_you_were_my_kid: form.if_you_were_my_kid || null,
-    family_name: form.family_name || null,
-    sibling_count: form.sibling_count ? Number(form.sibling_count) : null,
-    beds_available: form.beds_available ? Number(form.beds_available) : null,
-    favorite_holidays: form.favorite_holidays || null,
-    family_vibe: form.family_vibe || null,
-    seeking_sibling_reasons: form.seeking_sibling_reasons,
-    bio: form.bio || null,
-  };
-
-  if (includeSetupComplete) {
-    payload.setup_complete = setupComplete;
-  }
-
-  Object.keys(payload).forEach((key) => {
-    if (payload[key] === '' || payload[key] === undefined) {
-      delete payload[key];
-    }
-  });
-
-  return payload;
-}
-
 export function ProfileSetupProvider({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
-  const { user, hasProfile, refresh, setProfileState } = useAuth();
+  const { user, profile: authProfile, hasProfile, setProfileState } = useAuth();
   const { push } = useToast();
   const [form, setForm] = useState(getDefaultForm());
   const [loading, setLoading] = useState(true);
@@ -146,14 +101,22 @@ export function ProfileSetupProvider({ children }) {
         const savedStep = loadSavedStep(user.email);
 
         if (!cancelled) {
+          const editing = isProfileEditPath(location.pathname);
+
           if (profile) {
             setHasDbProfile(true);
-            setForm(normalizeProfile({ ...profile, ...(draft || {}) }));
+            if (profile.setup_complete) {
+              localStorage.removeItem(draftStorageKey(user.email));
+              localStorage.removeItem(stepStorageKey(user.email));
+              setForm(normalizeProfile(profile));
+            } else {
+              setForm(normalizeProfile({ ...profile, ...(draft || {}) }));
+            }
           } else if (draft) {
             setForm({ ...getDefaultForm(), ...draft });
           }
 
-          if (!profile?.setup_complete && savedStep && getStepIndex(savedStep) >= 0) {
+          if (!profile?.setup_complete && !editing && savedStep && getStepIndex(savedStep) >= 0) {
             const step = ONBOARDING_STEPS.find((item) => item.id === savedStep);
             if (step) {
               navigate(step.path, { replace: true });
@@ -176,15 +139,13 @@ export function ProfileSetupProvider({ children }) {
     return () => {
       cancelled = true;
     };
-  }, [user?.email, navigate]);
+  }, [user?.email, navigate, location.pathname]);
 
   useEffect(() => {
     if (loading || !hasProfile) return;
+    if (isProfileEditPath(location.pathname)) return;
 
-    const onOnboardingEntry = location.pathname.endsWith('/upload-photo')
-      || location.pathname.endsWith('/ProfileSetup');
-
-    if (onOnboardingEntry) {
+    if (isOnboardingEntryPath(location.pathname)) {
       navigate('/Home', { replace: true });
     }
   }, [loading, hasProfile, location.pathname, navigate]);
@@ -246,10 +207,12 @@ export function ProfileSetupProvider({ children }) {
     setSaving(true);
     try {
       const { profile } = await profileApi.saveMine(
-        buildPayload(form, { setupComplete, includeSetupComplete }),
+        buildProfilePayload(form, { setupComplete, includeSetupComplete }),
       );
       setHasDbProfile(true);
-      setProfileState(profile);
+      setProfileState((previous) => mergeProfileState(previous ?? authProfile, profile, {
+        preserveSetupComplete: !includeSetupComplete,
+      }));
       await queryClient.invalidateQueries({ queryKey: ['Profile'] });
       return true;
     } catch {
@@ -258,7 +221,7 @@ export function ProfileSetupProvider({ children }) {
     } finally {
       setSaving(false);
     }
-  }, [user?.email, form, hasDbProfile, push, queryClient, setProfileState]);
+  }, [user?.email, form, hasDbProfile, authProfile, push, queryClient, setProfileState]);
 
   const completeOnboarding = useCallback(async () => {
     if (!user?.email) return false;
@@ -266,7 +229,7 @@ export function ProfileSetupProvider({ children }) {
     setSaving(true);
     try {
       const { profile } = await profileApi.saveMine(
-        buildPayload(form, { setupComplete: true, includeSetupComplete: true }),
+        buildProfilePayload(form, { setupComplete: true, includeSetupComplete: true }),
       );
       const completedProfile = { ...profile, setup_complete: true };
 
