@@ -53,8 +53,16 @@ export function AuthProvider({ children }) {
     hasProfile: Boolean(profile?.setup_complete),
     isBlocked: Boolean(user?.is_blocked),
     refresh: bootstrap,
-    login: async (email, role) => {
-      const data = await authApi.login(email, role);
+    login: async (email, password) => {
+      const data = await authApi.login(email, password);
+      setStoredToken(data.token);
+      setUser(data.user);
+      setAuthError(null);
+      await bootstrap();
+      return data.user;
+    },
+    register: async (email, password) => {
+      const data = await authApi.register(email, password);
       setStoredToken(data.token);
       setUser(data.user);
       setAuthError(null);

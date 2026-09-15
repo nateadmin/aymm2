@@ -1,7 +1,14 @@
 import { Router } from 'express';
-import { createSession, deleteSession, findOrCreateUser } from '../auth.js';
+import {
+  createSession,
+  createUser,
+  deleteSession,
+  findUserByEmail,
+  setUserPassword,
+} from '../auth.js';
 import { withClient } from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
+import { hashPassword, verifyPassword } from '../password.js';
 
 const router = Router();
 
@@ -26,13 +33,60 @@ router.get('/me', requireAuth, async (req, res) => {
   });
 });
 
-router.post('/login', async (req, res) => {
-  const { email, role } = req.body || {};
+router.post('/register', async (req, res) => {
+  const { email, password } = req.body || {};
   if (!email || typeof email !== 'string') {
     return res.status(400).json({ error: 'email_required' });
   }
+  if (!password || typeof password !== 'string' || password.length < 8) {
+    return res.status(400).json({ error: 'password_required' });
+  }
 
-  const user = await findOrCreateUser(email, { role: role || 'user' });
+  const normalized = email.trim().toLowerCase();
+  const existing = await findUserByEmail(normalized);
+  if (existing) {
+    return res.status(409).json({ error: 'email_taken' });
+  }
+
+  const passwordHash = await hashPassword(password);
+  const user = await createUser(normalized, passwordHash);
+  const session = await createSession(user.id);
+
+  res.status(201).json({
+    token: session.token,
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      is_blocked: user.is_blocked,
+    },
+  });
+});
+
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body || {};
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ error: 'email_required' });
+  }
+  if (!password || typeof password !== 'string') {
+    return res.status(400).json({ error: 'password_required' });
+  }
+
+  const normalized = email.trim().toLowerCase();
+  const user = await findUserByEmail(normalized);
+  if (!user || !user.password_hash) {
+    return res.status(401).json({ error: 'invalid_credentials' });
+  }
+
+  const valid = await verifyPassword(password, user.password_hash);
+  if (!valid) {
+    return res.status(401).json({ error: 'invalid_credentials' });
+  }
+
+  if (user.is_blocked) {
+    return res.status(403).json({ error: 'account_blocked' });
+  }
+
   const session = await createSession(user.id);
 
   res.json({

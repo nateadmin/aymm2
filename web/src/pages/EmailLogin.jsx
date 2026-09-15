@@ -5,10 +5,12 @@ import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
+import { useToast } from '@/lib/toast';
 
 export default function EmailLogin() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { push } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -20,8 +22,13 @@ export default function EmailLogin() {
     if (!canSubmit || submitting) return;
     setSubmitting(true);
     try {
-      await login(email.trim());
-      navigate('/ProfileSetup');
+      await login(email.trim(), password);
+      navigate('/Home', { replace: true });
+    } catch (error) {
+      const message = error.payload?.error === 'invalid_credentials'
+        ? 'Email or password is incorrect.'
+        : 'Could not sign in. Please try again.';
+      push(message, 'error');
     } finally {
       setSubmitting(false);
     }

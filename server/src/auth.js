@@ -44,20 +44,36 @@ export async function getUserBySessionToken(token) {
   return result;
 }
 
-export async function findOrCreateUser(email, { role = 'user' } = {}) {
+export async function findUserByEmail(email) {
   const normalized = email.trim().toLowerCase();
 
   return withClient(async (client) => {
-    const existing = await client.query('SELECT * FROM users WHERE email = $1', [normalized]);
-    if (existing.rows[0]) {
-      return existing.rows[0];
-    }
+    const { rows } = await client.query('SELECT * FROM users WHERE email = $1', [normalized]);
+    return rows[0] || null;
+  });
+}
 
+export async function createUser(email, passwordHash, { role = 'user' } = {}) {
+  const normalized = email.trim().toLowerCase();
+
+  return withClient(async (client) => {
     const { rows } = await client.query(
-      'INSERT INTO users (email, role) VALUES ($1, $2) RETURNING *',
-      [normalized, role],
+      'INSERT INTO users (email, role, password_hash) VALUES ($1, $2, $3) RETURNING *',
+      [normalized, role, passwordHash],
     );
     return rows[0];
+  });
+}
+
+export async function setUserPassword(email, passwordHash) {
+  const normalized = email.trim().toLowerCase();
+
+  return withClient(async (client) => {
+    const { rows } = await client.query(
+      'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE email = $2 RETURNING *',
+      [passwordHash, normalized],
+    );
+    return rows[0] || null;
   });
 }
 

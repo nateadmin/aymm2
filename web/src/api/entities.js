@@ -59,8 +59,11 @@ export const authApi = {
   me() {
     return api.get('/api/auth/me');
   },
-  login(email, role) {
-    return api.post('/api/auth/login', { email, role });
+  login(email, password) {
+    return api.post('/api/auth/login', { email, password });
+  },
+  register(email, password) {
+    return api.post('/api/auth/register', { email, password });
   },
   logout() {
     return api.post('/api/auth/logout');
