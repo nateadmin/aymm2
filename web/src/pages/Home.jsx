@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ProfileCard from '@/components/shared/ProfileCard';
 import ProfileDetailModal from '@/components/shared/ProfileDetailModal';
 import ProfileChatModal from '@/components/shared/ProfileChatModal';
@@ -11,13 +10,15 @@ import { useBrowseProfiles } from '@/hooks/useBrowseProfiles';
 import { useConnectionActions } from '@/hooks/useConnectionActions';
 import { useSendMessage } from '@/hooks/useSendMessage';
 import { useMessages } from '@/hooks/useMessages';
+import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
 import { formatLabel } from '@/lib/format';
 
 export default function Home() {
-  const navigate = useNavigate();
   const { push } = useToast();
+  const { profile: authProfile } = useAuth();
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
+  const activeProfile = myProfile || authProfile;
   const {
     connections,
     sendConnection,
@@ -56,12 +57,7 @@ export default function Home() {
     setMessageText('');
   };
 
-  if (!myProfile && !isLoading) {
-    navigate('/ProfileSetup/upload-photo', { replace: true });
-    return null;
-  }
-
-  if (isLoading) {
+  if (isLoading && !activeProfile) {
     return (
       <div className="app-loading">
         <div className="app-loading__spinner" aria-label="Loading" />
@@ -90,7 +86,7 @@ export default function Home() {
             renderItem={(profile) => (
               <ProfileCard
                 profile={profile}
-                viewerProfile={myProfile}
+                viewerProfile={activeProfile}
                 pendingOutgoing={isPendingOutgoing(profile.user_email)}
                 onOpen={setViewProfile}
                 onPrimaryAction={handlePrimaryAction}
@@ -114,7 +110,7 @@ export default function Home() {
         profile={viewProfile}
         open={Boolean(viewProfile)}
         onClose={() => setViewProfile(null)}
-        viewerProfile={myProfile}
+        viewerProfile={activeProfile}
         pendingOutgoing={viewProfile ? isPendingOutgoing(viewProfile.user_email) : false}
         onPrimaryAction={handlePrimaryAction}
         onMessage={(item) => {

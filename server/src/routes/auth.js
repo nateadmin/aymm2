@@ -7,6 +7,7 @@ import {
   setUserPassword,
 } from '../auth.js';
 import { withClient } from '../db.js';
+import { serializeProfile } from '../profileSerialize.js';
 import { requireAuth } from '../middleware/auth.js';
 import { hashPassword, verifyPassword } from '../password.js';
 
@@ -21,6 +22,8 @@ router.get('/me', requireAuth, async (req, res) => {
     return rows[0] || null;
   });
 
+  const profile = serializeProfile(profileResult);
+
   res.json({
     user: {
       id: req.user.id,
@@ -28,8 +31,8 @@ router.get('/me', requireAuth, async (req, res) => {
       role: req.user.role,
       is_blocked: req.user.is_blocked,
     },
-    profile: profileResult,
-    hasProfile: Boolean(profileResult?.setup_complete),
+    profile,
+    hasProfile: Boolean(profile?.setup_complete),
   });
 });
 

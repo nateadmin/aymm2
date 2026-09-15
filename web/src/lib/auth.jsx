@@ -16,23 +16,28 @@ export function AuthProvider({ children }) {
       setUser(null);
       setProfile(null);
       setIsLoading(false);
-      return;
+      return null;
     }
 
     try {
       const data = await authApi.me();
+      const nextProfile = data.profile
+        ? { ...data.profile, setup_complete: Boolean(data.profile.setup_complete) }
+        : null;
       setUser(data.user);
-      setProfile(data.profile);
+      setProfile(nextProfile);
       setAuthError(null);
+      return { user: data.user, profile: nextProfile, hasProfile: Boolean(nextProfile?.setup_complete) };
     } catch (error) {
-      setStoredToken(null);
-      setUser(null);
-      setProfile(null);
       if (error.status === 401) {
+        setStoredToken(null);
+        setUser(null);
+        setProfile(null);
         setAuthError({ type: 'auth_required' });
       } else {
         setAuthError({ type: 'bootstrap_failed' });
       }
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -58,16 +63,16 @@ export function AuthProvider({ children }) {
       setStoredToken(data.token);
       setUser(data.user);
       setAuthError(null);
-      await bootstrap();
-      return data.user;
+      const session = await bootstrap();
+      return session || { user: data.user, profile: null, hasProfile: false };
     },
     register: async (email, password) => {
       const data = await authApi.register(email, password);
       setStoredToken(data.token);
       setUser(data.user);
       setAuthError(null);
-      await bootstrap();
-      return data.user;
+      const session = await bootstrap();
+      return session || { user: data.user, profile: null, hasProfile: false };
     },
     logout: async () => {
       try {

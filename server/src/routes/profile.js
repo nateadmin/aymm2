@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { withClient } from '../db.js';
+import { serializeProfile } from '../profileSerialize.js';
 import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
@@ -16,17 +17,6 @@ function serializeValue(key, value) {
     return JSON.stringify(value);
   }
   return value;
-}
-
-function deserializeRow(row) {
-  if (!row) return null;
-  const entity = { ...row };
-  for (const key of JSON_FIELDS) {
-    if (entity[key] && typeof entity[key] === 'string') {
-      entity[key] = JSON.parse(entity[key]);
-    }
-  }
-  return entity;
 }
 
 function buildProfilePayload(body, email) {
@@ -46,7 +36,7 @@ router.get('/me', requireAuth, async (req, res) => {
     return result.rows[0] || null;
   });
 
-  res.json({ profile: deserializeRow(row) });
+  res.json({ profile: serializeProfile(row) });
 });
 
 router.put('/me', requireAuth, async (req, res) => {
@@ -95,7 +85,7 @@ router.put('/me', requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'display_name_and_identity_required' });
   }
 
-  res.json({ profile: deserializeRow(row) });
+  res.json({ profile: serializeProfile(row) });
 });
 
 export default router;

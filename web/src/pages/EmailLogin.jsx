@@ -22,8 +22,8 @@ export default function EmailLogin() {
     if (!canSubmit || submitting) return;
     setSubmitting(true);
     try {
-      await login(email.trim(), password);
-      navigate('/Home', { replace: true });
+      const session = await login(email.trim(), password);
+      navigate(session?.hasProfile ? '/Home' : '/ProfileSetup/upload-photo', { replace: true });
     } catch (error) {
       const message = error.payload?.error === 'invalid_credentials'
         ? 'Email or password is incorrect.'

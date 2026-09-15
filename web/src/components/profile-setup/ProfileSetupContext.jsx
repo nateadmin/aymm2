@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { profileApi } from '@/api/profile';
 import { useAuth } from '@/lib/auth';
@@ -122,8 +122,9 @@ function buildPayload(form, { setupComplete = false, includeSetupComplete = fals
 
 export function ProfileSetupProvider({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
-  const { user, refresh, setProfileState } = useAuth();
+  const { user, hasProfile, refresh, setProfileState } = useAuth();
   const { push } = useToast();
   const [form, setForm] = useState(getDefaultForm());
   const [loading, setLoading] = useState(true);
@@ -176,6 +177,17 @@ export function ProfileSetupProvider({ children }) {
       cancelled = true;
     };
   }, [user?.email, navigate]);
+
+  useEffect(() => {
+    if (loading || !hasProfile) return;
+
+    const onOnboardingEntry = location.pathname.endsWith('/upload-photo')
+      || location.pathname.endsWith('/ProfileSetup');
+
+    if (onOnboardingEntry) {
+      navigate('/Home', { replace: true });
+    }
+  }, [loading, hasProfile, location.pathname, navigate]);
 
   const updateField = useCallback((key, value) => {
     setForm((current) => {
@@ -249,16 +261,31 @@ export function ProfileSetupProvider({ children }) {
   }, [user?.email, form, hasDbProfile, push, queryClient, setProfileState]);
 
   const completeOnboarding = useCallback(async () => {
-    const saved = await saveDraft('review', { setupComplete: true, includeSetupComplete: true });
-    if (!saved) return false;
+    if (!user?.email) return false;
 
-    await refresh();
-    localStorage.removeItem(draftStorageKey(user.email));
-    localStorage.removeItem(stepStorageKey(user.email));
-    push('Profile complete!', 'success');
-    navigate('/Home', { replace: true });
-    return true;
-  }, [saveDraft, refresh, user?.email, push, navigate]);
+    setSaving(true);
+    try {
+      const { profile } = await profileApi.saveMine(
+        buildPayload(form, { setupComplete: true, includeSetupComplete: true }),
+      );
+      const completedProfile = { ...profile, setup_complete: true };
+
+      setHasDbProfile(true);
+      setProfileState(completedProfile);
+      localStorage.removeItem(draftStorageKey(user.email));
+      localStorage.removeItem(stepStorageKey(user.email));
+      await queryClient.invalidateQueries({ queryKey: ['Profile'] });
+
+      push('Profile complete!', 'success');
+      navigate('/Home', { replace: true });
+      return true;
+    } catch {
+      push('Could not save your profile. Please try again.', 'error');
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  }, [user?.email, form, push, navigate, queryClient, setProfileState]);
 
   const isChild = CHILD_IDENTITIES.includes(form.identity_type);
   const isParent = PARENT_IDENTITIES.includes(form.identity_type);
