@@ -69,7 +69,7 @@ function loadSavedStep(email) {
   return localStorage.getItem(stepStorageKey(email));
 }
 
-function buildPayload(form, { setupComplete = false } = {}) {
+function buildPayload(form, { setupComplete = false, includeSetupComplete = false } = {}) {
   const payload = {
     display_name: form.display_name,
     age: form.age ? Number(form.age) : null,
@@ -105,8 +105,11 @@ function buildPayload(form, { setupComplete = false } = {}) {
     family_vibe: form.family_vibe || null,
     seeking_sibling_reasons: form.seeking_sibling_reasons,
     bio: form.bio || null,
-    setup_complete: setupComplete,
   };
+
+  if (includeSetupComplete) {
+    payload.setup_complete = setupComplete;
+  }
 
   Object.keys(payload).forEach((key) => {
     if (payload[key] === '' || payload[key] === undefined) {
@@ -218,7 +221,7 @@ export function ProfileSetupProvider({ children }) {
     });
   }, [user?.email]);
 
-  const saveDraft = useCallback(async (stepId, { setupComplete = false } = {}) => {
+  const saveDraft = useCallback(async (stepId, { setupComplete = false, includeSetupComplete = false } = {}) => {
     if (!user?.email) return false;
 
     persistDraft(user.email, form, stepId);
@@ -231,7 +234,7 @@ export function ProfileSetupProvider({ children }) {
     setSaving(true);
     try {
       const { profile } = await profileApi.saveMine(
-        buildPayload(form, { setupComplete }),
+        buildPayload(form, { setupComplete, includeSetupComplete }),
       );
       setHasDbProfile(true);
       setProfileState(profile);
@@ -246,7 +249,7 @@ export function ProfileSetupProvider({ children }) {
   }, [user?.email, form, hasDbProfile, push, queryClient, setProfileState]);
 
   const completeOnboarding = useCallback(async () => {
-    const saved = await saveDraft('review', { setupComplete: true });
+    const saved = await saveDraft('review', { setupComplete: true, includeSetupComplete: true });
     if (!saved) return false;
 
     await refresh();
