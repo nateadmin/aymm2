@@ -43,15 +43,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.625rem;
   width: 100%;
   max-width: var(--button-max-width);
   min-height: var(--button-height);
   padding: 1.0625rem 1.25rem;
   border-radius: var(--radius-button);
-  border: 1px solid transparent;
+  border: 0.8px solid transparent;
   font-family: var(--font-body);
-  font-size: var(--text-lg);
-  line-height: 1;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  letter-spacing: 0.0125rem;
   cursor: pointer;
   transition: transform 120ms ease, opacity 120ms ease, background-color 120ms ease;
 }
@@ -77,8 +79,24 @@
 
 .aymm-button--outline {
   background: var(--aymm-white);
-  border-color: var(--aymm-purple);
+  border-color: var(--aymm-warm-gray);
   color: var(--aymm-purple);
+}
+
+.aymm-button--disabled {
+  background: var(--aymm-btn-disabled-bg);
+  border-color: var(--aymm-btn-disabled-bg);
+  color: var(--aymm-btn-disabled-text);
+}
+
+.aymm-button--social {
+  background: var(--aymm-white);
+  border-color: var(--aymm-light-border);
+  color: var(--aymm-purple);
+  justify-content: flex-start;
+  padding-left: 1.125rem;
+  padding-right: 1.125rem;
+  font-size: 1rem;
 }
 
 .aymm-button--purple {

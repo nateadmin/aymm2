@@ -5,11 +5,22 @@
   --aymm-warm-gray: #c8bec5;
   --aymm-light-border: #e2dae0;
   --aymm-surface: #f5f3f6;
+  --aymm-canvas: #ede8f0;
   --aymm-disabled: #f0ecee;
   --aymm-white: #ffffff;
   --aymm-blush: #fff8f8;
+  --aymm-blush-border: #ffbcbc;
+  --aymm-blush-surface: #fff5f5;
+  --aymm-phase-purple-surface: #f4f0f7;
+  --aymm-phase-purple-border: #c5bad0;
+  --aymm-phase-violet: #6b3e8a;
+  --aymm-phase-violet-surface: #f8f3fc;
+  --aymm-phase-violet-border: #d5c0e8;
+  --aymm-footer-muted: #8b7fa0;
   --aymm-facebook: #1877f2;
   --aymm-error: #fe5658;
+  --aymm-btn-disabled-bg: #e8e4eb;
+  --aymm-btn-disabled-text: #a89bb0;
 
   --font-body: 'Patrick Hand', cursive;
   --font-heading: 'Kalam', cursive;
@@ -17,10 +28,14 @@
 
   --radius-button: 8px;
   --radius-input: 6px;
+  --radius-card: 12px;
+  --radius-chip: 4px;
   --button-height: 61px;
   --button-max-width: 345px;
   --input-height: 54px;
   --bottom-nav-height: 66px;
+  --status-bar-height: 44px;
+  --shell-width: 393px;
   --shell-max-mobile: 24.5625rem;
   --shell-max-public: 28rem;
   --shell-max-public-wide: 36rem;
@@ -35,21 +50,27 @@
   --space-lg: 1.5rem;
   --space-xl: 2rem;
   --space-2xl: 2.5rem;
+  --space-3xl: 3rem;
+  --space-splash-top: 5rem;
+  --space-screen-x: 1.5rem;
+  --space-screen-bottom: 2.5rem;
 
   --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
+  --text-sm: 0.8125rem;
   --text-md: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
   --text-2xl: 1.625rem;
   --text-3xl: 1.875rem;
+  --text-display-sm: 1.6875rem;
+  --text-display-md: 3.375rem;
   --text-hero: 3.25rem;
-  --text-splash: 8.125rem;
+  --text-splash-brand: 8.1875rem;
 
   color-scheme: light;
   font-family: var(--font-body);
   font-size: var(--text-md);
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--aymm-purple);
   background: var(--aymm-white);
 }

@@ -3,6 +3,8 @@ const VARIANTS = {
   outline: 'aymm-button--outline',
   purple: 'aymm-button--purple',
   ghost: 'aymm-button--ghost',
+  social: 'aymm-button--social',
+  disabled: 'aymm-button--disabled',
 };
 
 export default function Button({

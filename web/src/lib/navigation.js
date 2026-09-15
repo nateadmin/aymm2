@@ -13,7 +13,7 @@ export const NAV_ITEMS = [
   { path: '/Home', icon: Home, label: 'Home', hideForFamily: true },
   { path: '/Messages', icon: Mail, label: 'Letters' },
   { path: '/FamilyTables', icon: Users, label: 'Tables' },
-  { path: '/Newsfeed', icon: Newspaper, label: 'Feed' },
+  { path: '/Newsfeed', icon: Newspaper, label: 'Feed', hideFromBottomNav: true },
   { path: '/Profile', icon: User, label: 'Profile' },
 ];
 
@@ -23,7 +23,18 @@ export const ADMIN_NAV_ITEM = {
   label: 'Admin',
 };
 
-export const PUBLIC_ROUTES = ['/Welcome', '/AboutUs', '/PrivacyPolicy'];
+export const PUBLIC_ROUTES = [
+  '/',
+  '/Splash',
+  '/Welcome',
+  '/Login',
+  '/Register',
+  '/EmailLogin',
+  '/PhoneLogin',
+  '/OTP',
+  '/AboutUs',
+  '/PrivacyPolicy',
+];
 
 export const AUTH_LAYOUT_ROUTES = [
   '/Home',
@@ -34,8 +45,11 @@ export const AUTH_LAYOUT_ROUTES = [
   '/AdminDashboard',
 ];
 
-export function getVisibleNavItems({ isFamily, isAdmin }) {
-  const items = NAV_ITEMS.filter((item) => !(isFamily && item.hideForFamily));
+export function getVisibleNavItems({ isFamily, isAdmin, bottomNavOnly = false }) {
+  let items = NAV_ITEMS.filter((item) => !(isFamily && item.hideForFamily));
+  if (bottomNavOnly) {
+    items = items.filter((item) => !item.hideFromBottomNav);
+  }
   if (isAdmin) {
     items.push(ADMIN_NAV_ITEM);
   }

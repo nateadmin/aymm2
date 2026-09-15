@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/auth';
 export default function BottomNav() {
   const location = useLocation();
   const { isFamily, isAdmin } = useAuth();
-  const items = getVisibleNavItems({ isFamily, isAdmin });
+  const items = getVisibleNavItems({ isFamily, isAdmin, bottomNavOnly: true });
 
   return (
     <nav className="bottom-nav" aria-label="Primary">

@@ -6,7 +6,13 @@ import { ToastProvider } from '@/lib/toast';
 import { queryClient } from '@/lib/queryClient';
 import RequireAuth, { RequireProfile } from '@/components/RequireAuth';
 import AppLayout from '@/components/layout/AppLayout';
+import Splash from '@/pages/Splash';
 import Welcome from '@/pages/Welcome';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+import EmailLogin from '@/pages/EmailLogin';
+import PhoneLogin from '@/pages/PhoneLogin';
+import OTP from '@/pages/OTP';
 import ProfileSetup from '@/pages/ProfileSetup';
 import AboutUs from '@/pages/AboutUs';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
@@ -25,8 +31,14 @@ export default function App() {
         <ToastProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Navigate to="/Welcome" replace />} />
+              <Route path="/" element={<Splash />} />
+              <Route path="/Splash" element={<Navigate to="/" replace />} />
               <Route path="/Welcome" element={<Welcome />} />
+              <Route path="/Login" element={<Login />} />
+              <Route path="/Register" element={<Register />} />
+              <Route path="/EmailLogin" element={<EmailLogin />} />
+              <Route path="/PhoneLogin" element={<PhoneLogin />} />
+              <Route path="/OTP" element={<OTP />} />
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
 

@@ -1,4 +1,4 @@
-export default function HeartLogo({ className = '', alt = 'AYMM heart logo' }) {
+export default function HeartLogo({ className = '', alt = 'AYMM heart logo', ...props }) {
   return (
     <img
       src="/brand/heart-logo.png"
@@ -7,6 +7,7 @@ export default function HeartLogo({ className = '', alt = 'AYMM heart logo' }) {
       width={112}
       height={112}
       decoding="async"
+      {...props}
     />
   );
 }

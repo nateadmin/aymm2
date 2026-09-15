@@ -1,133 +1,97 @@
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import PageShell from '@/components/PageShell';
-import SwipeRail from '@/components/shared/SwipeRail';
-import ProfileCard from '@/components/shared/ProfileCard';
-import ProfileDetailModal from '@/components/shared/ProfileDetailModal';
-import ProfileChatModal from '@/components/shared/ProfileChatModal';
-import PlaceholderPanel from '@/components/shared/PlaceholderPanel';
-import { entities } from '@/api/entities';
-import { useAuth } from '@/lib/auth';
+import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import HeartLogo from '@/components/brand/HeartLogo';
+import { PLACEHOLDER_AVATAR } from '@/lib/constants';
 import { useBrowseProfiles } from '@/hooks/useBrowseProfiles';
-import { useConnections } from '@/hooks/useConnections';
-import {
-  findMutualPending,
-  findPendingConnection,
-  getConnectionTypeForProfile,
-  isConnected,
-} from '@/lib/connections';
-import { useToast } from '@/lib/toast';
+import { useMessages } from '@/hooks/useMessages';
+
+const QUICK_ACTIONS = [
+  {
+    title: 'Browse Profiles',
+    description: 'Discover family connections',
+    to: '/Newsfeed',
+  },
+  {
+    title: 'Family Tables',
+    description: 'Join a gathering near you',
+    to: '/FamilyTables',
+  },
+  {
+    title: 'Letters',
+    description: 'Unread messages',
+    to: '/Messages',
+  },
+];
 
 export default function Home() {
-  const { user } = useAuth();
-  const { push } = useToast();
-  const queryClient = useQueryClient();
-  const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
-  const { connections } = useConnections();
-  const [selectedProfile, setSelectedProfile] = useState(null);
-  const [messageProfile, setMessageProfile] = useState(null);
-  const [messageText, setMessageText] = useState('');
+  const navigate = useNavigate();
+  const { browseProfiles } = useBrowseProfiles();
+  const { unreadCount } = useMessages();
 
-  const connectionMutation = useMutation({
-    mutationFn: async (profile) => {
-      if (profile.is_demo) return null;
-      const mutual = findMutualPending(connections, user.email, profile.user_email);
-      if (mutual) {
-        return entities.Connection.update(mutual.id, { status: 'accepted' });
-      }
-      const existing = findPendingConnection(connections, user.email, profile.user_email);
-      if (existing) return existing;
-      return entities.Connection.create({
-        from_email: user.email,
-        to_email: profile.user_email,
-        type: getConnectionTypeForProfile(profile),
-        status: 'pending',
-      });
-    },
-    onSuccess: (result, profile) => {
-      queryClient.invalidateQueries({ queryKey: ['Connection'] });
-      if (result?.status === 'accepted') {
-        push(`You and ${profile.display_name} are connected!`, 'success');
-      } else {
-        push('Connection request sent.', 'success');
-      }
-    },
-    onError: () => push('Could not send connection request.', 'error'),
-  });
-
-  const messageMutation = useMutation({
-    mutationFn: async (profile) => {
-      const connected = isConnected(connections, user.email, profile.user_email);
-      return entities.Message.create({
-        from_email: user.email,
-        to_email: profile.user_email,
-        content: messageText,
-        is_request: !connected,
-      });
-    },
-    onSuccess: () => {
-      setMessageText('');
-      setMessageProfile(null);
-      queryClient.invalidateQueries({ queryKey: ['Message'] });
-      push('Letter sent.', 'success');
-    },
-    onError: () => push('Could not send letter.', 'error'),
-  });
-
-  const handleSecondary = (label) => {
-    push(`${label} action placeholder.`, 'info');
-  };
+  const railProfiles = browseProfiles.slice(0, 6);
 
   return (
-    <PageShell
-      eyebrow="Discover"
-      title="Home"
-      description="Swipe through profiles and send AYMM?, AYMF?, or Adopt connection requests."
-    >
-      {isLoading ? <PlaceholderPanel title="Loading matches" /> : null}
-      {isEmpty ? <PlaceholderPanel title="No matches yet" description="Adjust your seeking types or check back later." /> : null}
-      <SwipeRail
-        items={browseProfiles}
-        emptyLabel="No profiles in your browse rail."
-        renderItem={(profile) => (
-          <ProfileCard
-            profile={profile}
-            viewerProfile={myProfile}
-            pendingOutgoing={Boolean(findPendingConnection(connections, user.email, profile.user_email))}
-            onOpen={setSelectedProfile}
-            onPrimaryAction={(item) => connectionMutation.mutate(item)}
-            onMessage={(item) => setMessageProfile(item)}
-            onChallenge={() => handleSecondary('Challenge')}
-            onRecommend={() => handleSecondary('Recommend')}
-            onReligion={() => handleSecondary('Religion')}
-          />
-        )}
-      />
-      <ProfileDetailModal
-        profile={selectedProfile}
-        open={Boolean(selectedProfile)}
-        onClose={() => setSelectedProfile(null)}
-        viewerProfile={myProfile}
-        pendingOutgoing={selectedProfile ? Boolean(findPendingConnection(connections, user.email, selectedProfile.user_email)) : false}
-        onPrimaryAction={(item) => connectionMutation.mutate(item)}
-        onMessage={(item) => setMessageProfile(item)}
-        onChallenge={() => handleSecondary('Challenge')}
-        onRecommend={() => handleSecondary('Recommend')}
-        onReligion={() => handleSecondary('Religion')}
-      />
-      <ProfileChatModal
-        profile={messageProfile}
-        open={Boolean(messageProfile)}
-        onClose={() => {
-          setMessageProfile(null);
-          setMessageText('');
-        }}
-        messageText={messageText}
-        onMessageTextChange={setMessageText}
-        onSend={() => messageMutation.mutate(messageProfile)}
-        isLocked={messageProfile ? !isConnected(connections, user.email, messageProfile.user_email) : false}
-        sendingMessage={messageMutation.isPending}
-      />
-    </PageShell>
+    <div className="screen-pad" style={{ paddingTop: '1.5rem' }}>
+      <header className="home-header">
+        <div>
+          <h1 className="home-header__title">Good morning</h1>
+          <p className="home-header__subtitle">Find your family connection</p>
+        </div>
+        <HeartLogo className="home-header__heart" />
+      </header>
+
+      <section>
+        <h2 className="home-section-title">Profiles near you</h2>
+        <div className="profile-rail">
+          {railProfiles.map((profile) => (
+            <button
+              key={profile.id || profile.user_email}
+              type="button"
+              className="profile-rail-card"
+              onClick={() => navigate('/Newsfeed')}
+            >
+              <img
+                src={profile.profile_photos?.[0] || PLACEHOLDER_AVATAR}
+                alt=""
+                className="profile-rail-card__photo"
+              />
+              <div className="profile-rail-card__meta">
+                <p className="profile-rail-card__name">
+                  {profile.display_name}{profile.age ? `, ${profile.age}` : ''}
+                </p>
+                <p className="profile-rail-card__detail">
+                  {profile.identity_type}
+                  {profile.location ? ` · ${profile.location}` : ''}
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="home-section-title">Quick actions</h2>
+        <div className="quick-actions">
+          {QUICK_ACTIONS.map((action) => (
+            <button
+              key={action.title}
+              type="button"
+              className="quick-action-card"
+              onClick={() => navigate(action.to)}
+            >
+              <div>
+                <p className="quick-action-card__title">{action.title}</p>
+                <p className="quick-action-card__desc">
+                  {action.title === 'Letters' && unreadCount
+                    ? `${unreadCount} unread messages`
+                    : action.description}
+                </p>
+              </div>
+              <ChevronRight className="quick-action-card__chevron" size={18} />
+            </button>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
