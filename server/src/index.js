@@ -5,10 +5,13 @@ import pg from 'pg';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import entityRoutes from './routes/entities.js';
+import profileRoutes from './routes/profile.js';
+import uploadRoutes from './routes/uploads.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const webDist = path.resolve(__dirname, '../../web/dist');
+const uploadDir = process.env.UPLOAD_DIR || path.resolve(__dirname, '../../uploads');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -40,7 +43,10 @@ app.get('/api/version', (_req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/uploads', uploadRoutes);
 app.use('/api/entities', entityRoutes);
+app.use('/uploads', express.static(uploadDir));
 
 if (fs.existsSync(webDist)) {
   app.use(express.static(webDist, { index: false }));

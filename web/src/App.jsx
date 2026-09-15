@@ -43,7 +43,7 @@ export default function App() {
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
 
               <Route element={<RequireAuth />}>
-                <Route path="/ProfileSetup" element={<ProfileSetup />} />
+                <Route path="/ProfileSetup/*" element={<ProfileSetup />} />
                 <Route element={<RequireProfile />}>
                   <Route element={<AppLayout />}>
                     <Route path="/Home" element={<Home />} />

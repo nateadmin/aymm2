@@ -42,6 +42,8 @@ deploy_release() {
   fi
   cd - >/dev/null
 
+  install -d -m 755 -o "${DEPLOY_USER}" -g "${DEPLOY_USER}" "${APP_ROOT}/uploads"
+
   ln -sfn "${release_dir}" "${CURRENT_LINK}"
   chown -h "${DEPLOY_USER}:${DEPLOY_USER}" "${CURRENT_LINK}"
   chown -R "${DEPLOY_USER}:${DEPLOY_USER}" "${APP_ROOT}"

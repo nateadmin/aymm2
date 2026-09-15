@@ -14,7 +14,7 @@ export default function Profile() {
 
   const menuItems = [
     ...(isAdmin ? [{ label: 'Admin Dashboard', to: '/AdminDashboard' }] : []),
-    { label: 'Edit Profile', to: '/ProfileSetup' },
+    { label: 'Edit Profile', to: '/ProfileSetup/basic-info' },
     { label: 'Connections', action: 'connections' },
     { label: 'About Us', to: '/AboutUs' },
     { label: 'Privacy Policy', to: '/PrivacyPolicy' },

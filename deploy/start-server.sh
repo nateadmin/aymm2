@@ -16,4 +16,6 @@ fi
 set +a
 
 export PORT="${PORT:-3000}"
+export UPLOAD_DIR="${UPLOAD_DIR:-/opt/aymm/uploads}"
+mkdir -p "${UPLOAD_DIR}"
 exec /usr/bin/node /opt/aymm/current/server/src/index.js

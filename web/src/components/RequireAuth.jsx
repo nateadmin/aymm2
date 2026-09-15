@@ -38,8 +38,8 @@ export function RequireProfile() {
     );
   }
 
-  if (!hasProfile && location.pathname !== '/ProfileSetup') {
-    return <Navigate to="/ProfileSetup" replace />;
+  if (!hasProfile && !location.pathname.startsWith('/ProfileSetup')) {
+    return <Navigate to="/ProfileSetup/upload-photo" replace />;
   }
 
   return <Outlet />;

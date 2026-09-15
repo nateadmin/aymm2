@@ -11,7 +11,7 @@ export default function Welcome() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(hasProfile ? '/Home' : '/ProfileSetup', { replace: true });
+      navigate(hasProfile ? '/Home' : '/ProfileSetup/upload-photo', { replace: true });
     }
   }, [isAuthenticated, hasProfile, navigate]);
 
