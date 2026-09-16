@@ -1,5 +1,14 @@
 export const IDENTITY_TYPES = ['daughter', 'son', 'mother', 'father', 'family'];
 
+/** Figma onboarding order and copy for the "I am a..." step. */
+export const IDENTITY_ROLE_OPTIONS = [
+  { id: 'mother', label: 'Mother', emoji: '👩' },
+  { id: 'father', label: 'Father', emoji: '👨' },
+  { id: 'daughter', label: 'Daughter', emoji: '👧' },
+  { id: 'son', label: 'Son', emoji: '👦' },
+  { id: 'family', label: 'Family', emoji: '👨‍👩‍👧‍👦' },
+];
+
 export const CHILD_IDENTITIES = ['daughter', 'son'];
 export const PARENT_IDENTITIES = ['mother', 'father'];
 

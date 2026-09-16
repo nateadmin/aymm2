@@ -20,8 +20,8 @@ export default function ProfileSetup() {
         <Route path="upload-photo" element={<UploadPhotoStep />} />
         <Route path="upload-video" element={<UploadVideoStep />} />
         <Route path="basic-info" element={<BasicInfoStep />} />
+        <Route path="iam-a" element={<IAmAStep />} />
         <Route element={<OnboardingLayout />}>
-          <Route path="iam-a" element={<IAmAStep />} />
           <Route path="seeking-a" element={<SeekingAStep />} />
           <Route path="religion" element={<ReligionStep />} />
           <Route path="questions" element={<QuestionsStep />} />
