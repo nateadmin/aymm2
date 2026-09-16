@@ -34,6 +34,7 @@ export const PUBLIC_ROUTES = [
   '/OTP',
   '/AboutUs',
   '/PrivacyPolicy',
+  '/screens',
 ];
 
 export const AUTH_LAYOUT_ROUTES = [

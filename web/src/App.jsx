@@ -22,6 +22,8 @@ import FamilyTables from '@/pages/FamilyTables';
 import Newsfeed from '@/pages/Newsfeed';
 import Profile from '@/pages/Profile';
 import AdminDashboard from '@/pages/AdminDashboard';
+import ScreenIndex from '@/pages/ScreenIndex';
+import DesignReference from '@/pages/DesignReference';
 import NotFound from '@/pages/NotFound';
 
 export default function App() {
@@ -41,6 +43,8 @@ export default function App() {
               <Route path="/OTP" element={<OTP />} />
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+              <Route path="/screens" element={<ScreenIndex />} />
+              <Route path="/screens/ref/:slug" element={<DesignReference />} />
 
               <Route element={<RequireAuth />}>
                 <Route path="/ProfileSetup/*" element={<ProfileSetup />} />

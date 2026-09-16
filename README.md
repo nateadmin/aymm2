@@ -8,7 +8,11 @@ Public URLs: https://aymm.app and https://aymmapp.com (DNS A records → 185.198
 
 ## Staging (review every screen here)
 
-Agents and reviewers use **https://aymm.app** as the staging URL. Do not share raw PNGs or repo paths when a screen is live — link the route instead (for example `/`, `/Welcome`, `/Login`, `/ProfileSetup`).
+**Screen index (all 55 links):** https://aymm.app/screens
+
+Enable **staging preview** on that page to open partial/auth routes without logging in.
+
+Agents and reviewers use **https://aymm.app** as the staging base. Link routes, not raw PNGs.
 
 Design sources: `docs/ui-design/SOURCE.md`.
 
