@@ -529,9 +529,52 @@
   color: #f57f17;
 }
 
-.screen-index__badge--reference {
+.screen-index__badge--stub {
   background: var(--aymm-phase-purple-surface);
   color: var(--aymm-phase-violet);
+}
+
+.screen-stub {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+}
+
+.screen-stub__phase {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--aymm-phase-violet);
+}
+
+.screen-stub__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--aymm-purple);
+}
+
+.screen-stub__copy {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--aymm-muted-purple);
+}
+
+.screen-stub__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.screen-stub__ext {
+  font-size: var(--text-sm);
+  color: var(--aymm-muted-purple);
+  text-decoration: underline;
 }
 
 .screen-index__ref-link,

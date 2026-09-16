@@ -23,6 +23,7 @@ import Newsfeed from '@/pages/Newsfeed';
 import Profile from '@/pages/Profile';
 import AdminDashboard from '@/pages/AdminDashboard';
 import ScreenIndex from '@/pages/ScreenIndex';
+import ScreenStub from '@/pages/ScreenStub';
 import NotFound from '@/pages/NotFound';
 
 export default function App() {
@@ -43,6 +44,7 @@ export default function App() {
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/screens" element={<ScreenIndex />} />
+              <Route path="/preview/:slug" element={<ScreenStub />} />
 
               <Route element={<RequireAuth />}>
                 <Route path="/ProfileSetup/*" element={<ProfileSetup />} />

@@ -3,21 +3,47 @@ import {
   PHASE_LABELS,
   SCREEN_CATALOG,
   STAGING_HUB,
+  STATUS_LABELS,
   stagingUrl,
+  withPreviewQuery,
 } from '@/lib/screenCatalog';
+import {
+  disableStagingPreview,
+  enableStagingPreview,
+  isStagingPreviewEnabled,
+} from '@/lib/stagingPreview';
 
 export default function ScreenIndex() {
   const phases = Object.keys(PHASE_LABELS).map(Number);
+  const previewOn = isStagingPreviewEnabled();
+  const builtCount = SCREEN_CATALOG.filter((s) => s.status === 'live').length;
+  const partialCount = SCREEN_CATALOG.filter((s) => s.status === 'partial').length;
+  const stubCount = SCREEN_CATALOG.filter((s) => s.status === 'stub').length;
 
   return (
     <div className="screen-index">
       <header className="screen-index__header">
         <h1 className="screen-index__title">AYMM staging</h1>
         <p className="screen-index__lead">
-          {SCREEN_CATALOG.length} built screens on staging. Login is skipped automatically on{' '}
-          <strong>aymm.app</strong> so you can open every route below.
+          All {SCREEN_CATALOG.length} Figma screens. Login is skipped on <strong>aymm.app</strong>{' '}
+          ({builtCount} built, {partialCount} partial, {stubCount} coming soon). Add{' '}
+          <code>?preview=1</code> to any URL to force bypass.
         </p>
         <p className="screen-index__meta">Share this page: {STAGING_HUB}</p>
+        <button
+          type="button"
+          className="screen-index__preview-toggle"
+          onClick={() => {
+            if (previewOn) {
+              disableStagingPreview();
+            } else {
+              enableStagingPreview();
+            }
+            window.location.reload();
+          }}
+        >
+          {previewOn ? 'Turn off login bypass' : 'Turn on login bypass'}
+        </button>
       </header>
 
       {phases.map((phase) => (
@@ -37,7 +63,10 @@ export default function ScreenIndex() {
                     {screen.title}
                   </a>
                   <div className="screen-index__meta-row">
-                    <Link to={screen.route} className="screen-index__ref-link">
+                    <span className={`screen-index__badge screen-index__badge--${screen.status}`}>
+                      {STATUS_LABELS[screen.status]}
+                    </span>
+                    <Link to={withPreviewQuery(screen.route)} className="screen-index__ref-link">
                       Open in app
                     </Link>
                   </div>

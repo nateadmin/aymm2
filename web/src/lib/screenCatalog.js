@@ -1,48 +1,101 @@
 /**
- * Staging screen map — app routes only (no Figma reference views).
- * Hub: https://aymm.app/screens
+ * Wireframe screen map (55 screens, 4 phases).
+ * Staging hub: https://aymm.app/screens?preview=1
  */
 
 export const STAGING_BASE = 'https://aymm.app';
-export const STAGING_HUB = `${STAGING_BASE}/screens`;
+export const STAGING_HUB = `${STAGING_BASE}/screens?preview=1`;
 
 export const SCREEN_CATALOG = [
-  // Phase 1 — Onboarding (built)
-  { id: 1, phase: 1, title: 'Splash', route: '/' },
-  { id: 2, phase: 1, title: 'Welcome', route: '/Welcome' },
-  { id: 3, phase: 1, title: 'Login', route: '/Login' },
-  { id: 4, phase: 1, title: 'Register', route: '/Register' },
-  { id: 5, phase: 1, title: 'Email Login', route: '/EmailLogin' },
-  { id: 6, phase: 1, title: 'Phone Login', route: '/PhoneLogin' },
-  { id: 7, phase: 1, title: 'OTP', route: '/OTP' },
-  { id: 8, phase: 1, title: 'Upload Photo', route: '/ProfileSetup/upload-photo' },
-  { id: 9, phase: 1, title: 'Basic Info', route: '/ProfileSetup/basic-info' },
-  { id: 10, phase: 1, title: 'I Am A', route: '/ProfileSetup/iam-a' },
-  { id: 11, phase: 1, title: 'Seeking A', route: '/ProfileSetup/seeking-a' },
-  { id: 12, phase: 1, title: 'Religion', route: '/ProfileSetup/religion' },
-  { id: 13, phase: 1, title: 'Questions', route: '/ProfileSetup/questions' },
-  { id: 14, phase: 1, title: 'Bio', route: '/ProfileSetup/bio' },
-  { id: 15, phase: 1, title: 'Review', route: '/ProfileSetup/review' },
-  // Phase 3 — Community (built)
-  { id: 16, phase: 3, title: 'Letters', route: '/Messages' },
-  { id: 17, phase: 3, title: 'Family Tables', route: '/FamilyTables' },
-  // Phase 4 — App shell (built)
-  { id: 18, phase: 4, title: 'Home', route: '/Home' },
-  { id: 19, phase: 4, title: 'My Profile', route: '/Profile' },
-  { id: 20, phase: 4, title: 'Feed', route: '/Newsfeed' },
-  { id: 21, phase: 4, title: 'Admin', route: '/AdminDashboard' },
-  // Static
-  { id: 22, phase: 4, title: 'About Us', route: '/AboutUs' },
-  { id: 23, phase: 4, title: 'Privacy Policy', route: '/PrivacyPolicy' },
+  // Phase 1 — Onboarding
+  { id: 1, phase: 1, slug: 'splash', title: 'Splash', route: '/', status: 'live' },
+  { id: 2, phase: 1, slug: 'welcome', title: 'Welcome', route: '/Welcome', status: 'live' },
+  { id: 3, phase: 1, slug: 'login', title: 'Login', route: '/Login', status: 'live' },
+  { id: 4, phase: 1, slug: 'register', title: 'Register', route: '/Register', status: 'live' },
+  { id: 5, phase: 1, slug: 'email-login', title: 'Email Login', route: '/EmailLogin', status: 'live' },
+  { id: 6, phase: 1, slug: 'phone-login', title: 'Phone Login', route: '/PhoneLogin', status: 'live' },
+  { id: 7, phase: 1, slug: 'otp', title: 'OTP', route: '/OTP', status: 'live' },
+  { id: 8, phase: 1, slug: 'forgot-password', title: 'Forgot Password', route: '/preview/forgot-password', status: 'stub' },
+  { id: 9, phase: 1, slug: 'create-password', title: 'Create Password', route: '/preview/create-password', status: 'stub' },
+  { id: 10, phase: 1, slug: 'upload-photo', title: 'Upload Photo', route: '/ProfileSetup/upload-photo', status: 'partial' },
+  { id: 11, phase: 1, slug: 'upload-video', title: 'Upload Video', route: '/preview/upload-video', status: 'stub' },
+  { id: 12, phase: 1, slug: 'basic-info', title: 'Basic Info', route: '/ProfileSetup/basic-info', status: 'partial' },
+  { id: 13, phase: 1, slug: 'i-am-a', title: 'I Am A', route: '/ProfileSetup/iam-a', status: 'partial' },
+  { id: 14, phase: 1, slug: 'seeking-a', title: 'Seeking A', route: '/ProfileSetup/seeking-a', status: 'partial' },
+  { id: 15, phase: 1, slug: 'religion', title: 'Religion', route: '/ProfileSetup/religion', status: 'partial' },
+  { id: 16, phase: 1, slug: 'questions', title: 'Questions', route: '/ProfileSetup/questions', status: 'partial' },
+  { id: 17, phase: 1, slug: 'review', title: 'Review', route: '/ProfileSetup/review', status: 'partial' },
+  { id: 18, phase: 1, slug: 'complete', title: 'Complete', route: '/preview/complete', status: 'stub' },
+  { id: 19, phase: 1, slug: 'onboarding-extra', title: 'Onboarding (extra)', route: '/preview/onboarding-extra', status: 'stub' },
+  // Phase 2 — Discovery & Connection
+  { id: 20, phase: 2, slug: 'daughter-profile', title: 'Daughter Profile', route: '/preview/daughter-profile', status: 'stub' },
+  { id: 21, phase: 2, slug: 'mother-profile', title: 'Mother Profile', route: '/preview/mother-profile', status: 'stub' },
+  { id: 22, phase: 2, slug: 'family-profile', title: 'Family Profile', route: '/preview/family-profile', status: 'stub' },
+  { id: 23, phase: 2, slug: 'connection-success', title: 'Connection Success', route: '/preview/connection-success', status: 'stub' },
+  { id: 24, phase: 2, slug: 'seeking-parent-reasons', title: 'Seeking Parent Reasons', route: '/preview/seeking-parent-reasons', status: 'stub' },
+  { id: 25, phase: 2, slug: 'seeking-child-reasons', title: 'Seeking Child Reasons', route: '/preview/seeking-child-reasons', status: 'stub' },
+  { id: 26, phase: 2, slug: 'seeking-sibling-reasons', title: 'Seeking Sibling Reasons', route: '/preview/seeking-sibling-reasons', status: 'stub' },
+  { id: 27, phase: 2, slug: 'lifestyle-questions', title: 'Lifestyle Questions', route: '/preview/lifestyle-questions', status: 'stub' },
+  { id: 28, phase: 2, slug: 'personal-questions', title: 'Personal Questions', route: '/preview/personal-questions', status: 'stub' },
+  { id: 29, phase: 2, slug: 'family-questions', title: 'Family Questions', route: '/preview/family-questions', status: 'stub' },
+  { id: 30, phase: 2, slug: 'religion-info', title: 'Religion Info', route: '/preview/religion-info', status: 'stub' },
+  { id: 31, phase: 2, slug: 'recommend', title: 'Recommend', route: '/preview/recommend', status: 'stub' },
+  // Phase 3 — Community, Tables & Letters
+  { id: 32, phase: 3, slug: 'letters-inbox', title: 'Letters Inbox', route: '/Messages', status: 'partial' },
+  { id: 33, phase: 3, slug: 'message-requests', title: 'Message Requests', route: '/preview/message-requests', status: 'stub' },
+  { id: 34, phase: 3, slug: 'open-conversation', title: 'Open Conversation', route: '/preview/open-conversation', status: 'stub' },
+  { id: 35, phase: 3, slug: 'family-table-listing', title: 'Family Table Listing', route: '/FamilyTables', status: 'partial' },
+  { id: 36, phase: 3, slug: 'family-table-details', title: 'Family Table Details', route: '/preview/family-table-details', status: 'stub' },
+  { id: 37, phase: 3, slug: 'request-join-table', title: 'Request to Join Table', route: '/preview/request-join-table', status: 'stub' },
+  { id: 38, phase: 3, slug: 'register-table', title: 'Register Table', route: '/preview/register-table', status: 'stub' },
+  { id: 39, phase: 3, slug: 'table-confirmation', title: 'Table Confirmation', route: '/preview/table-confirmation', status: 'stub' },
+  { id: 40, phase: 3, slug: 'previous-photos', title: 'Previous Photos', route: '/preview/previous-photos', status: 'stub' },
+  { id: 41, phase: 3, slug: 'event-reminders', title: 'Event Reminders', route: '/preview/event-reminders', status: 'stub' },
+  // Phase 4 — Full prototype
+  { id: 42, phase: 4, slug: 'home', title: 'Home', route: '/Home', status: 'partial' },
+  { id: 43, phase: 4, slug: 'settings', title: 'Settings', route: '/preview/settings', status: 'stub' },
+  { id: 44, phase: 4, slug: 'my-profile', title: 'My Profile', route: '/Profile', status: 'partial' },
+  { id: 45, phase: 4, slug: 'profile-carousel', title: 'Profile Carousel', route: '/preview/profile-carousel', status: 'stub' },
+  { id: 46, phase: 4, slug: 'adoption-approved', title: 'Adoption Approved', route: '/preview/adoption-approved', status: 'stub' },
+  { id: 47, phase: 4, slug: 'aymf-family-match', title: 'AYMF Family Match', route: '/preview/aymf-family-match', status: 'stub' },
+  { id: 48, phase: 4, slug: 'message-request-detail', title: 'Message Request Detail', route: '/preview/message-request-detail', status: 'stub' },
+  { id: 49, phase: 4, slug: 'compatibility-challenge', title: 'Compatibility Challenge', route: '/preview/compatibility-challenge', status: 'stub' },
+  { id: 50, phase: 4, slug: 'religion-selector', title: 'Religion Selector', route: '/preview/religion-selector', status: 'stub' },
+  { id: 51, phase: 4, slug: 'seeking-qs-parent', title: 'Seeking Qs (Parent)', route: '/preview/seeking-qs-parent', status: 'stub' },
+  { id: 52, phase: 4, slug: 'seeking-qs-child', title: 'Seeking Qs (Child)', route: '/preview/seeking-qs-child', status: 'stub' },
+  { id: 53, phase: 4, slug: 'seeking-qs-sibling', title: 'Seeking Qs (Sibling)', route: '/preview/seeking-qs-sibling', status: 'stub' },
+  { id: 54, phase: 4, slug: 'username-validation', title: 'Username Validation', route: '/preview/username-validation', status: 'stub' },
+  { id: 55, phase: 4, slug: 'register-table-full', title: 'Register Table (Full)', route: '/preview/register-table-full', status: 'stub' },
 ];
 
 export const PHASE_LABELS = {
   1: 'Phase 1 — Onboarding',
-  3: 'Phase 3 — Letters & Tables',
-  4: 'Phase 4 — App',
+  2: 'Phase 2 — Discovery & Connection',
+  3: 'Phase 3 — Community, Tables & Letters',
+  4: 'Phase 4 — Full Prototype',
 };
+
+export const STATUS_LABELS = {
+  live: 'Built',
+  partial: 'Partial',
+  stub: 'Coming soon',
+};
+
+export function getScreenBySlug(slug) {
+  return SCREEN_CATALOG.find((s) => s.slug === slug);
+}
+
+export function getScreenById(id) {
+  return SCREEN_CATALOG.find((s) => s.id === Number(id));
+}
 
 export function stagingUrl(route) {
   if (route.startsWith('http')) return route;
-  return `${STAGING_BASE}${route}`;
+  const path = `${STAGING_BASE}${route}`;
+  return path.includes('?') ? `${path}&preview=1` : `${path}?preview=1`;
+}
+
+export function withPreviewQuery(route) {
+  if (route.includes('?')) return `${route}&preview=1`;
+  return `${route}?preview=1`;
 }
