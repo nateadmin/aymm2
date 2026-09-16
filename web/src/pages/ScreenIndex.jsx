@@ -1,52 +1,23 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   PHASE_LABELS,
   SCREEN_CATALOG,
+  STAGING_HUB,
   stagingUrl,
 } from '@/lib/screenCatalog';
-import {
-  disableStagingPreview,
-  enableStagingPreview,
-  isStagingPreviewEnabled,
-} from '@/lib/stagingPreview';
-
-function StatusBadge({ status }) {
-  const labels = {
-    live: 'Live',
-    partial: 'Partial',
-    reference: 'Figma ref',
-  };
-  return <span className={`screen-index__badge screen-index__badge--${status}`}>{labels[status] || status}</span>;
-}
 
 export default function ScreenIndex() {
-  const phases = [1, 2, 3, 4];
-  const [previewOn, setPreviewOn] = useState(isStagingPreviewEnabled());
-
-  function togglePreview() {
-    if (previewOn) {
-      disableStagingPreview();
-      setPreviewOn(false);
-    } else {
-      enableStagingPreview();
-      setPreviewOn(true);
-    }
-  }
+  const phases = Object.keys(PHASE_LABELS).map(Number);
 
   return (
     <div className="screen-index">
       <header className="screen-index__header">
-        <h1 className="screen-index__title">AYMM staging screens</h1>
+        <h1 className="screen-index__title">AYMM staging</h1>
         <p className="screen-index__lead">
-          {SCREEN_CATALOG.length} wireframe-faithful screens.{' '}
-          <strong>Live</strong> and <strong>Partial</strong> open the app route;{' '}
-          <strong>Figma ref</strong> shows the design PNG until the screen is built.
+          {SCREEN_CATALOG.length} built screens on staging. Login is skipped automatically on{' '}
+          <strong>aymm.app</strong> so you can open every route below.
         </p>
-        <p className="screen-index__meta">Staging base: {stagingUrl('/')}</p>
-        <button type="button" className="screen-index__preview-toggle" onClick={togglePreview}>
-          {previewOn ? 'Disable staging preview (login required)' : 'Enable staging preview (skip login)'}
-        </button>
+        <p className="screen-index__meta">Share this page: {STAGING_HUB}</p>
       </header>
 
       {phases.map((phase) => (
@@ -57,22 +28,18 @@ export default function ScreenIndex() {
               <li key={screen.id} className="screen-index__item">
                 <span className="screen-index__num">{String(screen.id).padStart(2, '0')}</span>
                 <div className="screen-index__body">
-                  <Link to={screen.route} className="screen-index__link">
+                  <a
+                    href={stagingUrl(screen.route)}
+                    className="screen-index__link"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {screen.title}
-                  </Link>
+                  </a>
                   <div className="screen-index__meta-row">
-                    <StatusBadge status={screen.status} />
-                    <Link to={`/screens/ref/${screen.slug}`} className="screen-index__ref-link">
-                      View Figma ref
+                    <Link to={screen.route} className="screen-index__ref-link">
+                      Open in app
                     </Link>
-                    <a
-                      href={stagingUrl(screen.route)}
-                      className="screen-index__ext"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Open staging ↗
-                    </a>
                   </div>
                 </div>
               </li>

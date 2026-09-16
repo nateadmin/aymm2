@@ -6,15 +6,11 @@ Server: 185.198.27.3 (shared with Aldvin Gomes WordPress at aldvingomes.com)
 
 Public URLs: https://aymm.app and https://aymmapp.com (DNS A records → 185.198.27.3)
 
-## Staging (review every screen here)
+## Staging (review every built screen here)
 
-**Screen index (all 55 links):** https://aymm.app/screens
+**https://aymm.app/screens** — all implemented routes; login is skipped on staging automatically.
 
-Enable **staging preview** on that page to open partial/auth routes without logging in.
-
-Agents and reviewers use **https://aymm.app** as the staging base. Link routes, not raw PNGs.
-
-Design sources: `docs/ui-design/SOURCE.md`.
+Agents link staging URLs only (not design PNGs). Design sources for dev: `docs/ui-design/SOURCE.md`.
 
 ## Stack
 

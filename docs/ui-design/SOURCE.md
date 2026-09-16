@@ -9,4 +9,4 @@ Large binaries stay off GitHub. Canonical sources:
 | Screen exports | `screens/` in this directory (55 PNGs) |
 | Brand handoff PDFs | `../brand-identity/` |
 
-**Staging:** https://aymm.app — compare implemented screens against the PNG exports here.
+**Staging hub (built screens only):** https://aymm.app/screens — PNGs here are for dev handoff, not shown on staging.

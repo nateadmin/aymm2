@@ -6,19 +6,20 @@ export function isStagingHost() {
   return STAGING_HOSTS.has(window.location.hostname);
 }
 
+/** On staging hosts, skip login by default so every screen link works. */
 export function isStagingPreviewEnabled() {
   if (!isStagingHost()) return false;
   try {
-    return sessionStorage.getItem(STORAGE_KEY) === '1';
+    return sessionStorage.getItem(STORAGE_KEY) !== 'off';
   } catch {
-    return false;
+    return true;
   }
 }
 
-export function enableStagingPreview() {
-  sessionStorage.setItem(STORAGE_KEY, '1');
+export function disableStagingPreview() {
+  sessionStorage.setItem(STORAGE_KEY, 'off');
 }
 
-export function disableStagingPreview() {
+export function enableStagingPreview() {
   sessionStorage.removeItem(STORAGE_KEY);
 }
