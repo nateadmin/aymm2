@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
+import SplashBrand from '@/components/mobile/SplashBrand';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
@@ -42,7 +43,8 @@ export default function EmailLogin() {
       <form className="screen-pad screen-pad--auth" onSubmit={handleSubmit}>
         <BackButton to="/Login" />
 
-        <div>
+        <div className="screen-pad screen-pad--center" style={{ padding: 0 }}>
+          <SplashBrand compact />
           <h1 className="auth-heading">Sign in</h1>
           <p className="auth-subheading">Enter your details below</p>
         </div>
