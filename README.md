@@ -20,9 +20,9 @@ Agents link staging URLs only (not design PNGs). Design sources for dev: `docs/u
 - Apache reverse proxy vhost for `aymm.app`, `www.aymm.app`, and `aymmapp.com` (WordPress stays on `aldvingomes.com`)
 - Secrets from Infisical project AYMM, prod environment
 
-Brand identity PDFs belong in `docs/brand-identity/`. The web theme is implemented in `web/src/theme/` using those specs (colors, Two Turtle Doves typography, button/input sizes).
+Brand identity PDFs belong in `docs/brand-identity/`. The web theme is implemented in `web/src/theme/` using those specs (colors, Arial body type, Two Turtle Doves logo title, button/input sizes).
 
-Licensed `Two Turtle Doves` files belong in `web/public/fonts/two-turtle-doves.woff2` for splash/welcome wordmark rendering.
+Licensed fonts live in `web/src/assets/fonts/`: `arial.woff2` (UI copy) and `two-turtle-doves.woff2` (logo title only).
 
 ## Local web dev
 
