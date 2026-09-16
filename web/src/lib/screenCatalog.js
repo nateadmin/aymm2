@@ -82,6 +82,40 @@ export const STATUS_LABELS = {
   frame: 'Design frame',
 };
 
+/**
+ * Map catalog screen id → Figma export filename.
+ * Figma includes extra "uploaded" states (design-10, design-12) that are not
+ * separate catalog screens. Screen 19 uses the photo-uploaded frame.
+ */
+const DESIGN_SOURCE_BY_SCREEN_ID = (() => {
+  const skipped = new Set([10, 12]);
+  const mapping = new Map();
+  const pool = [];
+
+  for (let index = 0; index <= 55; index += 1) {
+    if (!skipped.has(index)) pool.push(index);
+  }
+
+  let poolIndex = 0;
+  for (let screenId = 1; screenId <= 55; screenId += 1) {
+    if (screenId === 19) {
+      mapping.set(screenId, 10);
+      continue;
+    }
+    mapping.set(screenId, pool[poolIndex]);
+    poolIndex += 1;
+  }
+
+  return mapping;
+})();
+
+export function designSourcePath(screenId) {
+  const sourceIndex = DESIGN_SOURCE_BY_SCREEN_ID.get(Number(screenId));
+  if (sourceIndex === undefined) return null;
+  if (sourceIndex === 0) return 'Replicate previous design.png';
+  return `Replicate previous design-${sourceIndex}.png`;
+}
+
 export function frameImageUrl(screen) {
   const id = typeof screen === 'number' ? screen : screen.id;
   return `/design-frames/frame-${String(id).padStart(2, '0')}.png`;
