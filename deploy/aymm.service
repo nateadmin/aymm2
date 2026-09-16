@@ -1,0 +1,18 @@
+[Unit]
+Description=AYMM API server
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/opt/aymm/current/server
+Environment=PORT=3000
+ExecStart=/opt/aymm/current/deploy/start-server.sh
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
