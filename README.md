@@ -30,7 +30,17 @@ Licensed `Two Turtle Doves` files belong in `web/public/fonts/two-turtle-doves.w
 cd web && npm ci && npm run dev
 ```
 
+Open **http://localhost:5173/screens?preview=1** to browse all 55 screens (login bypass is on for localhost).
+
 In another terminal, run the API from `server/` on port 3000.
+
+## Design review without installing anything
+
+1. Open [github.com/nateadmin/aymm2](https://github.com/nateadmin/aymm2)
+2. Click **Code** → **Codespaces** → **Create codespace on main**
+3. When the dev server starts, open the forwarded port and go to **`/screens?preview=1`**
+
+Or in the browser: [StackBlitz – aymm2/web](https://stackblitz.com/github/nateadmin/aymm2/tree/main/web) → run `npm run dev` → open `/screens?preview=1`.
 
 ## App shell routes
 
