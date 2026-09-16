@@ -3,6 +3,7 @@ import {
   PHASE_LABELS,
   SCREEN_CATALOG,
   STAGING_HUB,
+  STAGING_MOBILE_LOGIN,
   STATUS_LABELS,
   stagingUrl,
   withPreviewQuery,
@@ -26,11 +27,14 @@ export default function ScreenIndex() {
         <h1 className="screen-index__title">AYMM staging</h1>
         <p className="screen-index__lead">
           All {SCREEN_CATALOG.length} Figma screens ({builtCount} built, {partialCount} partial,{' '}
-          {stubCount} coming soon). Login is skipped on <strong>aymm.app</strong>,{' '}
-          <strong>StackBlitz</strong>, and <strong>Codespaces</strong>. Add <code>?preview=1</code> to
-          any URL to force bypass.
+          {stubCount} coming soon). Use <code>?mobile=1</code> for phone layout on desktop. Login
+          bypass: <code>?preview=1</code>.
         </p>
-        <p className="screen-index__meta">Share this page: {STAGING_HUB}</p>
+        <p className="screen-index__meta">
+          Mobile hub: {STAGING_HUB}
+          <br />
+          Mobile login sample: {STAGING_MOBILE_LOGIN}
+        </p>
         <button
           type="button"
           className="screen-index__preview-toggle"
