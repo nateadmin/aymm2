@@ -282,6 +282,39 @@ select {
   color: var(--aymm-muted-purple);
 }
 
+/* Force phone layout on desktop when ?mobile=1 (design review). */
+html[data-mobile-preview] .app-layout {
+  display: block;
+}
+
+html[data-mobile-preview] .app-sidebar,
+html[data-mobile-preview] .app-right-sidebar {
+  display: none !important;
+}
+
+html[data-mobile-preview] .app-layout__body {
+  max-width: var(--shell-max-mobile);
+  margin: 0 auto;
+  background: var(--aymm-white);
+}
+
+html[data-mobile-preview] .app-main {
+  display: block;
+}
+
+html[data-mobile-preview] .app-main__content {
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+}
+
+html[data-mobile-preview] .bottom-nav {
+  display: block !important;
+}
+
+html[data-mobile-preview] .page-shell {
+  max-width: none;
+  padding: var(--space-lg) var(--space-md);
+}
+
 @media (min-width: 48rem) {
   body {
     background: var(--aymm-surface);

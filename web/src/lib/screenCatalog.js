@@ -4,7 +4,8 @@
  */
 
 export const STAGING_BASE = 'https://aymm.app';
-export const STAGING_HUB = `${STAGING_BASE}/screens?preview=1`;
+export const STAGING_HUB = `${STAGING_BASE}/screens?preview=1&mobile=1`;
+export const STAGING_MOBILE_LOGIN = `${STAGING_BASE}/EmailLogin?preview=1&mobile=1`;
 
 export const SCREEN_CATALOG = [
   // Phase 1 — Onboarding
@@ -89,13 +90,21 @@ export function getScreenById(id) {
   return SCREEN_CATALOG.find((s) => s.id === Number(id));
 }
 
-export function stagingUrl(route) {
-  if (route.startsWith('http')) return route;
-  const path = `${STAGING_BASE}${route}`;
-  return path.includes('?') ? `${path}&preview=1` : `${path}?preview=1`;
+function appendQuery(route, key, value) {
+  if (route.includes(`${key}=`)) return route;
+  return route.includes('?') ? `${route}&${key}=${value}` : `${route}?${key}=${value}`;
 }
 
-export function withPreviewQuery(route) {
-  if (route.includes('?')) return `${route}&preview=1`;
-  return `${route}?preview=1`;
+export function stagingUrl(route, { mobile = true } = {}) {
+  if (route.startsWith('http')) return route;
+  let path = `${STAGING_BASE}${route}`;
+  path = appendQuery(path, 'preview', '1');
+  if (mobile) path = appendQuery(path, 'mobile', '1');
+  return path;
+}
+
+export function withPreviewQuery(route, { mobile = true } = {}) {
+  let path = appendQuery(route, 'preview', '1');
+  if (mobile) path = appendQuery(path, 'mobile', '1');
+  return path;
 }
