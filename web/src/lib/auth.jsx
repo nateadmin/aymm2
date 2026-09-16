@@ -8,6 +8,8 @@ import {
   loadMockSession,
   mockLogin,
   mockMe,
+  mockRegister,
+  mockSaveProfile,
 } from '@/lib/mockAuth';
 
 const AuthContext = createContext(null);
@@ -114,7 +116,7 @@ export function AuthProvider({ children }) {
     },
     register: async (email, password) => {
       if (isMockAuthEnabled()) {
-        const session = mockLogin(email, password, { completeProfile: false });
+        const session = mockRegister(email, password);
         setStoredToken(session.token);
         return applySession(session);
       }
@@ -140,7 +142,15 @@ export function AuthProvider({ children }) {
       setProfile(null);
       setAuthError({ type: 'auth_required' });
     },
-    setProfileState: setProfile,
+    setProfileState: (updater) => {
+      setProfile((previous) => {
+        const next = typeof updater === 'function' ? updater(previous) : updater;
+        if (isMockAuthEnabled() && isMockToken(getStoredToken()) && next) {
+          mockSaveProfile(next);
+        }
+        return next;
+      });
+    },
   }), [user, profile, isLoading, authError, bootstrap, applySession]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

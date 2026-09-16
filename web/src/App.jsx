@@ -10,7 +10,9 @@ import Splash from '@/pages/Splash';
 import Welcome from '@/pages/Welcome';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
+import Demo from '@/pages/Demo';
 import EmailLogin from '@/pages/EmailLogin';
+import EmailRegister from '@/pages/EmailRegister';
 import PhoneLogin from '@/pages/PhoneLogin';
 import OTP from '@/pages/OTP';
 import ProfileSetup from '@/pages/ProfileSetup';
@@ -38,7 +40,9 @@ export default function App() {
               <Route path="/Welcome" element={<Welcome />} />
               <Route path="/Login" element={<Login />} />
               <Route path="/Register" element={<Register />} />
+              <Route path="/demo" element={<Demo />} />
               <Route path="/EmailLogin" element={<EmailLogin />} />
+              <Route path="/EmailRegister" element={<EmailRegister />} />
               <Route path="/PhoneLogin" element={<PhoneLogin />} />
               <Route path="/OTP" element={<OTP />} />
               <Route path="/AboutUs" element={<AboutUs />} />

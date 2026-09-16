@@ -6,32 +6,31 @@ import SplashBrand from '@/components/mobile/SplashBrand';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
-import { getPostAuthPath } from '@/lib/session';
 import { useToast } from '@/lib/toast';
-import { isMockAuthEnabled, MOCK_LOGIN_EMAIL, MOCK_LOGIN_PASSWORD } from '@/lib/mockAuth';
+import { isMockAuthEnabled } from '@/lib/mockAuth';
 
-export default function EmailLogin() {
+export default function EmailRegister() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register } = useAuth();
   const { push } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
   const mockAuth = isMockAuthEnabled();
-  const canSubmit = email.trim() && password.trim();
+
+  const canSubmit = email.trim() && password.trim().length >= 8;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!canSubmit || submitting) return;
     setSubmitting(true);
     try {
-      const session = await login(email.trim(), password);
-      navigate(getPostAuthPath(session), { replace: true });
+      await register(email.trim(), password);
+      navigate('/ProfileSetup/upload-photo', { replace: true });
     } catch (error) {
-      const message = error.payload?.error === 'invalid_credentials'
-        ? 'Email or password is incorrect.'
-        : 'Could not sign in. Please try again.';
+      const message = error.payload?.error === 'email_taken'
+        ? 'That email is already registered.'
+        : 'Could not create your account. Use an 8+ character password.';
       push(message, 'error');
     } finally {
       setSubmitting(false);
@@ -41,12 +40,12 @@ export default function EmailLogin() {
   return (
     <MobileScreen>
       <form className="screen-pad screen-pad--auth" onSubmit={handleSubmit}>
-        <BackButton to={isMockAuthEnabled() ? '/demo' : '/Login'} />
+        <BackButton to="/demo" />
 
         <div className="screen-pad screen-pad--center" style={{ padding: 0 }}>
           <SplashBrand compact />
-          <h1 className="auth-heading">Sign in</h1>
-          <p className="auth-subheading">Enter your details below</p>
+          <h1 className="auth-heading">Create account</h1>
+          <p className="auth-subheading">Start your profile in a few steps</p>
         </div>
 
         <div className="auth-stack">
@@ -70,10 +69,10 @@ export default function EmailLogin() {
                 className="aymm-input"
                 type="password"
                 name="password"
-                placeholder="Your password"
+                placeholder="At least 8 characters"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                autoComplete="current-password"
+                autoComplete="new-password"
               />
               <EyeOff
                 size={18}
@@ -88,12 +87,8 @@ export default function EmailLogin() {
             </div>
           </label>
 
-          <button type="button" className="auth-link">Forgot Password?</button>
           {mockAuth ? (
-            <p className="auth-demo-hint">
-              StackBlitz demo: <strong>{MOCK_LOGIN_EMAIL}</strong> /{' '}
-              <strong>{MOCK_LOGIN_PASSWORD}</strong>
-            </p>
+            <p className="auth-demo-hint">Demo mode: any valid email works in StackBlitz.</p>
           ) : null}
         </div>
 
@@ -102,7 +97,7 @@ export default function EmailLogin() {
           variant={canSubmit ? 'primary' : 'disabled'}
           disabled={!canSubmit || submitting}
         >
-          Sign In
+          Continue to profile setup
         </Button>
       </form>
     </MobileScreen>
