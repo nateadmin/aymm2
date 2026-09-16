@@ -23,10 +23,10 @@ export const ONBOARDING_PROFILE_QUESTIONS = [
     field: 'question_hoping_for',
     title: 'What are you most hoping for?',
     options: [
-      { id: 'emotional_connection', label: 'Emotional connection' },
-      { id: 'guidance_support', label: 'Guidance and support' },
-      { id: 'belonging', label: 'Belonging and acceptance' },
-      { id: 'all_of_the_above', label: 'All of the above' },
+      { id: 'emotional_support', label: 'Emotional support' },
+      { id: 'shared_activities', label: 'Shared activities' },
+      { id: 'wisdom_guidance', label: 'Wisdom & guidance' },
+      { id: 'simply_belonging', label: 'Simply belonging' },
     ],
   },
 ];
