@@ -22,9 +22,9 @@
   --aymm-btn-disabled-bg: #e8e4eb;
   --aymm-btn-disabled-text: #a89bb0;
 
-  --font-body: 'Patrick Hand', cursive;
-  --font-heading: 'Kalam', cursive;
-  --font-brand: 'Two Turtle Doves', 'Patrick Hand', cursive;
+  --font-body: 'Two Turtle Doves', cursive;
+  --font-heading: 'Two Turtle Doves', cursive;
+  --font-brand: 'Two Turtle Doves', cursive;
 
   --radius-button: 8px;
   --radius-input: 6px;

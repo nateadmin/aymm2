@@ -20,7 +20,7 @@ Agents link staging URLs only (not design PNGs). Design sources for dev: `docs/u
 - Apache reverse proxy vhost for `aymm.app`, `www.aymm.app`, and `aymmapp.com` (WordPress stays on `aldvingomes.com`)
 - Secrets from Infisical project AYMM, prod environment
 
-Brand identity PDFs belong in `docs/brand-identity/`. The web theme is implemented in `web/src/theme/` using those specs (colors, Patrick Hand, Kalam, button/input sizes).
+Brand identity PDFs belong in `docs/brand-identity/`. The web theme is implemented in `web/src/theme/` using those specs (colors, Two Turtle Doves typography, button/input sizes).
 
 Licensed `Two Turtle Doves` files belong in `web/public/fonts/two-turtle-doves.woff2` for splash/welcome wordmark rendering.
 
@@ -111,6 +111,7 @@ Agents: do not report a deploy job complete until every post-deploy URL below re
 - GET `http://127.0.0.1:3000/Home` on server → 200 SPA shell
 - GET `https://aymm.app/api/health` → 200
 - GET `https://aymm.app/Welcome` → 200
+- Brand font bundled in build (`dist/assets/two-turtle-doves-*.woff2` > 10 KB after deploy)
 - WordPress unchanged: GET `https://aldvingomes.com/` → 200
 
 ### Log check
