@@ -602,8 +602,17 @@
   color: #f57f17;
 }
 
-.screen-index__badge--stub {
+.screen-index__badge--frame {
   background: var(--aymm-phase-purple-surface);
+  color: var(--aymm-phase-violet);
+}
+
+.design-ref__phase {
+  margin: 0.75rem 0 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--aymm-phase-violet);
 }
 
