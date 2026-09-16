@@ -40,7 +40,7 @@ In another terminal, run the API from `server/` on port 3000.
 2. Click **Code** → **Codespaces** → **Create codespace on main**
 3. When the dev server starts, open the forwarded port and go to **`/screens?preview=1`**
 
-Or in the browser: [StackBlitz – aymm2/web](https://stackblitz.com/github/nateadmin/aymm2/tree/main/web) → run `npm run dev` → open `/screens?preview=1`.
+Or in the browser: [StackBlitz – aymm2/web](https://stackblitz.com/github/nateadmin/aymm2/tree/main/web) → run `npm run dev` → open `/screens?preview=1`. Login bypass is automatic in StackBlitz; use `?preview=1` on any route if needed.
 
 ## App shell routes
 

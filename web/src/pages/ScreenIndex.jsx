@@ -25,9 +25,10 @@ export default function ScreenIndex() {
       <header className="screen-index__header">
         <h1 className="screen-index__title">AYMM staging</h1>
         <p className="screen-index__lead">
-          All {SCREEN_CATALOG.length} Figma screens. Login is skipped on <strong>aymm.app</strong>{' '}
-          ({builtCount} built, {partialCount} partial, {stubCount} coming soon). Add{' '}
-          <code>?preview=1</code> to any URL to force bypass.
+          All {SCREEN_CATALOG.length} Figma screens ({builtCount} built, {partialCount} partial,{' '}
+          {stubCount} coming soon). Login is skipped on <strong>aymm.app</strong>,{' '}
+          <strong>StackBlitz</strong>, and <strong>Codespaces</strong>. Add <code>?preview=1</code> to
+          any URL to force bypass.
         </p>
         <p className="screen-index__meta">Share this page: {STAGING_HUB}</p>
         <button
