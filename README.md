@@ -42,6 +42,8 @@ In another terminal, run the API from `server/` on port 3000.
 
 Or in the browser: [StackBlitz – aymm2/web](https://stackblitz.com/github/nateadmin/aymm2/tree/main/web) → run `npm run dev` → open `/screens?preview=1`. Login bypass is automatic in StackBlitz; use `?preview=1` on any route if needed.
 
+**StackBlitz demo login** (mock auth, no backend): `design@aymm.app` / `DesignReview1` — or any email with an 8+ character password.
+
 ## App shell routes
 
 Public: `/Welcome`, `/AboutUs`, `/PrivacyPolicy`

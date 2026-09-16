@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 import { getPostAuthPath } from '@/lib/session';
 import { useToast } from '@/lib/toast';
+import { isMockAuthEnabled, MOCK_LOGIN_EMAIL, MOCK_LOGIN_PASSWORD } from '@/lib/mockAuth';
 
 export default function EmailLogin() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function EmailLogin() {
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const mockAuth = isMockAuthEnabled();
   const canSubmit = email.trim() && password.trim();
 
   const handleSubmit = async (event) => {
@@ -85,6 +87,12 @@ export default function EmailLogin() {
           </label>
 
           <button type="button" className="auth-link">Forgot Password?</button>
+          {mockAuth ? (
+            <p className="auth-demo-hint">
+              StackBlitz demo: <strong>{MOCK_LOGIN_EMAIL}</strong> /{' '}
+              <strong>{MOCK_LOGIN_PASSWORD}</strong>
+            </p>
+          ) : null}
         </div>
 
         <Button

@@ -67,6 +67,14 @@
   gap: 1.5rem;
 }
 
+.auth-demo-hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--aymm-muted-purple);
+  text-align: center;
+}
+
 .screen-back {
   display: inline-flex;
   align-items: center;
