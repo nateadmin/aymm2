@@ -12,6 +12,18 @@ export const IDENTITY_ROLE_OPTIONS = [
 export const CHILD_IDENTITIES = ['daughter', 'son'];
 export const PARENT_IDENTITIES = ['mother', 'father'];
 
+/** Figma onboarding list for the Faith & Spirituality step. */
+export const RELIGION_ONBOARDING_OPTIONS = [
+  { id: 'christianity', label: 'Christianity' },
+  { id: 'islam', label: 'Islam' },
+  { id: 'judaism', label: 'Judaism' },
+  { id: 'hinduism', label: 'Hinduism' },
+  { id: 'buddhism', label: 'Buddhism' },
+  { id: 'spiritual', label: 'Spiritual' },
+  { id: 'open_to_all', label: 'No preference' },
+  { id: 'other', label: 'Other' },
+];
+
 export const RELIGIONS = [
   'christianity',
   'islam',
@@ -102,4 +114,11 @@ export const ADMIN_TABS = [
 export function labelForIdentity(type) {
   if (!type) return '';
   return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
+export function labelForReligion(id) {
+  const match = RELIGION_ONBOARDING_OPTIONS.find((option) => option.id === id);
+  if (match) return match.label;
+  if (!id) return '';
+  return id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');
 }

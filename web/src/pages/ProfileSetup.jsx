@@ -22,8 +22,8 @@ export default function ProfileSetup() {
         <Route path="basic-info" element={<BasicInfoStep />} />
         <Route path="iam-a" element={<IAmAStep />} />
         <Route path="seeking-a" element={<SeekingAStep />} />
+        <Route path="religion" element={<ReligionStep />} />
         <Route element={<OnboardingLayout />}>
-          <Route path="religion" element={<ReligionStep />} />
           <Route path="questions" element={<QuestionsStep />} />
           <Route path="bio" element={<BioStep />} />
           <Route path="review" element={<ReviewStep />} />

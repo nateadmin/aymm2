@@ -548,6 +548,10 @@
   color: var(--aymm-red);
 }
 
+.identity-role-option--text {
+  grid-template-columns: 1fr auto;
+}
+
 .identity-role-option__icon {
   font-size: 1.5rem;
   line-height: 1;

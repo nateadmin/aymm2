@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@/components/ui/Button';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
-import { labelForIdentity } from '@/lib/constants';
+import { labelForIdentity, labelForReligion } from '@/lib/constants';
 
 export default function ReviewStep() {
   const { form, completeOnboarding, saving, isFamily } = useProfileSetup();
@@ -17,7 +17,7 @@ export default function ReviewStep() {
         ? 'Hosting tables'
         : form.seeking_types.map(labelForIdentity).join(', '),
     },
-    { label: 'Religion', value: form.religion },
+    { label: 'Faith', value: labelForReligion(form.religion) },
     { label: 'Photos', value: `${form.profile_photos.length} uploaded` },
     { label: 'Video', value: form.intro_video_url ? '10-sec video ready' : 'Skipped' },
     { label: 'Bio', value: `${form.bio?.length || 0} characters` },
