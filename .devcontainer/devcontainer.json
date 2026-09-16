@@ -1,0 +1,22 @@
+{
+  "name": "AYMM design review",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": {
+      "label": "AYMM app",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "postCreateCommand": "cd web && npm ci",
+  "postAttachCommand": "cd web && npm run dev -- --host 0.0.0.0 --port 5173",
+  "customizations": {
+    "vscode": {
+      "portsAttributes": {
+        "5173": {
+          "label": "AYMM app — open /screens?preview=1"
+        }
+      }
+    }
+  }
+}
