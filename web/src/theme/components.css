@@ -1,7 +1,7 @@
 .aymm-heading {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 400;
   color: var(--aymm-purple);
 }
 
@@ -555,7 +555,7 @@
 
 .feed-card__action--active {
   color: var(--aymm-rose);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .feed-card__action--share,
@@ -605,7 +605,7 @@
 .chat-view__name,
 .profile-page__name {
   margin: 0;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--aymm-purple);
 }
 
@@ -728,7 +728,7 @@
 
 .table-card__title {
   margin: 0;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .table-detail,
@@ -865,7 +865,7 @@
 
 .comment-list__author {
   margin: 0;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .about-page,
