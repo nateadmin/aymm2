@@ -44,7 +44,7 @@ export default function EmailRegister() {
 
         <div className="screen-pad screen-pad--center" style={{ padding: 0 }}>
           <SplashBrand compact />
-          <h1 className="auth-heading">Create account</h1>
+          <h1 className="auth-heading auth-heading--brand">Create account</h1>
           <p className="auth-subheading">Start your profile in a few steps</p>
         </div>
 
