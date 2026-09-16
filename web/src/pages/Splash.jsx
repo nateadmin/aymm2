@@ -19,7 +19,6 @@ export default function Splash() {
         <div className="splash-actions">
           <Button onClick={() => navigate('/Welcome')}>Get Started</Button>
           <p className="splash-caption">A safe place for meaningful family bonds</p>
-          <p className="splash-meta">AYMM · Phase 1 + 2 + 3 + 4 · Wireframe-Faithful</p>
         </div>
       </div>
     </MobileScreen>

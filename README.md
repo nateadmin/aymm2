@@ -6,6 +6,12 @@ Server: 185.198.27.3 (shared with Aldvin Gomes WordPress at aldvingomes.com)
 
 Public URLs: https://aymm.app and https://aymmapp.com (DNS A records → 185.198.27.3)
 
+## Staging (review every screen here)
+
+Agents and reviewers use **https://aymm.app** as the staging URL. Do not share raw PNGs or repo paths when a screen is live — link the route instead (for example `/`, `/Welcome`, `/Login`, `/ProfileSetup`).
+
+Design sources: `docs/ui-design/SOURCE.md`.
+
 ## Stack
 
 - React web shell in `web/` (mobile bottom nav + desktop sidebar/right rail)
