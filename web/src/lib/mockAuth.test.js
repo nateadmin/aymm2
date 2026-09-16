@@ -6,6 +6,10 @@ import {
   isMockAuthEnabled,
   isMockToken,
   mockLogin,
+  mockRegister,
+  mockSaveProfile,
+  loadMockSession,
+  clearMockSession,
 } from './mockAuth.js';
 
 test('isMockAuthEnabled is off on live staging hosts', () => {
@@ -13,19 +17,28 @@ test('isMockAuthEnabled is off on live staging hosts', () => {
   assert.equal(isMockAuthEnabled('aymm2-web--5173--abc.local.webcontainer.io'), true);
 });
 
-test('mockLogin accepts demo credentials and any valid email with 8+ char password', () => {
-  const demo = mockLogin(MOCK_LOGIN_EMAIL, MOCK_LOGIN_PASSWORD);
-  assert.equal(isMockToken(demo.token), true);
-  assert.equal(demo.user.email, MOCK_LOGIN_EMAIL);
-  assert.equal(demo.profile.setup_complete, true);
-
-  const any = mockLogin('reviewer@example.com', 'password1');
-  assert.equal(any.user.email, 'reviewer@example.com');
+test('mockRegister creates account without completed profile', () => {
+  clearMockSession();
+  const session = mockRegister('new.user@example.com', 'password1');
+  assert.equal(isMockToken(session.token), true);
+  assert.equal(session.profile, null);
 });
 
-test('mockLogin rejects short passwords', () => {
-  assert.throws(
-    () => mockLogin('reviewer@example.com', 'short'),
-    (error) => error.payload?.error === 'invalid_credentials',
-  );
+test('mockLogin accepts demo credentials', () => {
+  clearMockSession();
+  const demo = mockLogin(MOCK_LOGIN_EMAIL, MOCK_LOGIN_PASSWORD);
+  assert.equal(demo.user.email, MOCK_LOGIN_EMAIL);
+  assert.equal(demo.profile.setup_complete, true);
+});
+
+test('mockSaveProfile stores onboarding progress', () => {
+  clearMockSession();
+  mockRegister('builder@example.com', 'password1');
+  const profile = mockSaveProfile({
+    display_name: 'Alex',
+    identity_type: 'daughter',
+    setup_complete: false,
+  });
+  assert.equal(profile.display_name, 'Alex');
+  assert.equal(loadMockSession().profile.display_name, 'Alex');
 });

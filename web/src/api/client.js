@@ -1,3 +1,5 @@
+import { tryMockApi } from '@/lib/mockApi';
+
 const TOKEN_KEY = 'aymm_session_token';
 
 export function getStoredToken() {
@@ -13,12 +15,17 @@ export function setStoredToken(token) {
 }
 
 async function request(path, options = {}) {
+  const token = getStoredToken();
+  const mockPayload = tryMockApi(path, options.method || 'GET', options.body, token);
+  if (mockPayload !== null) {
+    return mockPayload;
+  }
+
   const headers = {
     'Content-Type': 'application/json',
     ...(options.headers || {}),
   };
 
-  const token = getStoredToken();
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }

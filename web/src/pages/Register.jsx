@@ -48,7 +48,7 @@ export default function Register() {
           <SocialAuthButton icon={<FacebookIcon />}>Sign up with Facebook</SocialAuthButton>
           <SocialAuthButton icon={<InstagramIcon />}>Sign up with Instagram</SocialAuthButton>
           <div className="auth-divider">or</div>
-          <SocialAuthButton icon={<Mail size={18} />} onClick={() => navigate('/EmailLogin')}>
+          <SocialAuthButton icon={<Mail size={18} />} onClick={() => navigate('/EmailRegister')}>
             Sign up with Email
           </SocialAuthButton>
           <SocialAuthButton icon={<Phone size={18} />} onClick={() => navigate('/PhoneLogin')}>

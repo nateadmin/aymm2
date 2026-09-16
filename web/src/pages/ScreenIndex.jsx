@@ -31,9 +31,9 @@ export default function ScreenIndex() {
           bypass: <code>?preview=1</code>.
         </p>
         <p className="screen-index__meta">
-          Mobile hub: {STAGING_HUB}
+          Interactive demo: <Link to={withPreviewQuery('/demo')}>Open /demo</Link>
           <br />
-          Mobile login sample: {STAGING_MOBILE_LOGIN}
+          Mobile hub: {STAGING_HUB}
         </p>
         <button
           type="button"

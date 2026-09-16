@@ -2,6 +2,7 @@ import { isDesignReviewHost } from './stagingPreview.js';
 
 const MOCK_TOKEN_PREFIX = 'mock:';
 const MOCK_SESSION_KEY = 'aymm_mock_session';
+let memorySession = null;
 
 export const MOCK_LOGIN_EMAIL = 'design@aymm.app';
 export const MOCK_LOGIN_PASSWORD = 'DesignReview1';
@@ -24,6 +25,7 @@ export function isMockToken(token) {
 }
 
 function saveMockSession(session) {
+  memorySession = session;
   try {
     sessionStorage.setItem(MOCK_SESSION_KEY, JSON.stringify(session));
   } catch {
@@ -32,15 +34,25 @@ function saveMockSession(session) {
 }
 
 export function loadMockSession() {
+  if (memorySession) {
+    return memorySession;
+  }
+
   try {
     const raw = sessionStorage.getItem(MOCK_SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
+    if (raw) {
+      memorySession = JSON.parse(raw);
+      return memorySession;
+    }
   } catch {
-    return null;
+    // ignore storage failures
   }
+
+  return null;
 }
 
 export function clearMockSession() {
+  memorySession = null;
   try {
     sessionStorage.removeItem(MOCK_SESSION_KEY);
   } catch {
@@ -50,6 +62,36 @@ export function clearMockSession() {
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+function buildUser(email) {
+  return {
+    id: 'mock-user-1',
+    email,
+    role: 'user',
+    is_blocked: false,
+  };
+}
+
+export function mockRegister(email, password) {
+  const normalized = email.trim().toLowerCase();
+  const pass = password.trim();
+
+  if (!isValidEmail(normalized) || pass.length < 8) {
+    const error = new Error('invalid_registration');
+    error.status = 400;
+    error.payload = { error: 'password_required' };
+    throw error;
+  }
+
+  const session = {
+    token: `${MOCK_TOKEN_PREFIX}${normalized}`,
+    user: buildUser(normalized),
+    profile: null,
+  };
+
+  saveMockSession(session);
+  return session;
 }
 
 export function mockLogin(email, password, { completeProfile = true } = {}) {
@@ -67,25 +109,58 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
     throw error;
   }
 
+  const existing = loadMockSession();
   const session = {
     token: `${MOCK_TOKEN_PREFIX}${normalized}`,
-    user: {
-      id: 'mock-user-1',
-      email: normalized,
-      role: 'user',
-      is_blocked: false,
-    },
+    user: buildUser(normalized),
     profile: completeProfile
-      ? {
-          display_name: 'Design Review',
-          identity_type: 'daughter',
-          setup_complete: true,
-        }
-      : null,
+      ? existing?.profile?.setup_complete
+        ? existing.profile
+        : {
+            user_email: normalized,
+            display_name: 'Design Review',
+            identity_type: 'daughter',
+            setup_complete: true,
+          }
+      : existing?.profile ?? null,
   };
 
   saveMockSession(session);
   return session;
+}
+
+export function mockSaveProfile(data) {
+  const session = loadMockSession();
+  if (!session) {
+    const error = new Error('auth_required');
+    error.status = 401;
+    throw error;
+  }
+
+  const profile = {
+    ...(session.profile || {}),
+    ...data,
+    user_email: session.user.email,
+    id: session.profile?.id || `mock-profile-${session.user.id}`,
+  };
+
+  session.profile = profile;
+  saveMockSession(session);
+  return profile;
+}
+
+export function mockUploadImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve({
+        file_url: reader.result,
+        file_name: file.name,
+      });
+    };
+    reader.onerror = () => reject(new Error('upload_failed'));
+    reader.readAsDataURL(file);
+  });
 }
 
 export function mockMe(token) {

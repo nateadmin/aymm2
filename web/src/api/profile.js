@@ -1,4 +1,5 @@
-import { api } from './client';
+import { api, getStoredToken } from './client';
+import { tryMockUpload } from '@/lib/mockApi';
 
 export const profileApi = {
   getMine() {
@@ -10,10 +11,14 @@ export const profileApi = {
 };
 
 export async function uploadImage(file) {
+  const token = getStoredToken();
+  const mockUpload = await tryMockUpload(file, token);
+  if (mockUpload) {
+    return mockUpload;
+  }
+
   const body = new FormData();
   body.append('file', file);
-
-  const token = localStorage.getItem('aymm_session_token');
   const response = await fetch('/api/uploads', {
     method: 'POST',
     headers: token ? { Authorization: `Bearer ${token}` } : {},
