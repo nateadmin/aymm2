@@ -1,6 +1,7 @@
 :root {
   --aymm-red: #fe5658;
   --aymm-purple: #3f214d;
+  --aymm-rose: var(--aymm-red);
   --aymm-muted-purple: #6f6575;
   --aymm-warm-gray: #c8bec5;
   --aymm-light-border: #e2dae0;

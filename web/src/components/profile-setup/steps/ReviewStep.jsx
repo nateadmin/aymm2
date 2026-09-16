@@ -2,11 +2,11 @@ import {
   BookOpen,
   Camera,
   Check,
-  Heart,
   Search,
   User,
   Video,
 } from 'lucide-react';
+import HeartLogo from '@/components/brand/HeartLogo';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
@@ -64,7 +64,7 @@ export default function ReviewStep() {
       editPath: '/ProfileSetup/basic-info',
     },
     {
-      icon: <Heart size={20} />,
+      icon: <HeartLogo className="review-card__heart-logo" alt="" />,
       title: 'Identity',
       value: labelForIdentity(form.identity_type) || 'Not selected',
       editPath: '/ProfileSetup/iam-a',

@@ -270,6 +270,13 @@ select {
   font-size: var(--text-2xl);
 }
 
+.heart-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 .brand-lockup__logo {
   width: 5rem;
   height: auto;

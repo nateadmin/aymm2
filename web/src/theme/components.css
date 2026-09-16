@@ -74,7 +74,7 @@
 }
 
 .aymm-button--primary:active:not(:disabled) {
-  background: #e84d4f;
+  background: color-mix(in srgb, var(--aymm-red) 88%, var(--aymm-purple));
 }
 
 .aymm-button--outline {
@@ -876,6 +876,8 @@
 
 .about-page__logo {
   justify-self: center;
+  width: 5rem;
+  height: auto;
 }
 
 .about-page__copy {
