@@ -188,6 +188,7 @@
 
 .splash-brand__subtitle {
   margin: 0;
+  font-family: var(--font-brand);
   font-size: var(--text-display-sm);
   line-height: 2.5rem;
   letter-spacing: 0.01875rem;
@@ -233,7 +234,8 @@
 
 .welcome-home-title {
   margin: 2rem 0 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-brand);
+  font-weight: 400;
   font-size: clamp(3rem, 14vw, 4.5rem);
   line-height: 0.95;
   letter-spacing: 0.02em;
@@ -269,6 +271,11 @@
   font-weight: 700;
   line-height: 1.2;
   color: var(--aymm-purple);
+}
+
+.auth-heading--brand {
+  font-family: var(--font-brand);
+  font-weight: 400;
 }
 
 .auth-subheading {
