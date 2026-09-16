@@ -50,6 +50,9 @@ function normalizeProfile(profile) {
     religion: profile.religion || '',
     identity_type: profile.identity_type || '',
     family_vibe: profile.family_vibe || 'loud_house',
+    question_family_meaning: profile.question_family_meaning || '',
+    question_stay_in_touch: profile.question_stay_in_touch || '',
+    question_hoping_for: profile.question_hoping_for || '',
   };
 }
 
@@ -240,8 +243,8 @@ export function ProfileSetupProvider({ children }) {
       localStorage.removeItem(stepStorageKey(user.email));
       await queryClient.invalidateQueries({ queryKey: ['Profile'] });
 
-      push('Profile complete!', 'success');
-      navigate('/Home', { replace: true });
+      push('Profile submitted!', 'success');
+      navigate('/ProfileSetup/complete', { replace: true });
       return true;
     } catch {
       push('Could not save your profile. Please try again.', 'error');

@@ -26,7 +26,7 @@ export const SCREEN_CATALOG = [
   { id: 15, phase: 1, slug: 'religion', title: 'Religion', route: '/ProfileSetup/religion', status: 'partial' },
   { id: 16, phase: 1, slug: 'questions', title: 'Questions', route: '/ProfileSetup/questions', status: 'partial' },
   { id: 17, phase: 1, slug: 'review', title: 'Review', route: '/ProfileSetup/review', status: 'partial' },
-  { id: 18, phase: 1, slug: 'complete', title: 'Complete', route: '/preview/complete', status: 'frame' },
+  { id: 18, phase: 1, slug: 'complete', title: 'Complete', route: '/ProfileSetup/complete', status: 'partial' },
   { id: 19, phase: 1, slug: 'onboarding-extra', title: 'Onboarding (extra)', route: '/preview/onboarding-extra', status: 'frame' },
   // Phase 2 — Discovery & Connection
   { id: 20, phase: 2, slug: 'daughter-profile', title: 'Daughter Profile', route: '/preview/daughter-profile', status: 'frame' },

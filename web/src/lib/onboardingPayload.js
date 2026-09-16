@@ -35,6 +35,9 @@ export function buildProfilePayload(form, { setupComplete = false, includeSetupC
     family_vibe: form.family_vibe || null,
     seeking_sibling_reasons: form.seeking_sibling_reasons || [],
     bio: form.bio || null,
+    question_family_meaning: form.question_family_meaning || null,
+    question_stay_in_touch: form.question_stay_in_touch || null,
+    question_hoping_for: form.question_hoping_for || null,
   };
 
   if (includeSetupComplete) {

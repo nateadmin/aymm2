@@ -6,8 +6,8 @@ export const ONBOARDING_STEPS = [
   { id: 'seeking-a', path: '/ProfileSetup/seeking-a', label: 'Seeking a' },
   { id: 'religion', path: '/ProfileSetup/religion', label: 'Religion' },
   { id: 'questions', path: '/ProfileSetup/questions', label: 'Questions' },
-  { id: 'bio', path: '/ProfileSetup/bio', label: 'Bio' },
   { id: 'review', path: '/ProfileSetup/review', label: 'Review' },
+  { id: 'complete', path: '/ProfileSetup/complete', label: 'Complete' },
 ];
 
 export const SEEKING_OPTIONS_FOR = {
@@ -95,6 +95,9 @@ export function getDefaultForm() {
     family_vibe: '',
     seeking_sibling_reasons: [],
     bio: '',
+    question_family_meaning: '',
+    question_stay_in_touch: '',
+    question_hoping_for: '',
   };
 }
 

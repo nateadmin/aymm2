@@ -35,6 +35,11 @@ function PreviewUploadVideoRedirect() {
   return <Navigate to={`/ProfileSetup/upload-video${location.search}`} replace />;
 }
 
+function PreviewCompleteRedirect() {
+  const location = useLocation();
+  return <Navigate to={`/ProfileSetup/complete${location.search}`} replace />;
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -58,6 +63,7 @@ export default function App() {
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/screens" element={<ScreenIndex />} />
               <Route path="/preview/upload-video" element={<PreviewUploadVideoRedirect />} />
+              <Route path="/preview/complete" element={<PreviewCompleteRedirect />} />
               <Route path="/preview/:slug" element={<ScreenStub />} />
 
               <Route element={<RequireAuth />}>
