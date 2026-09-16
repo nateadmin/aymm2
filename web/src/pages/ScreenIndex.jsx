@@ -19,7 +19,7 @@ export default function ScreenIndex() {
   const previewOn = isStagingPreviewEnabled();
   const builtCount = SCREEN_CATALOG.filter((s) => s.status === 'live').length;
   const partialCount = SCREEN_CATALOG.filter((s) => s.status === 'partial').length;
-  const stubCount = SCREEN_CATALOG.filter((s) => s.status === 'stub').length;
+  const frameCount = SCREEN_CATALOG.filter((s) => s.status === 'frame').length;
 
   return (
     <div className="screen-index">
@@ -27,7 +27,7 @@ export default function ScreenIndex() {
         <h1 className="screen-index__title">AYMM staging</h1>
         <p className="screen-index__lead">
           All {SCREEN_CATALOG.length} Figma screens ({builtCount} built, {partialCount} partial,{' '}
-          {stubCount} coming soon). Use <code>?mobile=1</code> for phone layout on desktop. Login
+          {frameCount} design frames). Use <code>?mobile=1</code> for phone layout on desktop. Login
           bypass: <code>?preview=1</code>.
         </p>
         <p className="screen-index__meta">
