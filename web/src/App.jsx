@@ -15,6 +15,8 @@ import EmailLogin from '@/pages/EmailLogin';
 import EmailRegister from '@/pages/EmailRegister';
 import PhoneLogin from '@/pages/PhoneLogin';
 import OTP from '@/pages/OTP';
+import ForgotPassword from '@/pages/ForgotPassword';
+import CreatePassword from '@/pages/CreatePassword';
 import ProfileSetup from '@/pages/ProfileSetup';
 import AboutUs from '@/pages/AboutUs';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
@@ -45,6 +47,8 @@ export default function App() {
               <Route path="/EmailRegister" element={<EmailRegister />} />
               <Route path="/PhoneLogin" element={<PhoneLogin />} />
               <Route path="/OTP" element={<OTP />} />
+              <Route path="/ForgotPassword" element={<ForgotPassword />} />
+              <Route path="/CreatePassword" element={<CreatePassword />} />
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/screens" element={<ScreenIndex />} />

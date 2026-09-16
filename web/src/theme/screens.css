@@ -355,6 +355,65 @@
   font-family: var(--font-body);
 }
 
+.auth-segment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  width: 100%;
+  max-width: var(--button-max-width);
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: var(--aymm-cream);
+  border: 0.8px solid var(--aymm-light-border);
+}
+
+.auth-segment__option {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--aymm-muted-purple);
+  background: transparent;
+  cursor: pointer;
+}
+
+.auth-segment__option--active {
+  background: var(--aymm-purple);
+  color: #fff;
+}
+
+.otp-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  max-width: var(--button-max-width);
+}
+
+.otp-grid__digit {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1.5px solid var(--aymm-red);
+  border-radius: 0.75rem;
+  text-align: center;
+  font-size: 1.25rem;
+  font-family: var(--font-body);
+  color: var(--aymm-purple);
+  background: #fff;
+}
+
+.otp-resend {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--aymm-muted-purple);
+  text-align: center;
+}
+
+.otp-resend span {
+  color: var(--aymm-red);
+}
+
 .home-header {
   display: flex;
   align-items: flex-start;

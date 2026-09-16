@@ -68,4 +68,10 @@ export const authApi = {
   logout() {
     return api.post('/api/auth/logout');
   },
+  forgotPassword({ email, phone }) {
+    return api.post('/api/auth/forgot-password', { email, phone });
+  },
+  resetPassword({ email, phone, password, code }) {
+    return api.post('/api/auth/reset-password', { email, phone, password, code });
+  },
 };

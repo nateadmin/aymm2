@@ -88,7 +88,13 @@ export default function EmailLogin() {
             </div>
           </label>
 
-          <button type="button" className="auth-link">Forgot Password?</button>
+          <button
+            type="button"
+            className="auth-link"
+            onClick={() => navigate('/ForgotPassword')}
+          >
+            Forgot Password?
+          </button>
           {mockAuth ? (
             <p className="auth-demo-hint">
               StackBlitz demo: <strong>{MOCK_LOGIN_EMAIL}</strong> /{' '}

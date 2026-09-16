@@ -9,6 +9,8 @@ import {
   mockLogin,
   mockMe,
   mockRegister,
+  mockRequestPasswordReset,
+  mockResetPassword,
   mockSaveProfile,
 } from '@/lib/mockAuth';
 
@@ -126,6 +128,18 @@ export function AuthProvider({ children }) {
       setAuthError(null);
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
+    },
+    requestPasswordReset: async ({ channel, email, phone }) => {
+      if (isMockAuthEnabled()) {
+        return mockRequestPasswordReset({ channel, email, phone });
+      }
+      return authApi.forgotPassword({ email, phone });
+    },
+    resetPassword: async ({ email, phone, password, code }) => {
+      if (isMockAuthEnabled()) {
+        return mockResetPassword({ email, phone, password, code });
+      }
+      return authApi.resetPassword({ email, phone, password, code });
     },
     logout: async () => {
       const token = getStoredToken();
