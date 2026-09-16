@@ -19,6 +19,7 @@ export default function ReviewStep() {
     },
     { label: 'Religion', value: form.religion },
     { label: 'Photos', value: `${form.profile_photos.length} uploaded` },
+    { label: 'Video', value: form.intro_video_url ? '10-sec video ready' : 'Skipped' },
     { label: 'Bio', value: `${form.bio?.length || 0} characters` },
   ];
 

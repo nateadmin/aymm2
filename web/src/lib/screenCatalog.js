@@ -19,7 +19,7 @@ export const SCREEN_CATALOG = [
   { id: 8, phase: 1, slug: 'forgot-password', title: 'Forgot Password', route: '/ForgotPassword', status: 'live' },
   { id: 9, phase: 1, slug: 'create-password', title: 'Create Password', route: '/CreatePassword', status: 'live' },
   { id: 10, phase: 1, slug: 'upload-photo', title: 'Upload Photo', route: '/ProfileSetup/upload-photo', status: 'partial' },
-  { id: 11, phase: 1, slug: 'upload-video', title: 'Upload Video', route: '/preview/upload-video', status: 'frame' },
+  { id: 11, phase: 1, slug: 'upload-video', title: 'Upload Video', route: '/ProfileSetup/upload-video', status: 'partial' },
   { id: 12, phase: 1, slug: 'basic-info', title: 'Basic Info', route: '/ProfileSetup/basic-info', status: 'partial' },
   { id: 13, phase: 1, slug: 'i-am-a', title: 'I Am A', route: '/ProfileSetup/iam-a', status: 'partial' },
   { id: 14, phase: 1, slug: 'seeking-a', title: 'Seeking A', route: '/ProfileSetup/seeking-a', status: 'partial' },

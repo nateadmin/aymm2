@@ -1,6 +1,6 @@
 import React from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/lib/auth';
 import { ToastProvider } from '@/lib/toast';
 import { queryClient } from '@/lib/queryClient';
@@ -30,6 +30,11 @@ import ScreenIndex from '@/pages/ScreenIndex';
 import ScreenStub from '@/pages/ScreenStub';
 import NotFound from '@/pages/NotFound';
 
+function PreviewUploadVideoRedirect() {
+  const location = useLocation();
+  return <Navigate to={`/ProfileSetup/upload-video${location.search}`} replace />;
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -52,6 +57,7 @@ export default function App() {
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/screens" element={<ScreenIndex />} />
+              <Route path="/preview/upload-video" element={<PreviewUploadVideoRedirect />} />
               <Route path="/preview/:slug" element={<ScreenStub />} />
 
               <Route element={<RequireAuth />}>

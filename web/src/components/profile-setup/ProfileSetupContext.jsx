@@ -46,6 +46,7 @@ function normalizeProfile(profile) {
     seeking_for: profile.seeking_for || [],
     seeking_sibling_reasons: profile.seeking_sibling_reasons || [],
     profile_photos: profile.profile_photos || [],
+    intro_video_url: profile.intro_video_url || '',
     religion: profile.religion || '',
     identity_type: profile.identity_type || '',
     family_vibe: profile.family_vibe || 'loud_house',

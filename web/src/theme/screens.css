@@ -414,6 +414,113 @@
   color: var(--aymm-red);
 }
 
+.mobile-onboarding {
+  gap: 1.25rem;
+}
+
+.mobile-onboarding__content {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.mobile-onboarding__actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mobile-onboarding__progress {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.mobile-onboarding__progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  color: var(--aymm-muted-purple);
+}
+
+.mobile-onboarding__progress-percent {
+  color: var(--aymm-red);
+  font-weight: 600;
+}
+
+.mobile-onboarding__progress-track {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.mobile-onboarding__progress-segment {
+  height: 0.25rem;
+  border-radius: 999px;
+  background: var(--aymm-light-border);
+}
+
+.mobile-onboarding__progress-segment--active {
+  background: var(--aymm-red);
+}
+
+.video-upload {
+  display: block;
+  cursor: pointer;
+}
+
+.video-upload__input {
+  display: none;
+}
+
+.video-upload__panel {
+  min-height: 11rem;
+  border: 1.5px dashed var(--aymm-light-border);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--aymm-purple);
+  background: #fff;
+}
+
+.video-upload__panel--filled {
+  border-color: var(--aymm-red);
+  background: var(--aymm-cream);
+}
+
+.video-upload__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  color: var(--aymm-purple);
+}
+
+.video-upload__hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--aymm-muted-purple);
+}
+
+.video-upload__notice {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.875rem 1rem;
+  border: 0.8px solid var(--aymm-light-border);
+  border-radius: 0.875rem;
+  background: #fff;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--aymm-muted-purple);
+}
+
+.video-upload__notice p {
+  margin: 0;
+}
+
 .home-header {
   display: flex;
   align-items: flex-start;

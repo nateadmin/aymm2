@@ -1,5 +1,6 @@
 export const ONBOARDING_STEPS = [
   { id: 'upload-photo', path: '/ProfileSetup/upload-photo', label: 'Photos' },
+  { id: 'upload-video', path: '/ProfileSetup/upload-video', label: 'Video' },
   { id: 'basic-info', path: '/ProfileSetup/basic-info', label: 'Basic info' },
   { id: 'iam-a', path: '/ProfileSetup/iam-a', label: 'I am a' },
   { id: 'seeking-a', path: '/ProfileSetup/seeking-a', label: 'Seeking a' },
@@ -71,6 +72,7 @@ export function getDefaultForm() {
     religion: '',
     religion_private: false,
     profile_photos: [],
+    intro_video_url: '',
     real_life_visits: false,
     seeking_for: [],
     grow_up_goal: '',

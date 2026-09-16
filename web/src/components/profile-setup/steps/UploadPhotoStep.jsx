@@ -11,7 +11,7 @@ export default function UploadPhotoStep() {
   const handleContinue = async () => {
     const saved = await saveDraft('upload-photo');
     if (saved) {
-      navigate('/ProfileSetup/basic-info');
+      navigate('/ProfileSetup/upload-video');
     }
   };
 

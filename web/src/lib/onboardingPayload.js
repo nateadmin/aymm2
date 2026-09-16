@@ -12,6 +12,7 @@ export function buildProfilePayload(form, { setupComplete = false, includeSetupC
     religion: form.religion || null,
     religion_private: form.religion_private,
     profile_photos: form.profile_photos || [],
+    intro_video_url: form.intro_video_url || null,
     real_life_visits: form.real_life_visits,
     seeking_for: form.seeking_for || [],
     grow_up_goal: form.grow_up_goal || null,
