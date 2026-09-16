@@ -575,6 +575,23 @@
   background: var(--aymm-red);
 }
 
+.identity-role-option__checkbox {
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 0.375rem;
+  border: 1.5px solid var(--aymm-light-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #fff;
+}
+
+.identity-role-option__checkbox--selected {
+  border-color: var(--aymm-red);
+  background: var(--aymm-red);
+}
+
 .home-header {
   display: flex;
   align-items: flex-start;
