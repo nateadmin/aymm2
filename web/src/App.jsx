@@ -28,6 +28,7 @@ import Profile from '@/pages/Profile';
 import AdminDashboard from '@/pages/AdminDashboard';
 import ScreenIndex from '@/pages/ScreenIndex';
 import ScreenStub from '@/pages/ScreenStub';
+import Discovery from '@/pages/Discovery';
 import NotFound from '@/pages/NotFound';
 
 function PreviewUploadVideoRedirect() {
@@ -39,6 +40,26 @@ function PreviewCompleteRedirect() {
   const location = useLocation();
   return <Navigate to={`/ProfileSetup/complete${location.search}`} replace />;
 }
+
+function PreviewDiscoveryRedirect({ slug }) {
+  const location = useLocation();
+  return <Navigate to={`/Discovery/${slug}${location.search}`} replace />;
+}
+
+const DISCOVERY_PREVIEW_SLUGS = [
+  'daughter-profile',
+  'mother-profile',
+  'family-profile',
+  'connection-success',
+  'seeking-parent-reasons',
+  'seeking-child-reasons',
+  'seeking-sibling-reasons',
+  'lifestyle-questions',
+  'personal-questions',
+  'family-questions',
+  'religion-info',
+  'recommend',
+];
 
 export default function App() {
   return (
@@ -64,9 +85,17 @@ export default function App() {
               <Route path="/screens" element={<ScreenIndex />} />
               <Route path="/preview/upload-video" element={<PreviewUploadVideoRedirect />} />
               <Route path="/preview/complete" element={<PreviewCompleteRedirect />} />
+              {DISCOVERY_PREVIEW_SLUGS.map((slug) => (
+                <Route
+                  key={slug}
+                  path={`/preview/${slug}`}
+                  element={<PreviewDiscoveryRedirect slug={slug} />}
+                />
+              ))}
               <Route path="/preview/:slug" element={<ScreenStub />} />
 
               <Route element={<RequireAuth />}>
+                <Route path="/Discovery/*" element={<Discovery />} />
                 <Route path="/ProfileSetup/*" element={<ProfileSetup />} />
                 <Route element={<RequireProfile />}>
                   <Route element={<AppLayout />}>
