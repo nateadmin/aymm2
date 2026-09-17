@@ -6,14 +6,13 @@ import {
   User,
   Video,
 } from 'lucide-react';
-import HeartLogo from '@/components/brand/HeartLogo';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
-import { labelForIdentity, labelForReligion } from '@/lib/constants';
+import { emojiForIdentity, labelForIdentity, labelForReligion } from '@/lib/constants';
 
 function ReviewCard({ icon, title, value, editPath, onEdit }) {
   return (
@@ -22,12 +21,14 @@ function ReviewCard({ icon, title, value, editPath, onEdit }) {
       <div className="review-card__body">
         <p className="review-card__title">{title}</p>
         <p className="review-card__value">{value}</p>
+      </div>
+      <div className="review-card__aside">
         <button type="button" className="review-card__edit" onClick={() => onEdit(editPath)}>
           Edit
         </button>
-      </div>
-      <div className="review-card__check" aria-hidden="true">
-        <Check size={16} strokeWidth={3} />
+        <div className="review-card__check" aria-hidden="true">
+          <Check size={16} strokeWidth={3} />
+        </div>
       </div>
     </div>
   );
@@ -43,6 +44,7 @@ export default function ReviewStep() {
   const basicInfoLine = basicInfo && form.location
     ? `${basicInfo} · ${form.location}`
     : basicInfo || form.location || 'Not added yet';
+  const identityEmoji = emojiForIdentity(form.identity_type);
 
   const cards = [
     {
@@ -64,7 +66,9 @@ export default function ReviewStep() {
       editPath: '/ProfileSetup/basic-info',
     },
     {
-      icon: <HeartLogo className="review-card__heart-logo" alt="" />,
+      icon: identityEmoji
+        ? <span className="review-card__emoji">{identityEmoji}</span>
+        : <span className="review-card__emoji">💛</span>,
       title: 'Identity',
       value: labelForIdentity(form.identity_type) || 'Not selected',
       editPath: '/ProfileSetup/iam-a',
@@ -78,7 +82,7 @@ export default function ReviewStep() {
       editPath: '/ProfileSetup/seeking-a',
     },
     {
-      icon: <BookOpen size={20} />,
+      icon: <BookOpen size={20} className="review-card__faith-icon" />,
       title: 'Faith',
       value: labelForReligion(form.religion) || 'No preference',
       editPath: '/ProfileSetup/religion',

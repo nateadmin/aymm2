@@ -12,9 +12,11 @@ export default function CompleteStep() {
       <div className="screen-pad screen-pad--between mobile-onboarding complete-step">
         <div className="complete-step__content">
           <div className="complete-step__hero">
-            <HeartLogo style={{ width: '3rem', height: '3rem' }} />
-            <h1 className="auth-heading auth-heading--brand">You&apos;re all set!</h1>
-            <p className="auth-subheading">
+            <HeartLogo className="complete-step__logo" alt="" />
+            <h1 className="auth-heading auth-heading--brand complete-step__title">
+              You&apos;re all set!
+            </h1>
+            <p className="auth-subheading complete-step__lede">
               Your profile is under review. We&apos;ll notify you as soon as it&apos;s approved —
               usually within 24 hours.
             </p>
@@ -25,17 +27,18 @@ export default function CompleteStep() {
               <span className="complete-step__status-icon" aria-hidden="true">
                 <Check size={14} strokeWidth={3} />
               </span>
-              <span>Profile submitted</span>
+              <span className="complete-step__status-label">Profile submitted</span>
+              <Check className="complete-step__status-trailing" size={16} strokeWidth={3} aria-hidden="true" />
             </li>
             <li className="complete-step__status complete-step__status--done">
               <span className="complete-step__status-icon" aria-hidden="true">
                 <Check size={14} strokeWidth={3} />
               </span>
-              <span>Under review...</span>
+              <span className="complete-step__status-label">Under review...</span>
             </li>
             <li className="complete-step__status complete-step__status--pending">
               <span className="complete-step__status-icon" aria-hidden="true" />
-              <span>Start finding family</span>
+              <span className="complete-step__status-label">Start finding family</span>
             </li>
           </ul>
         </div>

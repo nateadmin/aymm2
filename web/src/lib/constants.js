@@ -116,6 +116,11 @@ export function labelForIdentity(type) {
   return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
+export function emojiForIdentity(type) {
+  const match = IDENTITY_ROLE_OPTIONS.find((option) => option.id === type);
+  return match?.emoji || '';
+}
+
 export function labelForReligion(id) {
   const match = RELIGION_ONBOARDING_OPTIONS.find((option) => option.id === id);
   if (match) return match.label;
