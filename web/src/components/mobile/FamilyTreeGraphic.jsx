@@ -1,9 +1,9 @@
 export default function FamilyTreeGraphic({ className = '' }) {
   return (
     <svg
-      viewBox="0 0 280 150"
+      viewBox="0 10 280 140"
       width="280"
-      height="150"
+      height="140"
       className={`splash-family-graphic${className ? ` ${className}` : ''}`}
       aria-hidden="true"
     >
