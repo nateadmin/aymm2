@@ -2234,7 +2234,7 @@
   margin-top: 0.25rem;
 }
 
-.prototype-home__logo {
+.prototype-home__header .heart-logo.prototype-home__logo {
   width: 0.55rem;
   height: 0.55rem;
   margin-top: 0.5rem;

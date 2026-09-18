@@ -16,7 +16,7 @@ export default function PrototypeHome() {
             <h1 className="auth-heading auth-heading--brand prototype-home__greeting">Good morning</h1>
             <p className="auth-subheading prototype-home__subtitle">Find your family connection</p>
           </div>
-          <HeartLogo className="prototype-home__logo" alt="" />
+          <HeartLogo className="prototype-home__logo" alt="" style={{ width: '0.55rem', height: '0.55rem' }} />
         </header>
 
         <section>
