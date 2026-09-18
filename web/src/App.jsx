@@ -30,6 +30,7 @@ import ScreenIndex from '@/pages/ScreenIndex';
 import ScreenStub from '@/pages/ScreenStub';
 import Discovery from '@/pages/Discovery';
 import Community from '@/pages/Community';
+import Prototype from '@/pages/Prototype';
 import NotFound from '@/pages/NotFound';
 
 function PreviewUploadVideoRedirect() {
@@ -80,6 +81,28 @@ const COMMUNITY_PREVIEW_SLUGS = [
   'event-reminders',
 ];
 
+function PreviewPrototypeRedirect({ slug }) {
+  const location = useLocation();
+  return <Navigate to={`/Prototype/${slug}${location.search}`} replace />;
+}
+
+const PROTOTYPE_PREVIEW_SLUGS = [
+  'home',
+  'settings',
+  'my-profile',
+  'profile-carousel',
+  'adoption-approved',
+  'aymm-family-match',
+  'message-request-detail',
+  'compatibility-challenge',
+  'religion-selector',
+  'seeking-qs-parent',
+  'seeking-qs-child',
+  'seeking-qs-sibling',
+  'username-validation',
+  'register-table-full',
+];
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -118,11 +141,20 @@ export default function App() {
                   element={<PreviewCommunityRedirect slug={slug} />}
                 />
               ))}
+              {PROTOTYPE_PREVIEW_SLUGS.map((slug) => (
+                <Route
+                  key={slug}
+                  path={`/preview/${slug}`}
+                  element={<PreviewPrototypeRedirect slug={slug} />}
+                />
+              ))}
+              <Route path="/preview/aymf-family-match" element={<PreviewPrototypeRedirect slug="aymm-family-match" />} />
               <Route path="/preview/:slug" element={<ScreenStub />} />
 
               <Route element={<RequireAuth />}>
                 <Route path="/Discovery/*" element={<Discovery />} />
                 <Route path="/Community/*" element={<Community />} />
+                <Route path="/Prototype/*" element={<Prototype />} />
                 <Route path="/ProfileSetup/*" element={<ProfileSetup />} />
                 <Route element={<RequireProfile />}>
                   <Route element={<AppLayout />}>
