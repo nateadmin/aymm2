@@ -29,6 +29,7 @@ import AdminDashboard from '@/pages/AdminDashboard';
 import ScreenIndex from '@/pages/ScreenIndex';
 import ScreenStub from '@/pages/ScreenStub';
 import Discovery from '@/pages/Discovery';
+import Community from '@/pages/Community';
 import NotFound from '@/pages/NotFound';
 
 function PreviewUploadVideoRedirect() {
@@ -59,6 +60,24 @@ const DISCOVERY_PREVIEW_SLUGS = [
   'family-questions',
   'religion-info',
   'recommend',
+];
+
+function PreviewCommunityRedirect({ slug }) {
+  const location = useLocation();
+  return <Navigate to={`/Community/${slug}${location.search}`} replace />;
+}
+
+const COMMUNITY_PREVIEW_SLUGS = [
+  'letters-inbox',
+  'message-requests',
+  'open-conversation',
+  'family-table-listing',
+  'family-table-details',
+  'request-join-table',
+  'register-table',
+  'table-confirmation',
+  'previous-photos',
+  'event-reminders',
 ];
 
 export default function App() {
@@ -92,10 +111,18 @@ export default function App() {
                   element={<PreviewDiscoveryRedirect slug={slug} />}
                 />
               ))}
+              {COMMUNITY_PREVIEW_SLUGS.map((slug) => (
+                <Route
+                  key={slug}
+                  path={`/preview/${slug}`}
+                  element={<PreviewCommunityRedirect slug={slug} />}
+                />
+              ))}
               <Route path="/preview/:slug" element={<ScreenStub />} />
 
               <Route element={<RequireAuth />}>
                 <Route path="/Discovery/*" element={<Discovery />} />
+                <Route path="/Community/*" element={<Community />} />
                 <Route path="/ProfileSetup/*" element={<ProfileSetup />} />
                 <Route element={<RequireProfile />}>
                   <Route element={<AppLayout />}>
