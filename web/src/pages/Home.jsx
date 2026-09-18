@@ -69,7 +69,7 @@ export default function Home() {
   return (
     <div className="screen-pad browse-page">
       <header className="browse-hero">
-        <h1 className="browse-hero__title"><AymmQuestion /></h1>
+        <h1 className="browse-hero__title"><AymmQuestion variant="hero" /></h1>
         <p className="browse-hero__subtitle">Find your family connection</p>
       </header>
 

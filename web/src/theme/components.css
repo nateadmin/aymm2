@@ -45,6 +45,22 @@
   font-weight: 400;
 }
 
+.aymm-brand-wordmark--button {
+  font-size: 2.125rem;
+  line-height: 1;
+  color: inherit;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transform: translateY(0.06rem);
+}
+
+.aymm-brand-wordmark--hero {
+  font-size: var(--text-3xl);
+  line-height: 1;
+  color: var(--aymm-purple);
+  font-weight: 400;
+}
+
 .aymm-button {
   appearance: none;
   display: inline-flex;
@@ -450,10 +466,6 @@
   color: var(--aymm-purple);
 }
 
-.browse-hero__title .aymm-brand-wordmark--inline {
-  font-size: var(--text-3xl);
-  color: var(--aymm-purple);
-}
 
 .browse-hero__subtitle,
 .home-section-title {
