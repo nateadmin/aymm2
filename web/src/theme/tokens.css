@@ -55,7 +55,12 @@
   --space-3xl: 3rem;
   --space-splash-top: 5rem;
   --space-screen-x: 1.5rem;
-  --space-screen-bottom: 2.5rem;
+  --space-screen-bottom: 2rem;
+  /* Extra inset so bottom CTAs clear the rounded phone frame on desktop preview. */
+  --space-frame-inset: 0.75rem;
+  --space-screen-footer: calc(
+    var(--space-screen-bottom) + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px)
+  );
 
   --text-xs: 0.75rem;
   --text-sm: 0.8125rem;

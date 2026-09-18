@@ -160,7 +160,7 @@ select {
   z-index: 20;
   border-top: 1px solid var(--aymm-light-border);
   background: var(--aymm-white);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: calc(var(--space-frame-inset, 0px) + env(safe-area-inset-bottom, 0px));
 }
 
 .bottom-nav__inner {
@@ -316,7 +316,9 @@ html[data-mobile-preview] .app-main {
 }
 
 html[data-mobile-preview] .app-main__content {
-  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(
+    var(--bottom-nav-height) + var(--space-frame-inset, 0px) + env(safe-area-inset-bottom, 0px)
+  );
 }
 
 html[data-mobile-preview] .bottom-nav {
@@ -329,6 +331,10 @@ html[data-mobile-preview] .page-shell {
 }
 
 @media (min-width: 48rem) {
+  html[data-mobile-preview] {
+    --space-frame-inset: 1.25rem;
+  }
+
   body {
     background: var(--aymm-surface);
   }
