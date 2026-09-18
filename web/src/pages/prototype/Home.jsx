@@ -12,11 +12,11 @@ export default function PrototypeHome() {
     <PrototypeScreen>
       <div className="screen-pad prototype-home">
         <header className="prototype-home__header">
-          <div>
+          <div className="prototype-home__copy">
             <h1 className="auth-heading auth-heading--brand prototype-home__greeting">Good morning</h1>
             <p className="auth-subheading prototype-home__subtitle">Find your family connection</p>
           </div>
-          <HeartLogo className="prototype-home__logo" alt="" style={{ width: '0.55rem', height: '0.55rem' }} />
+          <HeartLogo className="prototype-home__logo" alt="" style={{ width: '1.5rem', height: '1.5rem' }} />
         </header>
 
         <section>
