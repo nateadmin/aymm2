@@ -13,8 +13,8 @@ export default function PrototypeHome() {
       <div className="screen-pad prototype-home">
         <header className="prototype-home__header">
           <div>
-            <h1 className="prototype-home__greeting">Good morning</h1>
-            <p className="prototype-home__subtitle">Find your family connection</p>
+            <h1 className="auth-heading auth-heading--brand prototype-home__greeting">Good morning</h1>
+            <p className="auth-subheading prototype-home__subtitle">Find your family connection</p>
           </div>
           <HeartLogo className="prototype-home__logo" alt="" />
         </header>

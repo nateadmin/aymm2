@@ -2226,23 +2226,18 @@
 }
 
 .prototype-home__greeting {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.15;
-  color: var(--aymm-purple);
+  font-size: 2.25rem;
+  line-height: 1.1;
 }
 
 .prototype-home__subtitle {
-  margin: 0.35rem 0 0;
-  font-size: var(--text-md);
-  color: var(--aymm-muted-purple);
+  margin-top: 0.25rem;
 }
 
 .prototype-home__logo {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  margin-top: 0.35rem;
   flex-shrink: 0;
 }
 
