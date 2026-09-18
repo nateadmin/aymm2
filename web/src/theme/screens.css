@@ -2241,9 +2241,9 @@
 }
 
 .prototype-home__header .heart-logo.prototype-home__logo {
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-top: 0.35rem;
+  width: 70px;
+  height: 70px;
+  margin-top: 0;
   flex-shrink: 0;
 }
 
