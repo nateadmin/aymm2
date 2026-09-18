@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import MobileScreen from '@/components/mobile/MobileScreen';
-import BackButton from '@/components/mobile/BackButton';
+import AuthPage from '@/components/mobile/AuthPage';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/lib/toast';
 
@@ -64,51 +63,20 @@ export default function OTP() {
   const backTo = isResetFlow ? '/ForgotPassword' : '/PhoneLogin';
 
   return (
-    <MobileScreen>
-      <div className="screen-pad screen-pad--auth">
-        <BackButton to={backTo} />
-
-        <div>
+    <AuthPage
+      backTo={backTo}
+      align="start"
+      header={(
+        <>
           <h1 className="auth-heading auth-heading--brand">Enter the code</h1>
           <p className="auth-subheading">
             {isResetFlow
               ? `We sent a 6-digit code to your ${resetState.channel === 'phone' ? 'phone' : 'email'}${destination ? ` (${destination})` : ''}.`
               : 'We sent a 6-digit code to your phone.'}
           </p>
-        </div>
-
-        <div className="otp-grid" aria-label="Verification code">
-          {digits.map((digit, index) => (
-            <input
-              key={index}
-              id={`otp-digit-${index}`}
-              className="otp-grid__digit"
-              type="text"
-              inputMode="numeric"
-              maxLength={1}
-              value={digit}
-              onChange={(event) => updateDigit(index, event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Backspace' && !digit && index > 0) {
-                  document.getElementById(`otp-digit-${index - 1}`)?.focus();
-                }
-              }}
-            />
-          ))}
-        </div>
-
-        <p className="otp-resend">
-          {secondsLeft > 0 ? (
-            <>
-              Resend in <span>{secondsLeft}s</span>
-            </>
-          ) : (
-            <button type="button" className="auth-link" onClick={() => setSecondsLeft(42)}>
-              Resend code
-            </button>
-          )}
-        </p>
-
+        </>
+      )}
+      footer={(
         <Button
           variant={code.length === CODE_LENGTH ? 'primary' : 'disabled'}
           disabled={code.length !== CODE_LENGTH}
@@ -116,7 +84,39 @@ export default function OTP() {
         >
           Verify
         </Button>
+      )}
+    >
+      <div className="otp-grid" aria-label="Verification code">
+        {digits.map((digit, index) => (
+          <input
+            key={index}
+            id={`otp-digit-${index}`}
+            className="otp-grid__digit"
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            value={digit}
+            onChange={(event) => updateDigit(index, event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Backspace' && !digit && index > 0) {
+                document.getElementById(`otp-digit-${index - 1}`)?.focus();
+              }
+            }}
+          />
+        ))}
       </div>
-    </MobileScreen>
+
+      <p className="otp-resend">
+        {secondsLeft > 0 ? (
+          <>
+            Resend in <span>{secondsLeft}s</span>
+          </>
+        ) : (
+          <button type="button" className="auth-link" onClick={() => setSecondsLeft(42)}>
+            Resend code
+          </button>
+        )}
+      </p>
+    </AuthPage>
   );
 }

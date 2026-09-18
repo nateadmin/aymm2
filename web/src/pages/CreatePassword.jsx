@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { EyeOff } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import MobileScreen from '@/components/mobile/MobileScreen';
-import BackButton from '@/components/mobile/BackButton';
+import AuthPage from '@/components/mobile/AuthPage';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
@@ -49,55 +48,18 @@ export default function CreatePassword() {
   };
 
   return (
-    <MobileScreen>
-      <form className="screen-pad screen-pad--auth" onSubmit={handleSubmit}>
-        <BackButton to="/ForgotPassword" />
-
-        <div>
+    <AuthPage
+      as="form"
+      backTo="/ForgotPassword"
+      align="start"
+      onSubmit={handleSubmit}
+      header={(
+        <>
           <h1 className="auth-heading auth-heading--brand">Create Password</h1>
           <p className="auth-subheading">Make it strong and memorable</p>
-        </div>
-
-        <div className="auth-stack">
-          <label className="auth-field">
-            <span className="auth-field__label">Password</span>
-            <div className="auth-field__input-wrap">
-              <input
-                className="aymm-input"
-                type="password"
-                name="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                autoComplete="new-password"
-              />
-              <EyeOff
-                size={18}
-                style={{
-                  position: 'absolute',
-                  right: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: 'var(--aymm-warm-gray)',
-                }}
-              />
-            </div>
-          </label>
-
-          <label className="auth-field">
-            <span className="auth-field__label">Confirm Password</span>
-            <input
-              className="aymm-input"
-              type="password"
-              name="confirmPassword"
-              placeholder="Re-enter password"
-              value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
-              autoComplete="new-password"
-            />
-          </label>
-        </div>
-
+        </>
+      )}
+      footer={(
         <Button
           type="submit"
           variant={canSubmit ? 'primary' : 'disabled'}
@@ -105,7 +67,47 @@ export default function CreatePassword() {
         >
           Set Password
         </Button>
-      </form>
-    </MobileScreen>
+      )}
+    >
+      <div className="auth-stack">
+        <label className="auth-field">
+          <span className="auth-field__label">Password</span>
+          <div className="auth-field__input-wrap">
+            <input
+              className="aymm-input"
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="new-password"
+            />
+            <EyeOff
+              size={18}
+              style={{
+                position: 'absolute',
+                right: '1rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'var(--aymm-warm-gray)',
+              }}
+            />
+          </div>
+        </label>
+
+        <label className="auth-field">
+          <span className="auth-field__label">Confirm Password</span>
+          <input
+            className="aymm-input"
+            type="password"
+            name="confirmPassword"
+            placeholder="Re-enter password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            autoComplete="new-password"
+          />
+        </label>
+      </div>
+    </AuthPage>
   );
 }
