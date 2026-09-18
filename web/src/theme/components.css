@@ -138,6 +138,50 @@
   padding: 0;
 }
 
+.input-action-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.625rem;
+  align-items: stretch;
+  width: 100%;
+  max-width: var(--button-max-width);
+}
+
+.input-action-row > .aymm-input {
+  max-width: none;
+  width: 100%;
+  min-height: var(--input-height);
+}
+
+.input-action-row .aymm-button--inline {
+  width: auto;
+  max-width: none;
+  min-height: var(--input-height);
+  height: auto;
+  align-self: stretch;
+  padding: 0 1.125rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.input-action-row__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--input-height);
+  padding: 0 1.125rem;
+  border: 1.5px solid var(--aymm-red);
+  border-radius: var(--radius-input);
+  background: var(--aymm-white);
+  color: var(--aymm-red);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 .aymm-field {
   display: grid;
   gap: var(--space-xs);

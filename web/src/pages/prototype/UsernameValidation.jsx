@@ -27,7 +27,7 @@ export default function UsernameValidation() {
 
           <label className="auth-field">
             <span className="auth-field__label">AYMM Family Username</span>
-            <div className="prototype-username__row">
+            <div className="input-action-row">
               <input
                 className="aymm-input"
                 placeholder="@yourfamilyname"
@@ -37,7 +37,9 @@ export default function UsernameValidation() {
                   setUsername(event.target.value.replace(/^@/, ''));
                 }}
               />
-              <Button variant="purple" onClick={handleCheck}>Check</Button>
+              <Button variant="purple" className="aymm-button--inline" onClick={handleCheck}>
+                Check
+              </Button>
             </div>
           </label>
 

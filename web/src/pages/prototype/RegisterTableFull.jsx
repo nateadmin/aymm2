@@ -33,7 +33,7 @@ export default function RegisterTableFull() {
           <div className="discovery-form-list">
             <label className="auth-field">
               <span className="auth-field__label">AYMM Family Username</span>
-              <div className="prototype-register-table__username">
+              <div className="input-action-row">
                 <input
                   className="aymm-input"
                   placeholder="@yourfamilyname"
@@ -42,7 +42,7 @@ export default function RegisterTableFull() {
                 />
                 <button
                   type="button"
-                  className="prototype-register-table__check"
+                  className="input-action-row__check"
                   onClick={() => navigate(withPreviewQuery('/Prototype/username-validation'))}
                 >
                   Check
