@@ -25,12 +25,14 @@ export default function MyProfile() {
         </div>
 
         <div className="prototype-my-profile__body">
-          <h1 className="prototype-my-profile__name">
-            {profile.name}, {profile.age}
-          </h1>
-          <p className="prototype-my-profile__meta">
-            {profile.role} · {profile.location}
-          </p>
+          <div className="hero-profile-identity">
+            <h1 className="hero-profile-identity__name">
+              {profile.name}, {profile.age}
+            </h1>
+            <p className="hero-profile-identity__meta">
+              {profile.role} · {profile.location}
+            </p>
+          </div>
 
           <Button
             variant="outline"

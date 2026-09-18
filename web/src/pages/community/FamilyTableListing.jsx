@@ -21,8 +21,10 @@ export default function FamilyTableListing() {
         </div>
 
         <div className="community-table-detail__body">
-          <h1 className="community-table-detail__title">{table.name}</h1>
-          <p className="community-table-detail__headline">{table.headline}</p>
+          <div className="hero-profile-identity">
+            <h1 className="hero-profile-identity__name community-table-detail__title">{table.name}</h1>
+            <p className="hero-profile-identity__meta community-table-detail__headline">{table.headline}</p>
+          </div>
 
           <div className="community-table-detail__stats">
             <div className="community-table-detail__stat">

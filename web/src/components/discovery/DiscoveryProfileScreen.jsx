@@ -32,12 +32,14 @@ export default function DiscoveryProfileScreen({ profile, backTo = '/screens' })
 
         <div className="discovery-profile__body">
           <div className="discovery-profile__header">
-            <h1 className="discovery-profile__name">
-              {profile.display_name}{profile.age ? `, ${profile.age}` : ''}
-            </h1>
-            <p className="discovery-profile__headline">
-              {profile.seeking_headline} · {profile.location}
-            </p>
+            <div className="hero-profile-identity">
+              <h1 className="hero-profile-identity__name discovery-profile__name">
+                {profile.display_name}{profile.age ? `, ${profile.age}` : ''}
+              </h1>
+              <p className="hero-profile-identity__meta discovery-profile__headline">
+                {profile.seeking_headline} · {profile.location}
+              </p>
+            </div>
             <div className="discovery-profile__tags">
               <span className="discovery-profile__tag discovery-profile__tag--identity">
                 {identityLabel}
