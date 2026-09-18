@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test src/lib/session.test.js src/lib/stagingPreview.test.js src/lib/mockAuth.test.js src/api/client.test.js"
+    "test": "node --test src/lib/session.test.js src/lib/stagingPreview.test.js src/lib/mockAuth.test.js src/lib/screenCatalog.test.js src/api/client.test.js"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.102.8",

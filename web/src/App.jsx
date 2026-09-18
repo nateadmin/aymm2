@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { syncMobilePreview } from '@/lib/mobilePreview';
 import { AuthProvider } from '@/lib/auth';
 import { ToastProvider } from '@/lib/toast';
 import { queryClient } from '@/lib/queryClient';
@@ -108,12 +109,21 @@ const PROTOTYPE_PREVIEW_SLUGS = [
   'register-table-full',
 ];
 
+function SyncPreviewFlags() {
+  const location = useLocation();
+  useEffect(() => {
+    syncMobilePreview(location.search);
+  }, [location.search]);
+  return null;
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ToastProvider>
           <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+            <SyncPreviewFlags />
             <Routes>
               <Route path="/" element={<Splash />} />
               <Route path="/Splash" element={<Navigate to="/" replace />} />
@@ -130,6 +140,7 @@ export default function App() {
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/screens" element={<ScreenIndex />} />
+              <Route path="/screens/:slug" element={<ScreenStub />} />
               <Route path="/preview/upload-photo" element={<PreviewUploadPhotoRedirect />} />
               <Route path="/preview/upload-video" element={<PreviewUploadVideoRedirect />} />
               <Route path="/preview/complete" element={<PreviewCompleteRedirect />} />

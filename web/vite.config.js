@@ -11,9 +11,15 @@ export default defineConfig({
     },
   },
   server: {
+    host: true,
+    allowedHosts: true,
     proxy: {
       '/api': 'http://127.0.0.1:3000',
     },
+  },
+  preview: {
+    host: true,
+    allowedHosts: true,
   },
   build: {
     outDir: 'dist',

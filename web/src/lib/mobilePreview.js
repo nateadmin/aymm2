@@ -1,13 +1,5 @@
 const STORAGE_KEY = 'aymm_mobile_preview';
 
-function readMobileParam() {
-  try {
-    return new URLSearchParams(window.location.search).get('mobile');
-  } catch {
-    return null;
-  }
-}
-
 function applyMobilePreview(enabled) {
   if (typeof document === 'undefined') return;
   if (enabled) {
@@ -17,9 +9,8 @@ function applyMobilePreview(enabled) {
   }
 }
 
-/** Call before React mounts so layout CSS applies on first paint. */
-export function initMobilePreview() {
-  const param = readMobileParam();
+export function syncMobilePreview(search = typeof window !== 'undefined' ? window.location.search : '') {
+  const param = new URLSearchParams(search).get('mobile');
 
   try {
     if (param === '1') {
@@ -37,7 +28,13 @@ export function initMobilePreview() {
     }
   } catch {
     if (param === '1') applyMobilePreview(true);
+    if (param === '0') applyMobilePreview(false);
   }
+}
+
+/** Call before React mounts so layout CSS applies on first paint. */
+export function initMobilePreview() {
+  syncMobilePreview();
 }
 
 export function isMobilePreviewEnabled() {

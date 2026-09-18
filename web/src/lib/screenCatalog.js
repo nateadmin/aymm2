@@ -118,7 +118,12 @@ export function designSourcePath(screenId) {
 
 export function frameImageUrl(screen) {
   const id = typeof screen === 'number' ? screen : screen.id;
-  return `/design-frames/frame-${String(id).padStart(2, '0')}.png`;
+  const base = String(import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+  return `${base}design-frames/frame-${String(id).padStart(2, '0')}.png`;
+}
+
+export function screenCardPath(screen) {
+  return `/screens/${screen.slug}`;
 }
 
 export function getScreenBySlug(slug) {
@@ -144,12 +149,14 @@ export function stagingUrl(route, { mobile = true } = {}) {
   if (route.startsWith('http')) return route;
   let path = `${getReviewBase()}${route}`;
   path = appendQuery(path, 'preview', '1');
-  if (mobile) path = appendQuery(path, 'mobile', '1');
+  if (mobile === true) path = appendQuery(path, 'mobile', '1');
+  if (mobile === false) path = appendQuery(path, 'mobile', '0');
   return path;
 }
 
 export function withPreviewQuery(route, { mobile = true } = {}) {
   let path = appendQuery(route, 'preview', '1');
-  if (mobile) path = appendQuery(path, 'mobile', '1');
+  if (mobile === true) path = appendQuery(path, 'mobile', '1');
+  if (mobile === false) path = appendQuery(path, 'mobile', '0');
   return path;
 }
