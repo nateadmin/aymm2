@@ -305,7 +305,7 @@
   height: 2.75rem;
 }
 
-.splash-brand__wordmark-compact {
+.splash-brand.splash-brand--compact .splash-brand__wordmark-compact {
   margin: 0;
   font-family: var(--font-brand);
   font-size: 45px;
@@ -332,7 +332,7 @@
   color: var(--aymm-muted-purple);
 }
 
-.splash-brand--compact .splash-brand__subtitle {
+.splash-brand.splash-brand--compact .splash-brand__subtitle {
   font-size: 25px;
   line-height: 1.3;
 }
