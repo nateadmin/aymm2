@@ -137,7 +137,7 @@ export const JOHNSON_TABLE = {
   holiday: 'Thanksgiving — Nov 27, 2025',
   food: 'Traditional Southern spread — turkey, cornbread, sweet potato pie',
   religion: 'Christian — non-denominational, welcoming all',
-  about: 'The Johnson family has been hosting Thanksgiving for over 20 years. Our gatherings are warm, casual, and deeply loving. We welcome anyone who needs a seat at the table.',
+  about: 'The Johnson family has been hosting their Thanksgiving table for 12 years. They love opening their home to people who need a place to belong during the holidays. This is a warm, casual, and deeply loving gathering.',
   hostFamily: 'The Johnson Family',
   eventDate: 'November 27, 2025',
   guestCapacity: '12 guests total · 4 seats remaining',

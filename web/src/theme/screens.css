@@ -1879,10 +1879,14 @@
 .community-table-detail__body {
   display: grid;
   gap: 1.125rem;
-  padding: 0 var(--space-screen-x) var(--space-screen-bottom);
+  padding: 0 var(--space-screen-x) calc(var(--space-screen-bottom) + 0.5rem);
   margin-top: -1.25rem;
   position: relative;
   z-index: 1;
+}
+
+.community-table-detail-screen .community-screen__body {
+  padding-bottom: 0;
 }
 
 .community-table-detail__title {
