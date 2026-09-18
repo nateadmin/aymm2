@@ -134,9 +134,15 @@ function appendQuery(route, key, value) {
   return route.includes('?') ? `${route}&${key}=${value}` : `${route}?${key}=${value}`;
 }
 
+export function getReviewBase() {
+  if (typeof window === 'undefined') return STAGING_BASE;
+  const base = String(import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  return `${window.location.origin}${base}`;
+}
+
 export function stagingUrl(route, { mobile = true } = {}) {
   if (route.startsWith('http')) return route;
-  let path = `${STAGING_BASE}${route}`;
+  let path = `${getReviewBase()}${route}`;
   path = appendQuery(path, 'preview', '1');
   if (mobile) path = appendQuery(path, 'mobile', '1');
   return path;

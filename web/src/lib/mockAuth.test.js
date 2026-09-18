@@ -15,6 +15,7 @@ import {
 test('isMockAuthEnabled is off on live staging hosts', () => {
   assert.equal(isMockAuthEnabled('aymm.app'), false);
   assert.equal(isMockAuthEnabled('aymm2-web--5173--abc.local.webcontainer.io'), true);
+  assert.equal(isMockAuthEnabled('nateadmin.github.io'), true);
 });
 
 test('mockRegister creates account without completed profile', () => {

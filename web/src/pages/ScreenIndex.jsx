@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import {
   PHASE_LABELS,
   SCREEN_CATALOG,
-  STAGING_HUB,
-  STAGING_MOBILE_LOGIN,
   STATUS_LABELS,
   stagingUrl,
   withPreviewQuery,
@@ -33,7 +31,9 @@ export default function ScreenIndex() {
         <p className="screen-index__meta">
           Interactive demo: <Link to={withPreviewQuery('/demo')}>Open /demo</Link>
           <br />
-          Mobile hub: {STAGING_HUB}
+          Sample login: <strong>design@aymm.app</strong> / <strong>DesignReview1</strong>
+          <br />
+          Mobile hub: {stagingUrl('/screens')}
         </p>
         <button
           type="button"
