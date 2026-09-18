@@ -38,6 +38,13 @@
   font-size: var(--text-splash);
 }
 
+.aymm-brand-wordmark--inline {
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  font-weight: 400;
+}
+
 .aymm-button {
   appearance: none;
   display: inline-flex;
@@ -439,7 +446,11 @@
 
 .browse-hero__title {
   margin: 0;
-  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  color: var(--aymm-purple);
+}
+
+.browse-hero__title .aymm-brand-wordmark--inline {
   font-size: var(--text-3xl);
   color: var(--aymm-purple);
 }

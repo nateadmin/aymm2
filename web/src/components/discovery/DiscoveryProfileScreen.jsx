@@ -2,6 +2,7 @@ import { Info, MessageCircle, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
+import PrimaryActionLabel from '@/components/brand/PrimaryActionLabel';
 import Button from '@/components/ui/Button';
 import { labelForIdentity, labelForReligion } from '@/lib/constants';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -48,7 +49,7 @@ export default function DiscoveryProfileScreen({ profile, backTo = '/screens' })
           </div>
 
           <Button variant={profile.primaryVariant || 'primary'} onClick={handlePrimary}>
-            {profile.primaryLabel}
+            <PrimaryActionLabel label={profile.primaryLabel} />
           </Button>
 
           <div className="discovery-profile__action-grid">

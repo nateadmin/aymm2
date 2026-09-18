@@ -46,7 +46,7 @@ export const FAMILY_PROFILE = {
   profile_photos: [
     'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=80',
   ],
-  primaryLabel: 'AYMF?',
+  primaryLabel: 'AYMM?',
   primaryVariant: 'purple',
   aboutTitle: 'Our Family',
   family_members: [

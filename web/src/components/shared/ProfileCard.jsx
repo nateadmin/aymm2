@@ -1,6 +1,7 @@
 import { PLACEHOLDER_AVATAR } from '@/lib/constants';
 import { getPrimaryActionLabel } from '@/lib/connections';
 import { distanceMiles } from '@/lib/matching';
+import PrimaryActionLabel from '@/components/brand/PrimaryActionLabel';
 import Button from '@/components/ui/Button';
 
 export default function ProfileCard({
@@ -41,7 +42,7 @@ export default function ProfileCard({
 
       <div className="profile-card__actions">
         <Button onClick={() => onPrimaryAction?.(profile)} disabled={profile.is_demo}>
-          {primaryLabel}
+          <PrimaryActionLabel label={primaryLabel} />
         </Button>
         <div className="page-shell__grid page-shell__grid--actions">
           <button type="button" className="aymm-pill-action" onClick={() => onMessage?.(profile)}>Msg</button>
