@@ -10,5 +10,6 @@ test('isDesignReviewHost matches staging and review environments', () => {
   assert.equal(isDesignReviewHost('something.stackblitz.io'), true);
   assert.equal(isDesignReviewHost('my-codespace-123.github.dev'), true);
   assert.equal(isDesignReviewHost('nateadmin.github.io'), true);
+  assert.equal(isDesignReviewHost('demo.trycloudflare.com'), true);
   assert.equal(isDesignReviewHost('example.com'), false);
 });

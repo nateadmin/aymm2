@@ -19,6 +19,7 @@ const PREVIEW_HOST_SUFFIXES = [
   '.github.dev',
   '.githubpreview.dev',
   '.github.io',
+  '.trycloudflare.com',
 ];
 
 function readPreviewParam() {
