@@ -464,9 +464,14 @@
 }
 
 /* Any auth title paired with a subheading uses the brand face. */
-.auth-heading:has(+ .auth-subheading) {
+.auth-heading:has(+ .auth-subheading):not(.auth-heading--arial) {
   font-family: var(--font-brand);
   font-weight: 400;
+}
+
+.auth-heading--arial {
+  font-family: var(--font-heading);
+  font-weight: 700;
 }
 
 .auth-subheading {
