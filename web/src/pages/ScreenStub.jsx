@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import {
-  frameImageUrl,
   getScreenBySlug,
+  screenThumbnailUrl,
   PHASE_LABELS,
   SCREEN_CATALOG,
   screenCardPath,
@@ -44,8 +44,8 @@ export default function ScreenStub() {
 
       <div className="design-ref__phone">
         <img
-          src={frameImageUrl(screen)}
-          alt={`${screen.title} design card`}
+          src={screenThumbnailUrl(screen)}
+          alt={`${screen.title} live preview`}
           className="design-ref__image"
         />
       </div>

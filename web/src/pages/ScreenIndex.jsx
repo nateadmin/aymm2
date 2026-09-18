@@ -4,8 +4,8 @@ import {
   PHASE_LABELS,
   SCREEN_CATALOG,
   STATUS_LABELS,
-  frameImageUrl,
   screenCardPath,
+  screenThumbnailUrl,
   withPreviewQuery,
 } from '@/lib/screenCatalog';
 import {
@@ -30,8 +30,8 @@ export default function ScreenIndex() {
       <header className="screen-index__header">
         <h1 className="screen-index__title">AYMM screen cards</h1>
         <p className="screen-index__lead">
-          All {SCREEN_CATALOG.length} design cards ({builtCount} built as live screens). Open any
-          card on its own, or open the built screen.
+          All {SCREEN_CATALOG.length} screens ({builtCount} built). Thumbnails are live captures of
+          the current build — open any card on its own, or open the built screen.
         </p>
         <p className="screen-index__meta">
           Sample login: <strong>design@aymm.app</strong> / <strong>DesignReview1</strong>
@@ -82,8 +82,8 @@ export default function ScreenIndex() {
                   className="screen-card__thumb"
                 >
                   <img
-                    src={frameImageUrl(screen)}
-                    alt={`${screen.title} design card`}
+                    src={screenThumbnailUrl(screen)}
+                    alt={`${screen.title} live preview`}
                     loading="lazy"
                   />
                 </Link>

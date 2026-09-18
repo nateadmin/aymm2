@@ -116,10 +116,29 @@ export function designSourcePath(screenId) {
   return `Replicate previous design-${sourceIndex}.png`;
 }
 
+/** Bump when live screen captures are regenerated (cache bust for staging thumbnails). */
+export const SCREEN_CAPTURE_VERSION = '20250918';
+
+function assetBase() {
+  const envBase = import.meta.env?.BASE_URL;
+  return String(envBase || '/').replace(/\/?$/, '/');
+}
+
 export function frameImageUrl(screen) {
   const id = typeof screen === 'number' ? screen : screen.id;
-  const base = String(import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
-  return `${base}design-frames/frame-${String(id).padStart(2, '0')}.png`;
+  return `${assetBase()}design-frames/frame-${String(id).padStart(2, '0')}.png`;
+}
+
+/** Catalog thumbnail: live capture for built screens, Figma frame for design-only entries. */
+export function screenThumbnailUrl(screen) {
+  const item = typeof screen === 'number' ? getScreenById(screen) : screen;
+  const id = item?.id ?? screen;
+  const base = assetBase();
+  const file = `frame-${String(id).padStart(2, '0')}.png`;
+  if (item?.status === 'live' || item?.status === 'partial') {
+    return `${base}screen-captures/${file}?v=${SCREEN_CAPTURE_VERSION}`;
+  }
+  return `${base}design-frames/${file}`;
 }
 
 export function screenCardPath(screen) {
