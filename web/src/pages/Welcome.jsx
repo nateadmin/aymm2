@@ -32,9 +32,11 @@ export default function Welcome() {
 
         <div className="welcome-page__spacer" aria-hidden="true" />
 
-        <div className="splash-actions">
-          <Button onClick={() => navigate('/Register')}>Create Account</Button>
-          <Button variant="outline" onClick={() => navigate('/Login')}>Log In</Button>
+        <div className="welcome-page__actions">
+          <div className="splash-actions">
+            <Button onClick={() => navigate('/Register')}>Create Account</Button>
+            <Button variant="outline" onClick={() => navigate('/Login')}>Log In</Button>
+          </div>
           <p className="welcome-legal">
             By continuing you agree to our{' '}
             <Link to="/PrivacyPolicy">Terms &amp; Privacy Policy</Link>
