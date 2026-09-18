@@ -33,6 +33,11 @@ import Community from '@/pages/Community';
 import Prototype from '@/pages/Prototype';
 import NotFound from '@/pages/NotFound';
 
+function PreviewUploadPhotoRedirect() {
+  const location = useLocation();
+  return <Navigate to={`/ProfileSetup/upload-photo${location.search}`} replace />;
+}
+
 function PreviewUploadVideoRedirect() {
   const location = useLocation();
   return <Navigate to={`/ProfileSetup/upload-video${location.search}`} replace />;
@@ -125,6 +130,7 @@ export default function App() {
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/screens" element={<ScreenIndex />} />
+              <Route path="/preview/upload-photo" element={<PreviewUploadPhotoRedirect />} />
               <Route path="/preview/upload-video" element={<PreviewUploadVideoRedirect />} />
               <Route path="/preview/complete" element={<PreviewCompleteRedirect />} />
               {DISCOVERY_PREVIEW_SLUGS.map((slug) => (
