@@ -18,6 +18,8 @@ const PREVIEW_HOST_SUFFIXES = [
   '.stackblitz.io',
   '.github.dev',
   '.githubpreview.dev',
+  '.github.io',
+  '.trycloudflare.com',
 ];
 
 function readPreviewParam() {

@@ -1,9 +1,7 @@
 import { Mail, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import MobileScreen from '@/components/mobile/MobileScreen';
-import BackButton from '@/components/mobile/BackButton';
+import AuthPage from '@/components/mobile/AuthPage';
 import HeartLogo from '@/components/brand/HeartLogo';
-import Button from '@/components/ui/Button';
 import SocialAuthButton from '@/components/ui/SocialAuthButton';
 
 function FacebookIcon() {
@@ -35,32 +33,32 @@ export default function Login() {
   const navigate = useNavigate();
 
   return (
-    <MobileScreen>
-      <div className="screen-pad screen-pad--auth">
-        <BackButton to="/Welcome" />
-
-        <div className="screen-pad screen-pad--center" style={{ padding: 0 }}>
-          <HeartLogo style={{ width: '2.5rem', height: '2.5rem' }} />
-          <h1 className="auth-heading">Welcome back</h1>
+    <AuthPage
+      backTo="/Welcome"
+      header={(
+        <>
+          <HeartLogo />
+          <h1 className="auth-heading auth-heading--brand">Welcome back</h1>
           <p className="auth-subheading">Sign in to continue</p>
-        </div>
-
-        <div className="auth-stack">
-          <SocialAuthButton icon={<FacebookIcon />}>Continue with Facebook</SocialAuthButton>
-          <SocialAuthButton icon={<InstagramIcon />}>Continue with Instagram</SocialAuthButton>
-          <div className="auth-divider">or</div>
-          <SocialAuthButton icon={<Mail size={18} />} onClick={() => navigate('/EmailLogin')}>
-            Continue with Email
-          </SocialAuthButton>
-          <SocialAuthButton icon={<Phone size={18} />} onClick={() => navigate('/PhoneLogin')}>
-            Continue with Phone
-          </SocialAuthButton>
-        </div>
-
+        </>
+      )}
+      footer={(
         <p className="auth-footer">
           No account? <button type="button" onClick={() => navigate('/Register')}>Sign Up</button>
         </p>
+      )}
+    >
+      <div className="auth-stack">
+        <SocialAuthButton icon={<FacebookIcon />}>Continue with Facebook</SocialAuthButton>
+        <SocialAuthButton icon={<InstagramIcon />}>Continue with Instagram</SocialAuthButton>
+        <div className="auth-divider">or</div>
+        <SocialAuthButton icon={<Mail size={18} />} onClick={() => navigate('/EmailLogin')}>
+          Continue with Email
+        </SocialAuthButton>
+        <SocialAuthButton icon={<Phone size={18} />} onClick={() => navigate('/PhoneLogin')}>
+          Continue with Phone
+        </SocialAuthButton>
       </div>
-    </MobileScreen>
+    </AuthPage>
   );
 }

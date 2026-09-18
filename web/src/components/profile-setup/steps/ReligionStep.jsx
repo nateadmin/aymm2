@@ -1,27 +1,11 @@
-import React from 'react';
+import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import MobileScreen from '@/components/mobile/MobileScreen';
+import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
+import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
-import { RELIGIONS } from '@/lib/constants';
-
-const RELIGION_LABELS = {
-  christianity: 'Christianity',
-  islam: 'Islam',
-  judaism: 'Judaism',
-  hinduism: 'Hinduism',
-  buddhism: 'Buddhism',
-  sikhism: 'Sikhism',
-  bahai: "Bahá'í",
-  jainism: 'Jainism',
-  shinto: 'Shinto',
-  taoism: 'Taoism',
-  zoroastrianism: 'Zoroastrianism',
-  atheist: 'Atheist',
-  agnostic: 'Agnostic',
-  spiritual: 'Spiritual',
-  other: 'Other',
-  open_to_all: 'Open to all',
-};
+import { RELIGION_ONBOARDING_OPTIONS } from '@/lib/constants';
 
 export default function ReligionStep() {
   const navigate = useNavigate();
@@ -35,37 +19,43 @@ export default function ReligionStep() {
   };
 
   return (
-    <div className="page-shell__grid">
-      <p className="aymm-muted">Open to all means you are open to connecting with people of any faith.</p>
-      <label className="aymm-field">
-        <span className="aymm-label">Religion</span>
-        <select
-          className="aymm-select"
-          value={form.religion}
-          onChange={(e) => updateField('religion', e.target.value)}
-        >
-          <option value="">Select religion</option>
-          {RELIGIONS.map((religion) => (
-            <option key={religion} value={religion}>
-              {RELIGION_LABELS[religion] || religion}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className="aymm-field">
-        <input
-          type="checkbox"
-          className="aymm-check"
-          checked={form.religion_private}
-          onChange={(e) => updateField('religion_private', e.target.checked)}
-        />
-        <span>Keep my religion private</span>
-      </label>
-      <div className="public-page__actions">
-        <Button disabled={!form.religion || saving} onClick={handleContinue}>
+    <MobileScreen>
+      <div className="screen-pad screen-pad--between mobile-onboarding">
+        <div className="mobile-onboarding__content">
+          <BackButton to="/ProfileSetup/seeking-a" />
+          <MobileOnboardingProgress step={6} />
+
+          <div>
+            <h1 className="auth-heading auth-heading--brand">Faith &amp; Spirituality</h1>
+            <p className="auth-subheading">Optional — helps us find compatible families</p>
+          </div>
+
+          <div className="identity-role-list" role="radiogroup" aria-label="Faith and spirituality">
+            {RELIGION_ONBOARDING_OPTIONS.map((option) => {
+              const selected = form.religion === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  className={`identity-role-option identity-role-option--text${selected ? ' identity-role-option--selected' : ''}`}
+                  onClick={() => updateField('religion', option.id)}
+                >
+                  <span className="identity-role-option__label">{option.label}</span>
+                  <span className="identity-role-option__radio" aria-hidden="true">
+                    {selected ? <Check size={14} strokeWidth={3} /> : null}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <Button disabled={saving} onClick={handleContinue}>
           Continue
         </Button>
       </div>
-    </div>
+    </MobileScreen>
   );
 }

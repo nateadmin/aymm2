@@ -25,6 +25,10 @@ import {
   mergeProfileState,
 } from '@/lib/session';
 import { CHILD_IDENTITIES, PARENT_IDENTITIES } from '@/lib/constants';
+import {
+  getOnboardingActorEmail,
+  isPreviewOnlyOnboarding,
+} from '@/lib/onboardingActor';
 
 const ProfileSetupContext = createContext(null);
 
@@ -46,9 +50,13 @@ function normalizeProfile(profile) {
     seeking_for: profile.seeking_for || [],
     seeking_sibling_reasons: profile.seeking_sibling_reasons || [],
     profile_photos: profile.profile_photos || [],
+    intro_video_url: profile.intro_video_url || '',
     religion: profile.religion || '',
     identity_type: profile.identity_type || '',
     family_vibe: profile.family_vibe || 'loud_house',
+    question_family_meaning: profile.question_family_meaning || '',
+    question_stay_in_touch: profile.question_stay_in_touch || '',
+    question_hoping_for: profile.question_hoping_for || '',
   };
 }
 
@@ -85,20 +93,39 @@ export function ProfileSetupProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [hasDbProfile, setHasDbProfile] = useState(false);
+  const actorEmail = getOnboardingActorEmail(user?.email);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
-      if (!user?.email) {
+      if (!actorEmail) {
         setLoading(false);
+        return;
+      }
+
+      if (isPreviewOnlyOnboarding(user?.email)) {
+        const draft = loadDraft(actorEmail);
+        const savedStep = loadSavedStep(actorEmail);
+        if (!cancelled) {
+          if (draft) {
+            setForm({ ...getDefaultForm(), ...draft });
+          }
+          if (!isProfileEditPath(location.pathname) && savedStep && getStepIndex(savedStep) >= 0) {
+            const step = ONBOARDING_STEPS.find((item) => item.id === savedStep);
+            if (step) {
+              navigate(step.path, { replace: true });
+            }
+          }
+          setLoading(false);
+        }
         return;
       }
 
       try {
         const { profile } = await profileApi.getMine();
-        const draft = loadDraft(user.email);
-        const savedStep = loadSavedStep(user.email);
+        const draft = loadDraft(actorEmail);
+        const savedStep = loadSavedStep(actorEmail);
 
         if (!cancelled) {
           const editing = isProfileEditPath(location.pathname);
@@ -106,8 +133,8 @@ export function ProfileSetupProvider({ children }) {
           if (profile) {
             setHasDbProfile(true);
             if (profile.setup_complete) {
-              localStorage.removeItem(draftStorageKey(user.email));
-              localStorage.removeItem(stepStorageKey(user.email));
+              localStorage.removeItem(draftStorageKey(actorEmail));
+              localStorage.removeItem(stepStorageKey(actorEmail));
               setForm(normalizeProfile(profile));
             } else {
               setForm(normalizeProfile({ ...profile, ...(draft || {}) }));
@@ -124,7 +151,7 @@ export function ProfileSetupProvider({ children }) {
           }
         }
       } catch {
-        const draft = loadDraft(user.email);
+        const draft = loadDraft(actorEmail);
         if (!cancelled && draft) {
           setForm({ ...getDefaultForm(), ...draft });
         }
@@ -139,7 +166,7 @@ export function ProfileSetupProvider({ children }) {
     return () => {
       cancelled = true;
     };
-  }, [user?.email, navigate, location.pathname]);
+  }, [actorEmail, user?.email, navigate, location.pathname]);
 
   useEffect(() => {
     if (loading || !hasProfile) return;
@@ -153,10 +180,10 @@ export function ProfileSetupProvider({ children }) {
   const updateField = useCallback((key, value) => {
     setForm((current) => {
       const next = { ...current, [key]: value };
-      persistDraft(user?.email, next);
+      persistDraft(actorEmail, next);
       return next;
     });
-  }, [user?.email]);
+  }, [actorEmail]);
 
   const toggleArrayValue = useCallback((key, value) => {
     setForm((current) => {
@@ -167,10 +194,10 @@ export function ProfileSetupProvider({ children }) {
           ? list.filter((item) => item !== value)
           : [...list, value],
       };
-      persistDraft(user?.email, next);
+      persistDraft(actorEmail, next);
       return next;
     });
-  }, [user?.email]);
+  }, [actorEmail]);
 
   const addPhoto = useCallback((url) => {
     setForm((current) => {
@@ -178,10 +205,10 @@ export function ProfileSetupProvider({ children }) {
         ...current,
         profile_photos: [...(current.profile_photos || []), url],
       };
-      persistDraft(user?.email, next);
+      persistDraft(actorEmail, next);
       return next;
     });
-  }, [user?.email]);
+  }, [actorEmail]);
 
   const removePhoto = useCallback((index) => {
     setForm((current) => {
@@ -189,15 +216,19 @@ export function ProfileSetupProvider({ children }) {
         ...current,
         profile_photos: (current.profile_photos || []).filter((_, i) => i !== index),
       };
-      persistDraft(user?.email, next);
+      persistDraft(actorEmail, next);
       return next;
     });
-  }, [user?.email]);
+  }, [actorEmail]);
 
   const saveDraft = useCallback(async (stepId, { setupComplete = false, includeSetupComplete = false } = {}) => {
-    if (!user?.email) return false;
+    if (!actorEmail) return false;
 
-    persistDraft(user.email, form, stepId);
+    persistDraft(actorEmail, form, stepId);
+
+    if (isPreviewOnlyOnboarding(user?.email)) {
+      return true;
+    }
 
     const needsDb = hasDbProfile || (form.display_name && form.identity_type);
     if (!needsDb) {
@@ -221,13 +252,24 @@ export function ProfileSetupProvider({ children }) {
     } finally {
       setSaving(false);
     }
-  }, [user?.email, form, hasDbProfile, authProfile, push, queryClient, setProfileState]);
+  }, [actorEmail, user?.email, form, hasDbProfile, authProfile, push, queryClient, setProfileState]);
 
   const completeOnboarding = useCallback(async () => {
-    if (!user?.email) return false;
+    if (!actorEmail) {
+      push('Sign in or use preview mode to submit your profile.', 'error');
+      return false;
+    }
 
     setSaving(true);
     try {
+      if (isPreviewOnlyOnboarding(user?.email)) {
+        localStorage.removeItem(draftStorageKey(actorEmail));
+        localStorage.removeItem(stepStorageKey(actorEmail));
+        push('Profile submitted!', 'success');
+        navigate('/ProfileSetup/complete', { replace: true });
+        return true;
+      }
+
       const { profile } = await profileApi.saveMine(
         buildProfilePayload(form, { setupComplete: true, includeSetupComplete: true }),
       );
@@ -235,12 +277,12 @@ export function ProfileSetupProvider({ children }) {
 
       setHasDbProfile(true);
       setProfileState(completedProfile);
-      localStorage.removeItem(draftStorageKey(user.email));
-      localStorage.removeItem(stepStorageKey(user.email));
+      localStorage.removeItem(draftStorageKey(actorEmail));
+      localStorage.removeItem(stepStorageKey(actorEmail));
       await queryClient.invalidateQueries({ queryKey: ['Profile'] });
 
-      push('Profile complete!', 'success');
-      navigate('/Home', { replace: true });
+      push('Profile submitted!', 'success');
+      navigate('/ProfileSetup/complete', { replace: true });
       return true;
     } catch {
       push('Could not save your profile. Please try again.', 'error');
@@ -248,7 +290,7 @@ export function ProfileSetupProvider({ children }) {
     } finally {
       setSaving(false);
     }
-  }, [user?.email, form, push, navigate, queryClient, setProfileState]);
+  }, [actorEmail, user?.email, form, push, navigate, queryClient, setProfileState]);
 
   const isChild = CHILD_IDENTITIES.includes(form.identity_type);
   const isParent = PARENT_IDENTITIES.includes(form.identity_type);

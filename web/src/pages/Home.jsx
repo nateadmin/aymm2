@@ -12,6 +12,7 @@ import { useSendMessage } from '@/hooks/useSendMessage';
 import { useMessages } from '@/hooks/useMessages';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
+import AymmQuestion from '@/components/brand/AymmQuestion';
 import { formatLabel } from '@/lib/format';
 
 export default function Home() {
@@ -68,7 +69,7 @@ export default function Home() {
   return (
     <div className="screen-pad browse-page">
       <header className="browse-hero">
-        <h1 className="browse-hero__title">AYMM?</h1>
+        <h1 className="browse-hero__title"><AymmQuestion variant="hero" /></h1>
         <p className="browse-hero__subtitle">Find your family connection</p>
       </header>
 

@@ -17,24 +17,32 @@ export default function Welcome() {
   }, [isAuthenticated, hasProfile, profile, navigate]);
 
   return (
-    <MobileScreen>
-      <div className="screen-pad screen-pad--center screen-pad--between">
-        <div className="screen-pad screen-pad--center" style={{ padding: 0 }}>
-          <SplashBrand compact />
+    <MobileScreen bodyClassName="welcome-screen">
+      <div className="welcome-page">
+        <SplashBrand compact />
+
+        <div className="welcome-page__spacer" aria-hidden="true" />
+
+        <div className="welcome-page__middle">
           <h1 className="welcome-home-title">welcome home</h1>
           <p className="welcome-copy">
             Thousands of people have found the family they always hoped for.
           </p>
         </div>
 
-        <div className="splash-actions">
+        <div className="welcome-page__spacer" aria-hidden="true" />
+
+        <div className="welcome-page__buttons splash-actions">
           <Button onClick={() => navigate('/Register')}>Create Account</Button>
           <Button variant="outline" onClick={() => navigate('/Login')}>Log In</Button>
-          <p className="welcome-legal">
-            By continuing you agree to our{' '}
-            <Link to="/PrivacyPolicy">Terms &amp; Privacy Policy</Link>
-          </p>
         </div>
+
+        <div className="welcome-page__spacer" aria-hidden="true" />
+
+        <p className="welcome-legal">
+          By continuing you agree to our{' '}
+          <Link to="/PrivacyPolicy">Terms &amp; Privacy Policy</Link>
+        </p>
       </div>
     </MobileScreen>
   );

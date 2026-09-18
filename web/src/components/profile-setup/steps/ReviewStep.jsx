@@ -1,50 +1,124 @@
-import React from 'react';
+import {
+  BookOpen,
+  Camera,
+  Check,
+  Search,
+  User,
+  Video,
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import MobileScreen from '@/components/mobile/MobileScreen';
+import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
+import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
-import { labelForIdentity } from '@/lib/constants';
+import { emojiForIdentity, labelForIdentity, labelForReligion } from '@/lib/constants';
+
+function ReviewCard({ icon, title, value, editPath, onEdit }) {
+  return (
+    <div className="review-card">
+      <div className="review-card__icon" aria-hidden="true">{icon}</div>
+      <div className="review-card__body">
+        <p className="review-card__title">{title}</p>
+        <p className="review-card__value">{value}</p>
+      </div>
+      <div className="review-card__aside">
+        <button type="button" className="review-card__edit" onClick={() => onEdit(editPath)}>
+          Edit
+        </button>
+        <div className="review-card__check" aria-hidden="true">
+          <Check size={16} strokeWidth={3} />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function ReviewStep() {
-  const { form, completeOnboarding, saving, isFamily } = useProfileSetup();
+  const navigate = useNavigate();
+  const { form, completeOnboarding, saving } = useProfileSetup();
 
-  const summary = [
-    { label: 'Name', value: form.display_name },
-    { label: 'Age', value: form.age },
-    { label: 'Location', value: form.location },
-    { label: 'I am a', value: labelForIdentity(form.identity_type) },
+  const photoCount = form.profile_photos.length;
+  const photoLabel = photoCount === 1 ? '1 photo uploaded' : `${photoCount} photos uploaded`;
+  const basicInfo = [form.display_name, form.age].filter(Boolean).join(', ');
+  const basicInfoLine = basicInfo && form.location
+    ? `${basicInfo} · ${form.location}`
+    : basicInfo || form.location || 'Not added yet';
+  const identityEmoji = emojiForIdentity(form.identity_type);
+
+  const cards = [
     {
-      label: 'Seeking',
-      value: isFamily
-        ? 'Hosting tables'
-        : form.seeking_types.map(labelForIdentity).join(', '),
+      icon: <Camera size={20} />,
+      title: 'Photos',
+      value: photoCount ? photoLabel : 'No photos yet',
+      editPath: '/ProfileSetup/upload-photo',
     },
-    { label: 'Religion', value: form.religion },
-    { label: 'Photos', value: `${form.profile_photos.length} uploaded` },
-    { label: 'Bio', value: `${form.bio?.length || 0} characters` },
+    {
+      icon: <Video size={20} />,
+      title: 'Introduction Video',
+      value: form.intro_video_url ? '10-sec video ready' : 'Skipped',
+      editPath: '/ProfileSetup/upload-video',
+    },
+    {
+      icon: <User size={20} />,
+      title: 'Basic Info',
+      value: basicInfoLine,
+      editPath: '/ProfileSetup/basic-info',
+    },
+    {
+      icon: identityEmoji
+        ? <span className="review-card__emoji">{identityEmoji}</span>
+        : <span className="review-card__emoji">💛</span>,
+      title: 'Identity',
+      value: labelForIdentity(form.identity_type) || 'Not selected',
+      editPath: '/ProfileSetup/iam-a',
+    },
+    {
+      icon: <Search size={20} />,
+      title: 'Seeking',
+      value: form.seeking_types.length
+        ? form.seeking_types.map(labelForIdentity).join(', ')
+        : 'Not selected',
+      editPath: '/ProfileSetup/seeking-a',
+    },
+    {
+      icon: <BookOpen size={20} className="review-card__faith-icon" />,
+      title: 'Faith',
+      value: labelForReligion(form.religion) || 'No preference',
+      editPath: '/ProfileSetup/religion',
+    },
   ];
 
   return (
-    <div className="page-shell__grid">
-      <p className="aymm-muted">Review your profile before finishing onboarding.</p>
-      <dl className="onboarding-review">
-        {summary.map((item) => (
-          <div key={item.label} className="onboarding-review__row">
-            <dt>{item.label}</dt>
-            <dd>{item.value || '—'}</dd>
+    <MobileScreen bodyClassName="mobile-onboarding-scroll">
+      <div className="screen-pad mobile-onboarding mobile-onboarding--scroll">
+        <div className="mobile-onboarding__content">
+          <BackButton to="/ProfileSetup/questions" />
+          <MobileOnboardingProgress step={8} />
+
+          <div>
+            <h1 className="auth-heading auth-heading--brand">Review your profile</h1>
+            <p className="auth-subheading">Give it one last look before going live.</p>
           </div>
-        ))}
-      </dl>
-      {form.profile_photos.length ? (
-        <div className="photo-upload__grid">
-          {form.profile_photos.map((url, index) => (
-            <img key={`${url}-${index}`} src={url} alt="" className="photo-upload__image" />
-          ))}
+
+          <div className="review-card-list">
+            {cards.map((card) => (
+              <ReviewCard
+                key={card.title}
+                icon={card.icon}
+                title={card.title}
+                value={card.value}
+                editPath={card.editPath}
+                onEdit={navigate}
+              />
+            ))}
+          </div>
         </div>
-      ) : null}
-      <div className="public-page__actions">
+
         <Button disabled={saving} onClick={completeOnboarding}>
-          {saving ? 'Saving...' : 'Complete profile'}
+          {saving ? 'Submitting...' : 'Submit Profile'}
         </Button>
       </div>
-    </div>
+    </MobileScreen>
   );
 }

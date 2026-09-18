@@ -9,7 +9,9 @@ export function getPostAuthPath(session) {
 }
 
 export function isOnboardingEntryPath(pathname) {
-  return pathname.endsWith('/upload-photo') || pathname.endsWith('/ProfileSetup');
+  return pathname.endsWith('/upload-photo')
+    || pathname.endsWith('/upload-video')
+    || pathname.endsWith('/ProfileSetup');
 }
 
 export function isProfileEditPath(pathname) {

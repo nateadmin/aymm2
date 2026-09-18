@@ -12,6 +12,7 @@ export function buildProfilePayload(form, { setupComplete = false, includeSetupC
     religion: form.religion || null,
     religion_private: form.religion_private,
     profile_photos: form.profile_photos || [],
+    intro_video_url: form.intro_video_url || null,
     real_life_visits: form.real_life_visits,
     seeking_for: form.seeking_for || [],
     grow_up_goal: form.grow_up_goal || null,
@@ -34,6 +35,9 @@ export function buildProfilePayload(form, { setupComplete = false, includeSetupC
     family_vibe: form.family_vibe || null,
     seeking_sibling_reasons: form.seeking_sibling_reasons || [],
     bio: form.bio || null,
+    question_family_meaning: form.question_family_meaning || null,
+    question_stay_in_touch: form.question_stay_in_touch || null,
+    question_hoping_for: form.question_hoping_for || null,
   };
 
   if (includeSetupComplete) {

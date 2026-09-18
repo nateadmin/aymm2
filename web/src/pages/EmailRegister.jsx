@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import MobileScreen from '@/components/mobile/MobileScreen';
+import AuthPage from '@/components/mobile/AuthPage';
 import SplashBrand from '@/components/mobile/SplashBrand';
-import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
@@ -38,60 +37,18 @@ export default function EmailRegister() {
   };
 
   return (
-    <MobileScreen>
-      <form className="screen-pad screen-pad--auth" onSubmit={handleSubmit}>
-        <BackButton to="/demo" />
-
-        <div className="screen-pad screen-pad--center" style={{ padding: 0 }}>
+    <AuthPage
+      as="form"
+      backTo="/demo"
+      onSubmit={handleSubmit}
+      header={(
+        <>
           <SplashBrand compact />
           <h1 className="auth-heading auth-heading--brand">Create account</h1>
           <p className="auth-subheading">Start your profile in a few steps</p>
-        </div>
-
-        <div className="auth-stack">
-          <label className="auth-field">
-            <span className="auth-field__label">Email address</span>
-            <input
-              className="aymm-input"
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              autoComplete="email"
-            />
-          </label>
-
-          <label className="auth-field">
-            <span className="auth-field__label">Password</span>
-            <div className="auth-field__input-wrap">
-              <input
-                className="aymm-input"
-                type="password"
-                name="password"
-                placeholder="At least 8 characters"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                autoComplete="new-password"
-              />
-              <EyeOff
-                size={18}
-                style={{
-                  position: 'absolute',
-                  right: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: 'var(--aymm-warm-gray)',
-                }}
-              />
-            </div>
-          </label>
-
-          {mockAuth ? (
-            <p className="auth-demo-hint">Demo mode: any valid email works in StackBlitz.</p>
-          ) : null}
-        </div>
-
+        </>
+      )}
+      footer={(
         <Button
           type="submit"
           variant={canSubmit ? 'primary' : 'disabled'}
@@ -99,7 +56,51 @@ export default function EmailRegister() {
         >
           Continue to profile setup
         </Button>
-      </form>
-    </MobileScreen>
+      )}
+    >
+      <div className="auth-stack">
+        <label className="auth-field">
+          <span className="auth-field__label">Email address</span>
+          <input
+            className="aymm-input"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            autoComplete="email"
+          />
+        </label>
+
+        <label className="auth-field">
+          <span className="auth-field__label">Password</span>
+          <div className="auth-field__input-wrap">
+            <input
+              className="aymm-input"
+              type="password"
+              name="password"
+              placeholder="At least 8 characters"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="new-password"
+            />
+            <EyeOff
+              size={18}
+              style={{
+                position: 'absolute',
+                right: '1rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'var(--aymm-warm-gray)',
+              }}
+            />
+          </div>
+        </label>
+
+        {mockAuth ? (
+          <p className="auth-demo-hint">Demo mode: any valid email works in StackBlitz.</p>
+        ) : null}
+      </div>
+    </AuthPage>
   );
 }

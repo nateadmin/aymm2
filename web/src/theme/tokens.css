@@ -1,6 +1,7 @@
 :root {
   --aymm-red: #fe5658;
   --aymm-purple: #3f214d;
+  --aymm-rose: var(--aymm-red);
   --aymm-muted-purple: #6f6575;
   --aymm-warm-gray: #c8bec5;
   --aymm-light-border: #e2dae0;
@@ -11,6 +12,7 @@
   --aymm-blush: #fff8f8;
   --aymm-blush-border: #ffbcbc;
   --aymm-blush-surface: #fff5f5;
+  --aymm-cream: #faf7f9;
   --aymm-phase-purple-surface: #f4f0f7;
   --aymm-phase-purple-border: #c5bad0;
   --aymm-phase-violet: #6b3e8a;
@@ -53,7 +55,12 @@
   --space-3xl: 3rem;
   --space-splash-top: 5rem;
   --space-screen-x: 1.5rem;
-  --space-screen-bottom: 2.5rem;
+  --space-screen-bottom: 2rem;
+  /* Extra inset so bottom CTAs clear the rounded phone frame on desktop preview. */
+  --space-frame-inset: 0.75rem;
+  --space-screen-footer: calc(
+    var(--space-screen-bottom) + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px)
+  );
 
   --text-xs: 0.75rem;
   --text-sm: 0.8125rem;

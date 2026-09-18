@@ -103,6 +103,49 @@ router.post('/login', async (req, res) => {
   });
 });
 
+router.post('/forgot-password', async (req, res) => {
+  const { email, phone } = req.body || {};
+  const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+  const normalizedPhone = typeof phone === 'string' ? phone.trim() : '';
+
+  if (!normalizedEmail && !normalizedPhone) {
+    return res.status(400).json({ error: 'email_required' });
+  }
+
+  if (normalizedEmail) {
+    const user = await findUserByEmail(normalizedEmail);
+    if (!user) {
+      return res.json({ ok: true });
+    }
+  }
+
+  res.json({ ok: true });
+});
+
+router.post('/reset-password', async (req, res) => {
+  const { email, password, code } = req.body || {};
+  const normalized = typeof email === 'string' ? email.trim().toLowerCase() : '';
+
+  if (!normalized) {
+    return res.status(400).json({ error: 'email_required' });
+  }
+  if (!password || typeof password !== 'string' || password.length < 8) {
+    return res.status(400).json({ error: 'password_required' });
+  }
+  if (!code || String(code).length < 6) {
+    return res.status(400).json({ error: 'invalid_code' });
+  }
+
+  const user = await findUserByEmail(normalized);
+  if (!user) {
+    return res.status(404).json({ error: 'user_not_found' });
+  }
+
+  const passwordHash = await hashPassword(password);
+  await setUserPassword(normalized, passwordHash);
+  res.json({ ok: true });
+});
+
 router.post('/logout', requireAuth, async (req, res) => {
   if (req.sessionToken) {
     await deleteSession(req.sessionToken);
