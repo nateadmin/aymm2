@@ -14,16 +14,20 @@ export default function Splash() {
           <HeartLogo
             className="splash-page__logo"
             alt=""
-            style={{ width: '3.25rem', height: '3.25rem' }}
+            style={{ width: '2.75rem', height: '2.75rem' }}
           />
           <p className="splash-page__wordmark">Aymm</p>
           <p className="splash-page__subtitle">Are You My Mother?</p>
         </header>
 
+        <div className="splash-page__spacer" aria-hidden="true" />
+
         <div className="splash-page__middle">
           <p className="splash-tagline">Build the family you always dreamed of</p>
           <FamilyTreeGraphic />
         </div>
+
+        <div className="splash-page__spacer" aria-hidden="true" />
 
         <div className="splash-actions">
           <Button onClick={() => navigate('/Welcome')}>Get Started</Button>
