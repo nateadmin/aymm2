@@ -9,9 +9,9 @@ export const SEEKING_PARENT_REASONS = [
 export const SEEKING_CHILD_REASONS = [
   { id: 'children_grown', label: 'My own children are grown and independent' },
   { id: 'love_to_give', label: 'I have nurturing love left to give' },
+  { id: 'support_growth', label: 'I want to support someone\'s growth' },
   { id: 'positive_presence', label: 'I\'d love to be a positive presence in someone\'s life' },
-  { id: 'share_wisdom', label: 'I want to share my wisdom and experience' },
-  { id: 'mentor_youth', label: 'I want to mentor and guide the next generation' },
+  { id: 'experience_bond', label: 'I never had children and want to experience that bond' },
 ];
 
 export const SEEKING_SIBLING_REASONS = [
