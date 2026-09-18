@@ -9,13 +9,10 @@ export default function Splash() {
 
   return (
     <MobileScreen>
-      <div className="screen-pad screen-pad--center screen-pad--between">
-        <div className="screen-pad screen-pad--center" style={{ padding: 0, gap: '3rem' }}>
-          <SplashBrand />
-          <p className="splash-tagline">Build the family you always dreamed of</p>
-          <FamilyTreeGraphic />
-        </div>
-
+      <div className="splash-page">
+        <SplashBrand />
+        <p className="splash-tagline">Build the family you always dreamed of</p>
+        <FamilyTreeGraphic />
         <div className="splash-actions">
           <Button onClick={() => navigate('/Welcome')}>Get Started</Button>
           <p className="splash-caption">A safe place for meaningful family bonds</p>

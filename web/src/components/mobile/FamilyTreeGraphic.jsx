@@ -1,6 +1,12 @@
-export default function FamilyTreeGraphic() {
+export default function FamilyTreeGraphic({ className = '' }) {
   return (
-    <svg viewBox="0 0 280 150" width="280" height="150" aria-hidden="true">
+    <svg
+      viewBox="0 0 280 150"
+      width="280"
+      height="150"
+      className={`splash-family-graphic${className ? ` ${className}` : ''}`}
+      aria-hidden="true"
+    >
       <circle cx="70" cy="50" r="28" stroke="var(--aymm-purple)" strokeWidth="2" fill="none" />
       <circle cx="210" cy="50" r="28" stroke="var(--aymm-purple)" strokeWidth="2" fill="none" />
       <circle cx="140" cy="120" r="28" stroke="var(--aymm-red)" strokeWidth="2" strokeDasharray="4 4" fill="none" />
