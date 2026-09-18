@@ -38,7 +38,7 @@ export default function Login() {
       header={(
         <>
           <HeartLogo />
-          <h1 className="auth-heading">Welcome back</h1>
+          <h1 className="auth-heading auth-heading--brand">Welcome back</h1>
           <p className="auth-subheading">Sign in to continue</p>
         </>
       )}
