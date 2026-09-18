@@ -13,7 +13,7 @@ export default function PhoneLogin() {
       align="start"
       header={(
         <>
-          <h1 className="auth-heading">Sign in with phone</h1>
+          <h1 className="auth-heading auth-heading--brand">Sign in with phone</h1>
           <p className="auth-subheading">We&apos;ll send a verification code to confirm it&apos;s you.</p>
         </>
       )}

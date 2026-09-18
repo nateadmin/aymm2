@@ -212,6 +212,11 @@ select {
   color: var(--aymm-purple);
 }
 
+.page-shell__header:has(.page-shell__description) .page-shell__title {
+  font-family: var(--font-brand);
+  font-weight: 400;
+}
+
 .page-shell__description {
   margin: 0.5rem 0 0;
   color: var(--aymm-muted-purple);

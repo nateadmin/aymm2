@@ -45,7 +45,7 @@ export default function EmailLogin() {
       header={(
         <>
           <SplashBrand compact />
-          <h1 className="auth-heading">Sign in</h1>
+          <h1 className="auth-heading auth-heading--brand">Sign in</h1>
           <p className="auth-subheading">Enter your details below</p>
         </>
       )}
