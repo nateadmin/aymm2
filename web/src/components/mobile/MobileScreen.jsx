@@ -1,5 +1,10 @@
 import { Signal, Wifi, Battery } from 'lucide-react';
 
+/**
+ * Wraps auth/onboarding flows in the mobile shell. The decorative status bar renders
+ * only at desktop breakpoints (phone-frame preview); real phones use the OS status
+ * area plus safe-area padding on the body.
+ */
 export default function MobileScreen({
   children,
   showStatusBar = true,

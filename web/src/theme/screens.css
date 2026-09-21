@@ -14,15 +14,22 @@
   flex-direction: column;
 }
 
+/* Decorative 9:41 bar — only inside the desktop phone-frame mock (see @media min-width 48rem). */
 .mobile-screen__status {
   box-sizing: border-box;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: space-between;
   height: var(--status-bar-height);
   padding: 0 var(--space-screen-x);
   border-bottom: 0.8px solid var(--aymm-light-border);
   flex-shrink: 0;
+}
+
+@media (max-width: 47.99rem) {
+  .mobile-screen__body {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
 }
 
 .mobile-screen__status-time {
@@ -3129,6 +3136,10 @@
 }
 
 @media (min-width: 48rem) {
+  .mobile-screen__status {
+    display: flex;
+  }
+
   .mobile-canvas {
     padding: 1.5rem 0;
   }
