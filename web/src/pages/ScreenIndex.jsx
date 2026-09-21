@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  DEMO_LINKS,
   PHASE_LABELS,
   SCREEN_CATALOG,
   STATUS_LABELS,
@@ -28,10 +29,17 @@ export default function ScreenIndex() {
   return (
     <div className="screen-index">
       <header className="screen-index__header">
-        <h1 className="screen-index__title">AYMM screen cards</h1>
+        <h1 className="screen-index__title">AYMM demo</h1>
+        <nav className="screen-index__short-links" aria-label="Demo entry points">
+          <Link to={DEMO_LINKS.app}>aymm demo</Link>
+          <span aria-hidden="true">·</span>
+          <Link to={DEMO_LINKS.catalog}>catalog</Link>
+          <span aria-hidden="true">·</span>
+          <Link to={DEMO_LINKS.login}>login</Link>
+        </nav>
         <p className="screen-index__lead">
-          All {SCREEN_CATALOG.length} screens ({builtCount} built). Thumbnails are live captures of
-          the current build — open any card on its own, or open the built screen.
+          {SCREEN_CATALOG.length} screens ({builtCount} built). Thumbnails show the live phone mock
+          — tap a card or open the built screen.
         </p>
         <p className="screen-index__meta">
           Sample login: <strong>design@aymm.app</strong> / <strong>DesignReview1</strong>
@@ -106,7 +114,7 @@ export default function ScreenIndex() {
                       to={withPreviewQuery(screen.route)}
                       className="screen-card__action screen-card__action--primary"
                     >
-                      Open built screen
+                      open screen
                     </Link>
                   </div>
                 </div>

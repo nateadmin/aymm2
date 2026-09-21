@@ -1,12 +1,20 @@
 /**
  * Wireframe screen map (55 screens, 4 phases).
- * Staging hub: https://aymm.app/screens?preview=1
+ * Short demo paths (append to staging host): see DEMO_LINKS.
  */
 
 export const STAGING_BASE = 'https://aymm.app';
-export const STAGING_HUB = `${STAGING_BASE}/screens?preview=1&mobile=1`;
-export const STAGING_DEVICE_HUB = `${STAGING_BASE}/Welcome?preview=1&mobile=1&native=1`;
-export const STAGING_MOBILE_LOGIN = `${STAGING_BASE}/EmailLogin?preview=1&mobile=1&native=1`;
+
+/** Relative paths — use on any staging host (aymm.app, tunnel, localhost). */
+export const DEMO_LINKS = {
+  app: '/Welcome?preview=1&mobile=1&native=1',
+  catalog: '/screens?preview=1&mobile=1',
+  login: '/EmailLogin?preview=1&mobile=1&native=1',
+};
+
+export const STAGING_HUB = `${STAGING_BASE}${DEMO_LINKS.catalog}`;
+export const STAGING_DEVICE_HUB = `${STAGING_BASE}${DEMO_LINKS.app}`;
+export const STAGING_MOBILE_LOGIN = `${STAGING_BASE}${DEMO_LINKS.login}`;
 
 export const SCREEN_CATALOG = [
   // Phase 1 — Onboarding
@@ -118,7 +126,7 @@ export function designSourcePath(screenId) {
 }
 
 /** Bump when live screen captures are regenerated (cache bust for staging thumbnails). */
-export const SCREEN_CAPTURE_VERSION = '20250921-staging';
+export const SCREEN_CAPTURE_VERSION = '20250921-phone-catalog';
 
 function assetBase() {
   const envBase = import.meta.env?.BASE_URL;

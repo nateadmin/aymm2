@@ -21,6 +21,8 @@ const screens = [...catalogSource.matchAll(
 const baseUrl = process.env.CAPTURE_BASE_URL || 'http://127.0.0.1:4173';
 const outDir = process.env.CAPTURE_OUT_DIR || path.join(root, 'web/public/screen-captures');
 const designDir = path.join(root, 'web/public/design-frames');
+/** Visible phone chrome height in catalog (one viewport, not full scroll). */
+const PHONE_THUMB_MAX_HEIGHT = 780;
 
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -31,6 +33,52 @@ const page = await browser.newPage({
 });
 
 const failures = [];
+
+async function capturePhoneThumbnail(target) {
+  const mobileScreen = page.locator('.mobile-screen').first();
+  const mobileCanvas = page.locator('.mobile-canvas').first();
+  const appContent = page.locator('.app-main__content').first();
+  const designPhone = page.locator('.design-ref__phone').first();
+
+  if (await mobileScreen.count()) {
+    const box = await mobileScreen.boundingBox();
+    if (box) {
+      const height = Math.min(box.height, PHONE_THUMB_MAX_HEIGHT);
+      const padX = 28;
+      const padTop = 20;
+      const padBottom = 32;
+      await page.screenshot({
+        path: target,
+        clip: {
+          x: Math.max(0, box.x - padX),
+          y: Math.max(0, box.y - padTop),
+          width: Math.min(box.width + padX * 2, 1280),
+          height: height + padTop + padBottom,
+        },
+      });
+      return;
+    }
+    await mobileScreen.screenshot({ path: target });
+    return;
+  }
+
+  if (await mobileCanvas.count()) {
+    await mobileCanvas.screenshot({ path: target });
+    return;
+  }
+
+  if (await appContent.count()) {
+    await appContent.screenshot({ path: target });
+    return;
+  }
+
+  if (await designPhone.count()) {
+    await designPhone.screenshot({ path: target });
+    return;
+  }
+
+  await page.screenshot({ path: target, fullPage: false });
+}
 
 for (const screen of screens) {
   const filename = `frame-${String(screen.id).padStart(2, '0')}.png`;
@@ -47,26 +95,12 @@ for (const screen of screens) {
     continue;
   }
 
-  const url = `${baseUrl}${screen.route}${screen.route.includes('?') ? '&' : '?'}preview=1&mobile=1`;
+  const url = `${baseUrl}${screen.route}${screen.route.includes('?') ? '&' : '?'}preview=1&mobile=1&native=0`;
 
   try {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 });
     await page.waitForTimeout(600);
-
-    const mobileScreen = page.locator('.mobile-screen').first();
-    const appContent = page.locator('.app-main__content').first();
-    const designPhone = page.locator('.design-ref__phone').first();
-
-    if (await mobileScreen.count()) {
-      await mobileScreen.screenshot({ path: target });
-    } else if (await appContent.count()) {
-      await appContent.screenshot({ path: target });
-    } else if (await designPhone.count()) {
-      await designPhone.screenshot({ path: target });
-    } else {
-      await page.screenshot({ path: target, fullPage: false });
-    }
-
+    await capturePhoneThumbnail(target);
     console.log(`Captured ${screen.id}/55: ${screen.title}`);
   } catch (error) {
     failures.push(`${screen.id} ${screen.title}: ${error.message}`);
