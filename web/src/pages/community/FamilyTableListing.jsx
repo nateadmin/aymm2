@@ -3,7 +3,7 @@ import CommunityScreen from '@/components/community/CommunityScreen';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import { JOHNSON_TABLE } from '@/lib/communityContent';
-import { withPreviewQuery } from '@/lib/screenCatalog';
+import { REVIEW_HOME_ROUTE, withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function FamilyTableListing() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export default function FamilyTableListing() {
     <CommunityScreen bodyClassName="community-table-detail-screen">
       <div className="community-table-detail">
         <div className="community-table-detail__toolbar">
-          <BackButton to={withPreviewQuery('/Home')} />
+          <BackButton to={withPreviewQuery(REVIEW_HOME_ROUTE)} />
         </div>
 
         <div className="community-table-detail__hero">

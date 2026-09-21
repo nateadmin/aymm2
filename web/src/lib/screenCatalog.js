@@ -3,7 +3,14 @@
  * Short demo paths (append to staging host): see DEMO_LINKS.
  */
 
+import { isMockAuthEnabled } from './mockAuth.js';
+import { isStagingPreviewEnabled } from './stagingPreview.js';
+
 export const STAGING_BASE = 'https://aymm.app';
+
+/** Phase 4 review shell — use instead of live /Home and /Profile in demos. */
+export const REVIEW_HOME_ROUTE = '/Prototype/home';
+export const REVIEW_PROFILE_ROUTE = '/Prototype/my-profile';
 
 /** Relative paths — use on any staging host (aymm.app, tunnel, localhost). */
 export const DEMO_LINKS = {
@@ -185,13 +192,16 @@ export function stagingUrl(route, { mobile = true } = {}) {
 function shouldKeepNativePreview({ native } = {}) {
   if (native === false) return false;
   if (native === true) return true;
-  if (typeof window === 'undefined') return false;
-  try {
-    if (new URLSearchParams(window.location.search).get('native') === '1') return true;
-    return sessionStorage.getItem('aymm_native_device') === 'on';
-  } catch {
-    return false;
+  if (typeof window !== 'undefined') {
+    try {
+      if (new URLSearchParams(window.location.search).get('native') === '1') return true;
+      if (sessionStorage.getItem('aymm_native_device') === 'on') return true;
+    } catch {
+      // ignore storage / URL access failures
+    }
   }
+  // Demo and design review: stay in full-width phone layout after login, not desktop frame mock.
+  return isStagingPreviewEnabled() || isMockAuthEnabled();
 }
 
 export function withPreviewQuery(route, { mobile = true, native } = {}) {

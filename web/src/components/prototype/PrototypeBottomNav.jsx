@@ -1,10 +1,14 @@
 import { Heart, Home, Newspaper, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { withPreviewQuery } from '@/lib/screenCatalog';
+import {
+  REVIEW_HOME_ROUTE,
+  REVIEW_PROFILE_ROUTE,
+  withPreviewQuery,
+} from '@/lib/screenCatalog';
 
 const ITEMS = [
   {
-    path: '/Prototype/home',
+    path: REVIEW_HOME_ROUTE,
     icon: Home,
     label: 'Home',
     match: (pathname) => pathname.includes('/Prototype/home'),
@@ -29,7 +33,7 @@ const ITEMS = [
       || pathname.includes('/Community/event-reminders'),
   },
   {
-    path: '/Prototype/my-profile',
+    path: REVIEW_PROFILE_ROUTE,
     icon: User,
     label: 'Profile',
     match: (pathname) => pathname.includes('/Prototype/my-profile')

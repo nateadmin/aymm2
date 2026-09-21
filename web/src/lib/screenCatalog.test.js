@@ -12,6 +12,17 @@ test('withPreviewQuery can keep the catalog on desktop and screens on mobile', (
   assert.equal(withPreviewQuery('/Prototype/home'), '/Prototype/home?preview=1&mobile=1');
 });
 
+test('withPreviewQuery can force real-device layout for one link', () => {
+  assert.equal(
+    withPreviewQuery('/EmailLogin', { native: true }),
+    '/EmailLogin?preview=1&mobile=1&native=1',
+  );
+  assert.equal(
+    withPreviewQuery('/screens', { mobile: false, native: false }),
+    '/screens?preview=1&mobile=0',
+  );
+});
+
 test('screenCardPath opens one catalog card at a time', () => {
   assert.equal(screenCardPath({ slug: 'my-profile' }), '/screens/my-profile');
 });

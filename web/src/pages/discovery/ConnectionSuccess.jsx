@@ -4,7 +4,7 @@ import MobileScreen from '@/components/mobile/MobileScreen';
 import HeartLogo from '@/components/brand/HeartLogo';
 import Button from '@/components/ui/Button';
 import { DAUGHTER_PROFILE } from '@/lib/discoveryProfiles';
-import { withPreviewQuery } from '@/lib/screenCatalog';
+import { REVIEW_HOME_ROUTE, withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function ConnectionSuccess() {
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ export default function ConnectionSuccess() {
         </div>
 
         <div className="connection-success__actions">
-          <Button onClick={() => navigate(withPreviewQuery('/Home'))}>
+          <Button onClick={() => navigate(withPreviewQuery(REVIEW_HOME_ROUTE))}>
             Keep Browsing
           </Button>
           <Button
