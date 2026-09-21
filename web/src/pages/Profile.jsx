@@ -28,7 +28,7 @@ export default function Profile() {
       || isMockAuthEnabled()
       || email === MOCK_LOGIN_EMAIL;
     if (useDesignProfile) {
-      navigate(withPreviewQuery(REVIEW_PROFILE_ROUTE), { replace: true });
+      navigate(withPreviewQuery(REVIEW_PROFILE_ROUTE, { native: false }), { replace: true });
     }
   }, [navigate, user?.email]);
   const { profile, isLoading } = useMyProfile();

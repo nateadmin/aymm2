@@ -52,7 +52,7 @@ export default function PrototypeBottomNav() {
         return (
           <Link
             key={path}
-            to={withPreviewQuery(path)}
+            to={withPreviewQuery(path, { native: false })}
             className={`community-bottom-nav__link${isActive ? ' community-bottom-nav__link--active' : ''}`}
           >
             <Icon size={20} strokeWidth={isActive ? 2.25 : 1.75} />

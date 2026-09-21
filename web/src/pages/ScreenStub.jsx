@@ -37,7 +37,7 @@ export default function ScreenStub() {
         <p className="design-ref__status">
           Card {String(screen.id).padStart(2, '0')} of {SCREEN_CATALOG.length}
         </p>
-        <Link to={withPreviewQuery(screen.route)} className="design-ref__open">
+        <Link to={withPreviewQuery(screen.route, { native: false })} className="design-ref__open">
           Open built screen
         </Link>
       </header>

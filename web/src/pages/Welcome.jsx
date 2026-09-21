@@ -13,7 +13,7 @@ export default function Welcome() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(withPreviewQuery(getPostAuthPath({ hasProfile, profile })), { replace: true });
+      navigate(withPreviewQuery(getPostAuthPath({ hasProfile, profile }), { native: false }), { replace: true });
     }
   }, [isAuthenticated, hasProfile, profile, navigate]);
 

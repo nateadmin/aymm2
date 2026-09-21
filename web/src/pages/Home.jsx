@@ -32,7 +32,7 @@ export default function Home() {
       || isMockAuthEnabled()
       || email === MOCK_LOGIN_EMAIL;
     if (onDesignHome) {
-      navigate(withPreviewQuery(DESIGN_HOME_ROUTE), { replace: true });
+      navigate(withPreviewQuery(DESIGN_HOME_ROUTE, { native: false }), { replace: true });
     }
   }, [navigate, authProfile?.user_email, user?.email]);
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();

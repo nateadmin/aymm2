@@ -27,7 +27,7 @@ export default function EmailLogin() {
     setSubmitting(true);
     try {
       const session = await login(email.trim(), password);
-      navigate(withPreviewQuery(getPostAuthPath(session)), { replace: true });
+      navigate(withPreviewQuery(getPostAuthPath(session), { native: false }), { replace: true });
     } catch (error) {
       const message = error.payload?.error === 'invalid_credentials'
         ? 'Email or password is incorrect.'

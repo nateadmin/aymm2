@@ -1,11 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  DEMO_LINKS,
+  REVIEW_PROFILE_ROUTE,
   SCREEN_CAPTURE_VERSION,
   screenCardPath,
   screenThumbnailUrl,
   withPreviewQuery,
 } from './screenCatalog.js';
+
+test('demo and login stay in the framed phone mock', () => {
+  assert.match(DEMO_LINKS.app, /mobile=1/);
+  assert.match(DEMO_LINKS.app, /native=0/);
+  assert.match(DEMO_LINKS.login, /mobile=1/);
+  assert.match(DEMO_LINKS.login, /native=0/);
+  assert.equal(REVIEW_PROFILE_ROUTE, '/Prototype/my-profile');
+});
 
 test('withPreviewQuery can keep the catalog on desktop and screens on mobile', () => {
   assert.equal(withPreviewQuery('/screens', { mobile: false }), '/screens?preview=1&mobile=0');

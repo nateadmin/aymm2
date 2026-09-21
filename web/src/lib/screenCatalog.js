@@ -3,20 +3,20 @@
  * Short demo paths (append to staging host): see DEMO_LINKS.
  */
 
-import { isMockAuthEnabled } from './mockAuth.js';
-import { isStagingPreviewEnabled } from './stagingPreview.js';
-
 export const STAGING_BASE = 'https://aymm.app';
 
 /** Phase 4 review shell — use instead of live /Home and /Profile in demos. */
 export const REVIEW_HOME_ROUTE = '/Prototype/home';
 export const REVIEW_PROFILE_ROUTE = '/Prototype/my-profile';
 
-/** Relative paths — use on any staging host (aymm.app, tunnel, localhost). */
+/** Relative paths — use on any staging host (aymm.app, tunnel, localhost).
+ * Demo/login stay in the framed phone mock (`mobile=1`, `native=0`) so
+ * desktop review still looks like a phone after sign-in.
+ */
 export const DEMO_LINKS = {
-  app: '/Welcome?preview=1&mobile=1&native=1',
+  app: '/Welcome?preview=1&mobile=1&native=0',
   catalog: '/screens?preview=1&mobile=1',
-  login: '/EmailLogin?preview=1&mobile=1&native=1',
+  login: '/EmailLogin?preview=1&mobile=1&native=0',
 };
 
 export const STAGING_HUB = `${STAGING_BASE}${DEMO_LINKS.catalog}`;
@@ -192,16 +192,13 @@ export function stagingUrl(route, { mobile = true } = {}) {
 function shouldKeepNativePreview({ native } = {}) {
   if (native === false) return false;
   if (native === true) return true;
-  if (typeof window !== 'undefined') {
-    try {
-      if (new URLSearchParams(window.location.search).get('native') === '1') return true;
-      if (sessionStorage.getItem('aymm_native_device') === 'on') return true;
-    } catch {
-      // ignore storage / URL access failures
-    }
+  if (typeof window === 'undefined') return false;
+  try {
+    if (new URLSearchParams(window.location.search).get('native') === '1') return true;
+    return sessionStorage.getItem('aymm_native_device') === 'on';
+  } catch {
+    return false;
   }
-  // Demo and design review: stay in full-width phone layout after login, not desktop frame mock.
-  return isStagingPreviewEnabled() || isMockAuthEnabled();
 }
 
 export function withPreviewQuery(route, { mobile = true, native } = {}) {
