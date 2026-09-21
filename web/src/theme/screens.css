@@ -652,23 +652,36 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
 }
 
 .otp-grid {
+  --otp-gap: clamp(0.25rem, 1.1vw, 0.5rem);
+  box-sizing: border-box;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(6, minmax(2.5rem, 1fr));
+  gap: var(--otp-gap);
   width: 100%;
   max-width: var(--button-max-width);
 }
 
 .otp-grid__digit {
+  box-sizing: border-box;
   width: 100%;
+  max-width: 3.25rem;
+  min-height: 2.5rem;
   aspect-ratio: 1;
+  justify-self: center;
   border: 1.5px solid var(--aymm-red);
   border-radius: 0.75rem;
   text-align: center;
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 4.5vw, 1.25rem);
   font-family: var(--font-body);
   color: var(--aymm-purple);
   background: #fff;
+  padding: 0;
+}
+
+@media (max-width: 22.499rem) {
+  .auth-page--start .otp-grid {
+    max-width: none;
+  }
 }
 
 .otp-resend {

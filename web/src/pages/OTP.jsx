@@ -94,6 +94,8 @@ export default function OTP() {
             className="otp-grid__digit"
             type="text"
             inputMode="numeric"
+            autoComplete={index === 0 ? 'one-time-code' : 'off'}
+            aria-label={`Digit ${index + 1} of ${CODE_LENGTH}`}
             maxLength={1}
             value={digit}
             onChange={(event) => updateDigit(index, event.target.value)}
