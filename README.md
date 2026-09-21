@@ -30,7 +30,7 @@ Licensed fonts live in `web/src/assets/fonts/`: `arial.woff2` (UI copy) and `two
 cd web && npm ci && npm run dev
 ```
 
-Open **http://localhost:5173/screens?preview=1** to browse all 55 screens (login bypass is on for localhost).
+Open **http://localhost:5173/screens?preview=1** to browse the screen catalog (login bypass is on for localhost).
 
 In another terminal, run the API from `server/` on port 3000.
 

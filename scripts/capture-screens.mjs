@@ -85,7 +85,7 @@ for (const screen of screens) {
     const designSource = path.join(designDir, filename);
     if (fs.existsSync(designSource)) {
       fs.copyFileSync(designSource, target);
-      console.log(`Copied design frame ${screen.id}/55: ${screen.title}`);
+      console.log(`Copied design frame ${screen.id}/${screens.length}: ${screen.title}`);
     } else {
       failures.push(`${screen.id} ${screen.title}: missing design frame`);
     }
@@ -98,10 +98,10 @@ for (const screen of screens) {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 });
     await page.waitForTimeout(600);
     await capturePhoneThumbnail(target);
-    console.log(`Captured ${screen.id}/55: ${screen.title}`);
+    console.log(`Captured ${screen.id}/${screens.length}: ${screen.title}`);
   } catch (error) {
     failures.push(`${screen.id} ${screen.title}: ${error.message}`);
-    console.error(`Failed ${screen.id}/55: ${screen.title}`, error.message);
+    console.error(`Failed ${screen.id}/${screens.length}: ${screen.title}`, error.message);
   }
 }
 

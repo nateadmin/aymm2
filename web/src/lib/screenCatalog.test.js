@@ -4,10 +4,18 @@ import {
   DEMO_LINKS,
   REVIEW_PROFILE_ROUTE,
   SCREEN_CAPTURE_VERSION,
+  SCREEN_CATALOG,
+  getScreenBySlug,
   screenCardPath,
   screenThumbnailUrl,
   withPreviewQuery,
 } from './screenCatalog.js';
+
+test('catalog no longer includes the extra onboarding frame', () => {
+  assert.equal(SCREEN_CATALOG.length, 54);
+  assert.equal(getScreenBySlug('onboarding-extra'), undefined);
+  assert.equal(SCREEN_CATALOG.some((screen) => screen.title === 'Onboarding (extra)'), false);
+});
 
 test('demo and login stay in the framed phone mock', () => {
   assert.match(DEMO_LINKS.app, /mobile=1/);
@@ -47,7 +55,7 @@ test('screenThumbnailUrl uses live captures for built screens', () => {
 
 test('screenThumbnailUrl keeps Figma frames for design-only entries', () => {
   assert.equal(
-    screenThumbnailUrl({ id: 19, slug: 'onboarding-extra', status: 'frame' }),
-    '/design-frames/frame-19.png',
+    screenThumbnailUrl({ id: 99, slug: 'unused-frame', status: 'frame' }),
+    '/design-frames/frame-99.png',
   );
 });

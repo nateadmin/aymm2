@@ -15,10 +15,7 @@ for (let index = 0; index <= 55; index += 1) {
 const mapping = new Map();
 let poolIndex = 0;
 for (let screenId = 1; screenId <= 55; screenId += 1) {
-  if (screenId === 19) {
-    mapping.set(screenId, 10);
-    continue;
-  }
+  if (screenId === 19) continue;
   mapping.set(screenId, pool[poolIndex]);
   poolIndex += 1;
 }
@@ -32,6 +29,7 @@ fs.mkdirSync(targetDir, { recursive: true });
 
 for (let screenId = 1; screenId <= 55; screenId += 1) {
   const sourceIndex = mapping.get(screenId);
+  if (sourceIndex === undefined) continue;
   const from = sourcePath(sourceIndex);
   const to = path.join(targetDir, `frame-${String(screenId).padStart(2, '0')}.png`);
   fs.copyFileSync(from, to);

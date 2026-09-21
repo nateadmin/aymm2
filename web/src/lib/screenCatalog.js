@@ -1,5 +1,5 @@
 /**
- * Wireframe screen map (55 screens, 4 phases).
+ * Wireframe screen map (54 screens, 4 phases).
  * Short demo paths (append to staging host): see DEMO_LINKS.
  */
 
@@ -43,7 +43,6 @@ export const SCREEN_CATALOG = [
   { id: 16, phase: 1, slug: 'questions', title: 'Questions', route: '/ProfileSetup/questions', status: 'live' },
   { id: 17, phase: 1, slug: 'review', title: 'Review', route: '/ProfileSetup/review', status: 'live' },
   { id: 18, phase: 1, slug: 'complete', title: 'Complete', route: '/ProfileSetup/complete', status: 'live' },
-  { id: 19, phase: 1, slug: 'onboarding-extra', title: 'Onboarding (extra)', route: '/preview/onboarding-extra', status: 'frame' },
   // Phase 2 — Discovery & Connection
   { id: 20, phase: 2, slug: 'daughter-profile', title: 'Daughter Profile', route: '/Discovery/daughter-profile', status: 'live' },
   { id: 21, phase: 2, slug: 'mother-profile', title: 'Mother Profile', route: '/Discovery/mother-profile', status: 'live' },
@@ -101,7 +100,7 @@ export const STATUS_LABELS = {
 /**
  * Map catalog screen id → Figma export filename.
  * Figma includes extra "uploaded" states (design-10, design-12) that are not
- * separate catalog screens. Screen 19 uses the photo-uploaded frame.
+ * separate catalog screens.
  */
 const DESIGN_SOURCE_BY_SCREEN_ID = (() => {
   const skipped = new Set([10, 12]);
@@ -114,10 +113,7 @@ const DESIGN_SOURCE_BY_SCREEN_ID = (() => {
 
   let poolIndex = 0;
   for (let screenId = 1; screenId <= 55; screenId += 1) {
-    if (screenId === 19) {
-      mapping.set(screenId, 10);
-      continue;
-    }
+    if (screenId === 19) continue;
     mapping.set(screenId, pool[poolIndex]);
     poolIndex += 1;
   }

@@ -140,6 +140,8 @@ export default function App() {
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/screens" element={<ScreenIndex />} />
+              <Route path="/screens/onboarding-extra" element={<Navigate to="/screens" replace />} />
+              <Route path="/preview/onboarding-extra" element={<Navigate to="/screens" replace />} />
               <Route path="/screens/:slug" element={<ScreenStub />} />
               <Route path="/preview/upload-photo" element={<PreviewUploadPhotoRedirect />} />
               <Route path="/preview/upload-video" element={<PreviewUploadVideoRedirect />} />
