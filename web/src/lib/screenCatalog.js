@@ -117,7 +117,7 @@ export function designSourcePath(screenId) {
 }
 
 /** Bump when live screen captures are regenerated (cache bust for staging thumbnails). */
-export const SCREEN_CAPTURE_VERSION = '20250921-otp';
+export const SCREEN_CAPTURE_VERSION = '20250921-frame-inset';
 
 function assetBase() {
   const envBase = import.meta.env?.BASE_URL;

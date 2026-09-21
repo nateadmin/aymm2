@@ -339,10 +339,6 @@ html[data-mobile-preview] .page-shell {
 }
 
 @media (min-width: 48rem) {
-  html[data-mobile-preview] {
-    --space-frame-inset: 1.25rem;
-  }
-
   body {
     background: var(--aymm-surface);
   }
