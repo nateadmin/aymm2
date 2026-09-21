@@ -3208,3 +3208,29 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
     padding-top: 0;
   }
 }
+
+/* ?native=1 — interactive review as on a real phone (no desktop frame mock). */
+html[data-real-device] .mobile-canvas {
+  min-height: var(--app-visible-height, var(--app-min-height));
+  padding: 0;
+  background: var(--aymm-white);
+}
+
+html[data-real-device] .mobile-screen {
+  max-width: 100%;
+  min-height: var(--app-visible-height, var(--app-min-height));
+  height: var(--app-visible-height, var(--app-min-height));
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  --space-frame-inset: 0px;
+  --space-screen-footer: calc(var(--space-screen-bottom) + var(--safe-area-bottom));
+}
+
+html[data-real-device] .mobile-screen__status {
+  display: none !important;
+}
+
+html[data-real-device] .mobile-screen__body {
+  padding-top: var(--safe-area-top);
+}

@@ -5,7 +5,8 @@
 
 export const STAGING_BASE = 'https://aymm.app';
 export const STAGING_HUB = `${STAGING_BASE}/screens?preview=1&mobile=1`;
-export const STAGING_MOBILE_LOGIN = `${STAGING_BASE}/EmailLogin?preview=1&mobile=1`;
+export const STAGING_DEVICE_HUB = `${STAGING_BASE}/Welcome?preview=1&mobile=1&native=1`;
+export const STAGING_MOBILE_LOGIN = `${STAGING_BASE}/EmailLogin?preview=1&mobile=1&native=1`;
 
 export const SCREEN_CATALOG = [
   // Phase 1 — Onboarding
