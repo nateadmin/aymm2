@@ -11,7 +11,7 @@ export default function MessageRequestDetail() {
 
   return (
     <PrototypeScreen showBottomNav={false}>
-      <div className="screen-pad screen-pad--between mobile-onboarding prototype-message-request">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding prototype-message-request">
         <div className="mobile-onboarding__content">
           <BackButton to={withPreviewQuery('/Community/message-requests')} />
 

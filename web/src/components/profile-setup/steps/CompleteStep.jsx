@@ -9,7 +9,7 @@ export default function CompleteStep() {
 
   return (
     <MobileScreen>
-      <div className="screen-pad screen-pad--between mobile-onboarding complete-step">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding complete-step">
         <div className="complete-step__content">
           <div className="complete-step__hero">
             <HeartLogo className="complete-step__logo" alt="" />

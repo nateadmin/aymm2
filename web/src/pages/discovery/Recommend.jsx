@@ -24,7 +24,7 @@ export default function Recommend() {
 
   return (
     <MobileScreen bodyClassName="mobile-onboarding-scroll">
-      <div className="screen-pad screen-pad--between mobile-onboarding mobile-onboarding--scroll">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
         <div className="mobile-onboarding__content">
           <BackButton to={withPreviewQuery('/Discovery/daughter-profile')} />
 

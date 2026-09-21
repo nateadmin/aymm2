@@ -12,7 +12,7 @@ export default function AdoptionApproved() {
 
   return (
     <PrototypeScreen showBottomNav={false}>
-      <div className="screen-pad screen-pad--between mobile-onboarding connection-success prototype-success">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding connection-success prototype-success">
         <div className="connection-success__content">
           <div className="prototype-success__avatars" aria-hidden="true">
             <img src={match.userPhoto} alt="" className="prototype-success__avatar" />

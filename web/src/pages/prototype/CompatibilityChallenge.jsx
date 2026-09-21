@@ -14,7 +14,7 @@ export default function CompatibilityChallenge() {
 
   return (
     <PrototypeScreen showBottomNav={false}>
-      <div className="screen-pad screen-pad--between mobile-onboarding prototype-challenge">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding prototype-challenge">
         <div className="mobile-onboarding__content">
           <BackButton to={withPreviewQuery('/Prototype/profile-carousel')} />
 

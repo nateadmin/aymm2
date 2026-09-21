@@ -22,7 +22,7 @@ export default function QuestionsStep() {
 
   return (
     <MobileScreen bodyClassName="mobile-onboarding-scroll">
-      <div className="screen-pad mobile-onboarding mobile-onboarding--scroll">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
         <div className="mobile-onboarding__content">
           <BackButton to="/ProfileSetup/religion" />
           <MobileOnboardingProgress step={7} />

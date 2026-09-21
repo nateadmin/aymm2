@@ -21,7 +21,7 @@ export default function RegisterTableFull() {
 
   return (
     <PrototypeScreen showBottomNav={false} bodyClassName="mobile-onboarding-scroll">
-      <div className="screen-pad screen-pad--between mobile-onboarding mobile-onboarding--scroll">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
         <div className="mobile-onboarding__content">
           <BackButton to={withPreviewQuery('/Community/family-table-listing')} />
 

@@ -13,7 +13,7 @@ export default function RequestJoinTable() {
 
   return (
     <CommunityScreen showBottomNav={false}>
-      <div className="screen-pad screen-pad--between mobile-onboarding">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding">
         <div className="mobile-onboarding__content">
           <BackButton to={withPreviewQuery('/Community/family-table-details')} />
 

@@ -11,7 +11,7 @@ export default function AymmFamilyMatch() {
 
   return (
     <PrototypeScreen showBottomNav={false}>
-      <div className="screen-pad screen-pad--between mobile-onboarding connection-success prototype-success">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding connection-success prototype-success">
         <div className="connection-success__content">
           <img src={match.photo} alt="" className="prototype-family-match__photo" />
 

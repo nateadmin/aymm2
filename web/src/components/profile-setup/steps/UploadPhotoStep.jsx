@@ -64,7 +64,7 @@ export default function UploadPhotoStep() {
 
   return (
     <MobileScreen>
-      <div className="screen-pad screen-pad--between mobile-onboarding">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding">
         <div className="mobile-onboarding__content">
           <BackButton to="/Register" />
           <MobileOnboardingProgress step={1} />

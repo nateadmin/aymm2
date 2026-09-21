@@ -9,7 +9,7 @@ export default function TableConfirmation() {
 
   return (
     <CommunityScreen showBottomNav={false}>
-      <div className="screen-pad screen-pad--between mobile-onboarding connection-success">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding connection-success">
         <div className="connection-success__content">
           <div className="connection-success__hero">
             <div className="connection-success__pulse community-confirm__icon" aria-hidden="true">

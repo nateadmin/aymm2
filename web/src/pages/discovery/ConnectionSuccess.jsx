@@ -12,7 +12,7 @@ export default function ConnectionSuccess() {
 
   return (
     <MobileScreen>
-      <div className="screen-pad screen-pad--between mobile-onboarding connection-success">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding connection-success">
         <div className="connection-success__content">
           <div className="connection-success__hero">
             <div className="connection-success__pulse" aria-hidden="true">

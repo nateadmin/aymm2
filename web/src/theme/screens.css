@@ -75,8 +75,21 @@
   text-align: center;
 }
 
-.screen-pad--between {
-  justify-content: space-between;
+/* One-handed forms: stack from top; primary actions sit a fixed gap below content. */
+.screen-pad--handheld {
+  justify-content: flex-start;
+}
+
+.screen-pad--handheld > .mobile-onboarding__content,
+.screen-pad--handheld > .connection-success__content {
+  flex-shrink: 0;
+}
+
+.screen-pad--handheld > .aymm-button,
+.screen-pad--handheld > .mobile-onboarding__actions,
+.screen-pad--handheld > .connection-success__actions {
+  margin-top: 1.75rem;
+  flex-shrink: 0;
 }
 
 .screen-pad--auth {
