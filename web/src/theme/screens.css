@@ -3136,15 +3136,11 @@
 }
 
 @media (min-width: 48rem) {
-  .mobile-screen__status {
-    display: flex;
-  }
-
   .mobile-canvas {
     padding: 1.5rem 0;
   }
 
-  .mobile-screen {
+  .mobile-canvas .mobile-screen {
     --space-frame-inset: 1.25rem;
     --space-screen-footer: calc(
       var(--space-screen-bottom) + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px)
@@ -3156,5 +3152,13 @@
       0 0 0 10px #1a1a1a,
       0 0 0 12px #2a2a2a;
     overflow: hidden;
+  }
+
+  .mobile-canvas .mobile-screen__status {
+    display: flex;
+  }
+
+  .mobile-canvas .mobile-screen__body {
+    padding-top: 0;
   }
 }

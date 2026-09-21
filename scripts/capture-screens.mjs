@@ -1,9 +1,11 @@
-import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const { chromium } = await import(
+  pathToFileURL(path.join(root, 'web/node_modules/playwright/index.mjs')).href
+);
 const catalogPath = path.join(root, 'web/src/lib/screenCatalog.js');
 const catalogSource = fs.readFileSync(catalogPath, 'utf8');
 const screens = [...catalogSource.matchAll(
