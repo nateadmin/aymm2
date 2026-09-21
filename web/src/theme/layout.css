@@ -352,6 +352,16 @@ html[data-mobile-preview] .page-shell {
 }
 
 @media (min-width: 48rem) {
+  html[data-mobile-preview] .app-layout,
+  html[data-mobile-preview] .app-main {
+    display: block;
+  }
+
+  html[data-mobile-preview] .app-layout__body {
+    max-width: var(--shell-max-mobile);
+    margin: 0 auto;
+  }
+
   body {
     background: var(--aymm-surface);
   }

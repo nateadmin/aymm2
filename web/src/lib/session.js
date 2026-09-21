@@ -1,11 +1,14 @@
+import { isStagingPreviewEnabled } from './stagingPreview.js';
+
 export function hasCompletedProfile(profile) {
   return Boolean(profile?.setup_complete);
 }
 
 export function getPostAuthPath(session) {
-  return hasCompletedProfile(session?.profile) || session?.hasProfile
-    ? '/Home'
-    : '/ProfileSetup/upload-photo';
+  const complete = hasCompletedProfile(session?.profile) || session?.hasProfile;
+  if (!complete) return '/ProfileSetup/upload-photo';
+  if (isStagingPreviewEnabled()) return '/Prototype/home';
+  return '/Home';
 }
 
 export function isOnboardingEntryPath(pathname) {

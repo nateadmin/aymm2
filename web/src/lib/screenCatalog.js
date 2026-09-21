@@ -174,9 +174,22 @@ export function stagingUrl(route, { mobile = true } = {}) {
   return path;
 }
 
-export function withPreviewQuery(route, { mobile = true } = {}) {
+function shouldKeepNativePreview({ native } = {}) {
+  if (native === false) return false;
+  if (native === true) return true;
+  if (typeof window === 'undefined') return false;
+  try {
+    if (new URLSearchParams(window.location.search).get('native') === '1') return true;
+    return sessionStorage.getItem('aymm_native_device') === 'on';
+  } catch {
+    return false;
+  }
+}
+
+export function withPreviewQuery(route, { mobile = true, native } = {}) {
   let path = appendQuery(route, 'preview', '1');
   if (mobile === true) path = appendQuery(path, 'mobile', '1');
   if (mobile === false) path = appendQuery(path, 'mobile', '0');
+  if (shouldKeepNativePreview({ native })) path = appendQuery(path, 'native', '1');
   return path;
 }

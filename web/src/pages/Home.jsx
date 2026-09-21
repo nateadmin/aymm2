@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { isStagingPreviewEnabled } from '@/lib/stagingPreview';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 import ProfileCard from '@/components/shared/ProfileCard';
 import ProfileDetailModal from '@/components/shared/ProfileDetailModal';
 import ProfileChatModal from '@/components/shared/ProfileChatModal';
@@ -16,7 +19,14 @@ import AymmQuestion from '@/components/brand/AymmQuestion';
 import { formatLabel } from '@/lib/format';
 
 export default function Home() {
+  const navigate = useNavigate();
   const { push } = useToast();
+
+  useEffect(() => {
+    if (isStagingPreviewEnabled()) {
+      navigate(withPreviewQuery('/Prototype/home'), { replace: true });
+    }
+  }, [navigate]);
   const { profile: authProfile } = useAuth();
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
   const activeProfile = myProfile || authProfile;

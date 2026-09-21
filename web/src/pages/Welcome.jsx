@@ -5,6 +5,7 @@ import SplashBrand from '@/components/mobile/SplashBrand';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 import { getPostAuthPath } from '@/lib/session';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function Welcome() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Welcome() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(getPostAuthPath({ hasProfile, profile }), { replace: true });
+      navigate(withPreviewQuery(getPostAuthPath({ hasProfile, profile })), { replace: true });
     }
   }, [isAuthenticated, hasProfile, profile, navigate]);
 

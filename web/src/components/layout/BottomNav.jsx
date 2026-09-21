@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getVisibleNavItems } from '@/lib/navigation';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 import { useAuth } from '@/lib/auth';
 
 export default function BottomNav() {
@@ -16,7 +17,7 @@ export default function BottomNav() {
           return (
             <Link
               key={path}
-              to={path}
+              to={withPreviewQuery(path)}
               className={`bottom-nav__link${active ? ' bottom-nav__link--active' : ''}`}
             >
               <Icon size={20} strokeWidth={active ? 2.25 : 1.75} />

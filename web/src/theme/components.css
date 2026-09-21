@@ -491,6 +491,13 @@
   text-align: center;
 }
 
+.app-main__content .screen-pad.browse-page {
+  flex: initial;
+  min-height: auto;
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+}
+
 .browse-page,
 .browse-hero,
 .browse-empty {
