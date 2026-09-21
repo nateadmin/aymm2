@@ -16,7 +16,7 @@ export default function UsernameValidation() {
 
   return (
     <PrototypeScreen showBottomNav={false}>
-      <div className="screen-pad screen-pad--between mobile-onboarding prototype-username">
+      <div className="screen-pad screen-pad--auth auth-page auth-page--start prototype-username">
         <div className="mobile-onboarding__content">
           <BackButton to={withPreviewQuery('/Prototype/register-table-full')} />
 
@@ -50,13 +50,15 @@ export default function UsernameValidation() {
           ) : null}
         </div>
 
-        <Button
-          variant={checked ? 'primary' : 'disabled'}
-          disabled={!checked}
-          onClick={() => navigate(withPreviewQuery('/Community/table-confirmation'))}
-        >
-          Continue
-        </Button>
+        <div className="auth-page__footer">
+          <Button
+            variant={checked ? 'primary' : 'disabled'}
+            disabled={!checked}
+            onClick={() => navigate(withPreviewQuery('/Community/table-confirmation'))}
+          >
+            Continue
+          </Button>
+        </div>
       </div>
     </PrototypeScreen>
   );

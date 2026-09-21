@@ -10,18 +10,21 @@ export default function AuthPage({
   onSubmit,
   children,
 }) {
+  const layoutClass = align === 'start' ? 'auth-page--start' : 'auth-page--center';
+
   return (
     <MobileScreen>
-      <Tag className="screen-pad screen-pad--auth auth-page" onSubmit={onSubmit}>
+      <Tag
+        className={`screen-pad screen-pad--auth auth-page ${layoutClass}`}
+        onSubmit={onSubmit}
+      >
         {backTo ? <BackButton to={backTo} /> : null}
         {header ? (
           <div className={`auth-header${align === 'start' ? ' auth-header--start' : ''}`}>
             {header}
           </div>
         ) : null}
-        <div className="auth-page__spacer" aria-hidden="true" />
         <div className="auth-page__body">{children}</div>
-        <div className="auth-page__spacer" aria-hidden="true" />
         {footer ? <div className="auth-page__footer">{footer}</div> : null}
       </Tag>
     </MobileScreen>
