@@ -1,5 +1,5 @@
 .mobile-canvas {
-  min-height: 100dvh;
+  min-height: var(--app-min-height);
   display: flex;
   justify-content: center;
   background: var(--aymm-canvas);
@@ -8,10 +8,18 @@
 .mobile-screen {
   width: 100%;
   max-width: var(--shell-width);
-  min-height: 100dvh;
+  min-height: var(--app-min-height);
   background: var(--aymm-white);
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 47.99rem) {
+  .mobile-canvas,
+  .mobile-screen {
+    min-height: var(--app-visible-height, var(--app-min-height));
+    height: var(--app-visible-height, var(--app-min-height));
+  }
 }
 
 /* Decorative 9:41 bar — only inside the desktop phone-frame mock (see @media min-width 48rem). */
@@ -1250,7 +1258,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   font-family: var(--font-body);
   color: var(--aymm-purple);
   background: var(--aymm-surface);
-  min-height: 100dvh;
+  min-height: var(--app-min-height);
 }
 
 .screen-index__header {
@@ -1524,7 +1532,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
 }
 
 .design-ref {
-  min-height: 100dvh;
+  min-height: var(--app-min-height);
   background: var(--aymm-canvas);
   padding: 1rem 1rem 2rem;
   font-family: var(--font-body);
@@ -3169,7 +3177,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
     --space-screen-footer: calc(
       var(--space-screen-bottom) + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px)
     );
-    min-height: calc(100dvh - 3rem);
+    min-height: calc(var(--app-min-height) - 3rem);
     border-radius: 2.75rem;
     box-shadow:
       0 1.5rem 4.5rem rgb(0 0 0 / 22%),

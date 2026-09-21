@@ -417,7 +417,7 @@
 .modal-shell__panel {
   position: relative;
   width: min(36rem, calc(100vw - 2rem));
-  max-height: calc(100dvh - 2rem);
+  max-height: calc(var(--app-visible-height, var(--app-min-height)) - 2rem);
   overflow: auto;
   background: var(--aymm-white);
   border-radius: var(--radius-button);
@@ -705,7 +705,7 @@
 .chat-view {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  min-height: calc(100dvh - var(--bottom-nav-height));
+  min-height: calc(var(--app-visible-height, var(--app-min-height)) - var(--bottom-nav-height));
 }
 
 .chat-view__header,

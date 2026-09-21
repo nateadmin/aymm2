@@ -59,6 +59,12 @@
   /* Extra inset so bottom CTAs clear the rounded phone frame on desktop preview. */
   --space-frame-inset: 0.75rem;
   --keyboard-inset: 0px;
+  /* Stable small viewport; JS sets --app-visible-height from visualViewport on phones. */
+  --app-min-height: 100vh;
+  --app-min-height: 100svh;
+  --app-visible-height: 100svh;
+  --app-offset-top: 0px;
+  --browser-chrome-inset: 0px;
   --space-screen-footer: calc(
     var(--space-screen-bottom) + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px)
   );

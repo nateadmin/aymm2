@@ -48,6 +48,27 @@ export function ensureVisibleAboveKeyboard(element, options = {}) {
   }
 }
 
+export function measureVisibleViewport(
+  viewport = typeof window !== 'undefined' ? window.visualViewport : null,
+  layoutHeight = typeof window !== 'undefined' ? window.innerHeight : 0,
+) {
+  if (typeof window === 'undefined') {
+    return { height: 0, offsetTop: 0, chromeInset: 0 };
+  }
+  const height = Math.round(viewport?.height ?? window.innerHeight);
+  const offsetTop = Math.round(viewport?.offsetTop ?? 0);
+  const chromeInset = Math.max(0, Math.round(layoutHeight - height - offsetTop));
+  return { height, offsetTop, chromeInset };
+}
+
+export function syncVisibleViewport() {
+  if (typeof window === 'undefined') return;
+  const { height, offsetTop, chromeInset } = measureVisibleViewport(window.visualViewport);
+  document.documentElement.style.setProperty('--app-visible-height', `${height}px`);
+  document.documentElement.style.setProperty('--app-offset-top', `${offsetTop}px`);
+  document.documentElement.style.setProperty('--browser-chrome-inset', `${chromeInset}px`);
+}
+
 function syncKeyboardInset() {
   const viewport = window.visualViewport;
   if (!viewport) return;
@@ -107,6 +128,7 @@ function handleFocusIn(event) {
 }
 
 function handleViewportChange() {
+  syncVisibleViewport();
   syncKeyboardInset();
   const active = document.activeElement;
   if (active instanceof HTMLElement && active.matches(FOCUSABLE_INPUT_SELECTOR)) {
@@ -114,16 +136,27 @@ function handleViewportChange() {
   }
 }
 
-/** Keep focused fields and nearby CTAs above the mobile software keyboard. */
+function handleWindowResize() {
+  syncVisibleViewport();
+  if (window.visualViewport) {
+    syncKeyboardInset();
+  }
+}
+
+/** Sync visible viewport height and keep fields above the mobile software keyboard. */
 export function initKeyboardViewport() {
   if (installed || typeof window === 'undefined') return;
-  if (!window.visualViewport) return;
   installed = true;
 
   document.documentElement.style.setProperty('--keyboard-inset', '0px');
-  syncKeyboardInset();
+  syncVisibleViewport();
+  if (window.visualViewport) {
+    syncKeyboardInset();
+    window.visualViewport.addEventListener('resize', handleViewportChange);
+    window.visualViewport.addEventListener('scroll', handleViewportChange);
+    document.addEventListener('focusin', handleFocusIn, true);
+  }
 
-  window.visualViewport.addEventListener('resize', handleViewportChange);
-  window.visualViewport.addEventListener('scroll', handleViewportChange);
-  document.addEventListener('focusin', handleFocusIn, true);
+  window.addEventListener('resize', handleWindowResize);
+  window.addEventListener('orientationchange', handleWindowResize);
 }

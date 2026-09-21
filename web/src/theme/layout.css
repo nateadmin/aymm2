@@ -50,7 +50,7 @@ select {
 }
 
 .public-page {
-  min-height: 100dvh;
+  min-height: var(--app-min-height);
   width: 100%;
   max-width: var(--shell-max-mobile);
   margin: 0 auto;
@@ -79,7 +79,7 @@ select {
 }
 
 .app-layout {
-  min-height: 100dvh;
+  min-height: var(--app-min-height);
   background: var(--aymm-surface);
 }
 
@@ -87,7 +87,7 @@ select {
   display: none;
   position: sticky;
   top: 0;
-  height: 100dvh;
+  height: var(--app-min-height);
   width: var(--shell-sidebar-width);
   flex-shrink: 0;
   border-right: 1px solid var(--aymm-light-border);
@@ -96,7 +96,7 @@ select {
 }
 
 .app-layout__body {
-  min-height: 100dvh;
+  min-height: var(--app-min-height);
   width: 100%;
   max-width: var(--shell-max-mobile);
   margin: 0 auto;
@@ -110,6 +110,14 @@ select {
 
 .app-main__content {
   padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 47.99rem) {
+  .public-page,
+  .app-layout,
+  .app-layout__body {
+    min-height: var(--app-visible-height, var(--app-min-height));
+  }
 }
 
 .app-right-sidebar {
@@ -346,7 +354,7 @@ html[data-mobile-preview] .page-shell {
 
   .public-page--welcome {
     max-width: var(--shell-max-public-wide);
-    min-height: 100dvh;
+    min-height: var(--app-min-height);
     justify-content: center;
     padding-top: var(--space-2xl);
     padding-bottom: var(--space-2xl);
@@ -362,7 +370,7 @@ html[data-mobile-preview] .page-shell {
 
   .app-layout {
     display: flex;
-    min-height: 100dvh;
+    min-height: var(--app-min-height);
   }
 
   .app-sidebar {
@@ -382,7 +390,7 @@ html[data-mobile-preview] .page-shell {
   .app-main {
     flex: 1;
     display: flex;
-    min-height: 100dvh;
+    min-height: var(--app-min-height);
   }
 
   .app-main__content {
@@ -397,7 +405,7 @@ html[data-mobile-preview] .page-shell {
     display: block;
     position: sticky;
     top: 0;
-    height: 100dvh;
+    height: var(--app-min-height);
     width: var(--shell-right-sidebar-width);
     flex-shrink: 0;
     border-left: 1px solid var(--aymm-light-border);
