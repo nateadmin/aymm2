@@ -33,7 +33,7 @@ export default function ScreenIndex() {
         <nav className="screen-index__short-links" aria-label="Demo entry points">
           <Link to={DEMO_LINKS.app}>aymm demo</Link>
           <span aria-hidden="true">·</span>
-          <Link to={DEMO_LINKS.catalog}>catalog</Link>
+          <Link to={DEMO_LINKS.catalog}>aymm catalog</Link>
           <span aria-hidden="true">·</span>
           <Link to={DEMO_LINKS.login}>login</Link>
         </nav>
