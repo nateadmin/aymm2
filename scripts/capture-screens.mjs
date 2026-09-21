@@ -44,16 +44,13 @@ async function capturePhoneThumbnail(target) {
     const box = await mobileScreen.boundingBox();
     if (box) {
       const height = Math.min(box.height, PHONE_THUMB_MAX_HEIGHT);
-      const padX = 28;
-      const padTop = 20;
-      const padBottom = 32;
       await page.screenshot({
         path: target,
         clip: {
-          x: Math.max(0, box.x - padX),
-          y: Math.max(0, box.y - padTop),
-          width: Math.min(box.width + padX * 2, 1280),
-          height: height + padTop + padBottom,
+          x: box.x,
+          y: box.y,
+          width: box.width,
+          height,
         },
       });
       return;
