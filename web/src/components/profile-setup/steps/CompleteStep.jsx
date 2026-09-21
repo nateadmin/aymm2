@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import HeartLogo from '@/components/brand/HeartLogo';
 import Button from '@/components/ui/Button';
+import { useAuth } from '@/lib/auth';
+import { getPostAuthPath } from '@/lib/session';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function CompleteStep() {
   const navigate = useNavigate();
+  const { user, profile, hasProfile } = useAuth();
 
   return (
     <MobileScreen>
@@ -43,7 +47,12 @@ export default function CompleteStep() {
           </ul>
         </div>
 
-        <Button onClick={() => navigate('/Home', { replace: true })}>
+        <Button
+          onClick={() => navigate(
+            withPreviewQuery(getPostAuthPath({ user, profile, hasProfile })),
+            { replace: true },
+          )}
+        >
           Start Finding Family
         </Button>
       </div>

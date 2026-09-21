@@ -21,6 +21,23 @@ test('getPostAuthPath routes completed users to Home', () => {
   assert.equal(getPostAuthPath({ hasProfile: false }), '/ProfileSetup/upload-photo');
 });
 
+test('getPostAuthPath routes sample demo login to design Home screen', () => {
+  assert.equal(
+    getPostAuthPath({
+      hasProfile: true,
+      user: { email: 'design@aymm.app' },
+    }),
+    '/Prototype/home',
+  );
+  assert.equal(
+    getPostAuthPath({
+      hasProfile: true,
+      profile: { user_email: 'design@aymm.app', setup_complete: true },
+    }),
+    '/Prototype/home',
+  );
+});
+
 test('onboarding entry vs edit paths are distinct', () => {
   assert.equal(isOnboardingEntryPath('/ProfileSetup/upload-photo'), true);
   assert.equal(isProfileEditPath('/ProfileSetup/basic-info'), true);

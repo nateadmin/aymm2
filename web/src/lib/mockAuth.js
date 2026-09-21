@@ -112,18 +112,21 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
   }
 
   const existing = loadMockSession();
+  const demoProfile = {
+    user_email: normalized,
+    display_name: 'Design Review',
+    identity_type: 'daughter',
+    setup_complete: true,
+  };
   const session = {
     token: `${MOCK_TOKEN_PREFIX}${normalized}`,
     user: buildUser(normalized),
     profile: completeProfile
-      ? existing?.profile?.setup_complete
-        ? existing.profile
-        : {
-            user_email: normalized,
-            display_name: 'Design Review',
-            identity_type: 'daughter',
-            setup_complete: true,
-          }
+      ? matchesDemo
+        ? demoProfile
+        : existing?.profile?.setup_complete
+          ? existing.profile
+          : demoProfile
       : existing?.profile ?? null,
   };
 

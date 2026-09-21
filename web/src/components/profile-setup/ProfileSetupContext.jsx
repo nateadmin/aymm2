@@ -19,7 +19,9 @@ import {
   stepStorageKey,
 } from '@/lib/onboarding';
 import { buildProfilePayload } from '@/lib/onboardingPayload';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 import {
+  getPostAuthPath,
   isOnboardingEntryPath,
   isProfileEditPath,
   mergeProfileState,
@@ -173,9 +175,12 @@ export function ProfileSetupProvider({ children }) {
     if (isProfileEditPath(location.pathname)) return;
 
     if (isOnboardingEntryPath(location.pathname)) {
-      navigate('/Home', { replace: true });
+      navigate(
+        withPreviewQuery(getPostAuthPath({ user, profile: authProfile, hasProfile })),
+        { replace: true },
+      );
     }
-  }, [loading, hasProfile, location.pathname, navigate]);
+  }, [loading, hasProfile, authProfile, user, location.pathname, navigate]);
 
   const updateField = useCallback((key, value) => {
     setForm((current) => {
