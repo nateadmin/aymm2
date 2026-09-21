@@ -56,6 +56,17 @@
   -webkit-overflow-scrolling: touch;
 }
 
+html[data-keyboard-open] .mobile-screen__body,
+html[data-keyboard-open] .app-main__content {
+  scroll-padding-bottom: calc(var(--keyboard-inset) + 5.5rem);
+}
+
+html[data-keyboard-open] .screen-pad--handheld > .aymm-button,
+html[data-keyboard-open] .auth-page__footer,
+html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
+  scroll-margin-bottom: calc(var(--keyboard-inset) + 1rem);
+}
+
 .screen-pad {
   box-sizing: border-box;
   flex: 1;
