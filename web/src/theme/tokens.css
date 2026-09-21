@@ -58,6 +58,8 @@
   --space-screen-bottom: 2rem;
   /* Non-zero only inside the desktop phone-frame mock (.mobile-canvas .mobile-screen). */
   --space-frame-inset: 0px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --keyboard-inset: 0px;
   /* Stable small viewport; JS sets --app-visible-height from visualViewport on phones. */
   --app-min-height: 100vh;
@@ -65,9 +67,7 @@
   --app-visible-height: 100svh;
   --app-offset-top: 0px;
   --browser-chrome-inset: 0px;
-  --space-screen-footer: calc(
-    var(--space-screen-bottom) + env(safe-area-inset-bottom, 0px)
-  );
+  --space-screen-footer: calc(var(--space-screen-bottom) + var(--safe-area-bottom));
 
   --text-xs: 0.75rem;
   --text-sm: 0.8125rem;

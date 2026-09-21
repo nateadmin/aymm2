@@ -36,7 +36,8 @@
 
 @media (max-width: 47.99rem) {
   .mobile-screen__body {
-    padding-top: env(safe-area-inset-top, 0px);
+    padding-top: var(--safe-area-top);
+    scroll-padding-top: var(--safe-area-top);
   }
 }
 
@@ -1975,7 +1976,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   justify-content: space-around;
   border-top: 1px solid var(--aymm-light-border);
   background: var(--aymm-white);
-  padding: 0.375rem 0.5rem calc(0.375rem + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px));
+  padding: 0.375rem 0.5rem calc(0.375rem + var(--space-frame-inset) + var(--safe-area-bottom));
 }
 
 .community-bottom-nav__link {
@@ -2249,7 +2250,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
 .community-chat__composer {
   display: grid;
   gap: 0.75rem;
-  padding: 0.875rem var(--space-screen-x) calc(0.875rem + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px));
+  padding: 0.875rem var(--space-screen-x) calc(0.875rem + var(--space-frame-inset) + var(--safe-area-bottom));
   border-top: 1px solid var(--aymm-light-border);
   background: var(--aymm-white);
 }
@@ -3188,7 +3189,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   .mobile-canvas .mobile-screen {
     --space-frame-inset: 1.25rem;
     --space-screen-footer: calc(
-      var(--space-screen-bottom) + var(--space-frame-inset) + env(safe-area-inset-bottom, 0px)
+      var(--space-screen-bottom) + var(--space-frame-inset) + var(--safe-area-bottom)
     );
     min-height: calc(var(--app-min-height) - 3rem);
     border-radius: 2.75rem;

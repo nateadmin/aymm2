@@ -109,7 +109,7 @@ select {
 }
 
 .app-main__content {
-  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
 }
 
 @media (max-width: 47.99rem) {
@@ -117,6 +117,19 @@ select {
   .app-layout,
   .app-layout__body {
     min-height: var(--app-visible-height, var(--app-min-height));
+  }
+
+  .app-main__content {
+    padding-top: var(--safe-area-top);
+    scroll-padding-top: var(--safe-area-top);
+  }
+
+  .public-page {
+    padding-top: calc(var(--space-xl) + var(--safe-area-top));
+  }
+
+  .public-page--welcome {
+    padding-top: calc(var(--space-2xl) + var(--safe-area-top));
   }
 }
 
@@ -168,7 +181,7 @@ select {
   z-index: 20;
   border-top: 1px solid var(--aymm-light-border);
   background: var(--aymm-white);
-  padding-bottom: calc(var(--space-frame-inset, 0px) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(var(--space-frame-inset, 0px) + var(--safe-area-bottom));
 }
 
 .bottom-nav__inner {
@@ -325,7 +338,7 @@ html[data-mobile-preview] .app-main {
 
 html[data-mobile-preview] .app-main__content {
   padding-bottom: calc(
-    var(--bottom-nav-height) + var(--space-frame-inset, 0px) + env(safe-area-inset-bottom, 0px)
+    var(--bottom-nav-height) + var(--space-frame-inset, 0px) + var(--safe-area-bottom)
   );
 }
 
