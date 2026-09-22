@@ -8,7 +8,7 @@ Public URLs: https://aymm.app and https://aymmapp.com (DNS A records → 185.198
 
 ## Staging (review every built screen here)
 
-Use these **stable aymm.app links** (do not share random tunnel hostnames):
+Use these **stable aymm.app links**. Temporary previews must use the same names (`aymm-catalog`, `aymm-demo`, `aymm-login`) — never random tunnel hostnames.
 
 | Link | URL |
 |------|-----|
