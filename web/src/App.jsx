@@ -131,6 +131,9 @@ export default function App() {
               <Route path="/Login" element={<Login />} />
               <Route path="/Register" element={<Register />} />
               <Route path="/demo" element={<Demo />} />
+              <Route path="/aymm-catalog" element={<Navigate to="/screens?preview=1&mobile=1" replace />} />
+              <Route path="/aymm-demo" element={<Navigate to="/Welcome?preview=1&mobile=1&native=0" replace />} />
+              <Route path="/aymm-login" element={<Navigate to="/EmailLogin?preview=1&mobile=1&native=0" replace />} />
               <Route path="/EmailLogin" element={<EmailLogin />} />
               <Route path="/EmailRegister" element={<EmailRegister />} />
               <Route path="/PhoneLogin" element={<PhoneLogin />} />

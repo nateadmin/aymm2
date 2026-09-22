@@ -9,19 +9,23 @@ export const STAGING_BASE = 'https://aymm.app';
 export const REVIEW_HOME_ROUTE = '/Prototype/home';
 export const REVIEW_PROFILE_ROUTE = '/Prototype/my-profile';
 
-/** Relative paths — use on any staging host (aymm.app, tunnel, localhost).
- * Demo/login stay in the framed phone mock (`mobile=1`, `native=0`) so
- * desktop review still looks like a phone after sign-in.
- */
+/** Stable short paths (redirect to preview query targets). Share on aymm.app only. */
 export const DEMO_LINKS = {
-  app: '/Welcome?preview=1&mobile=1&native=0',
-  catalog: '/screens?preview=1&mobile=1',
-  login: '/EmailLogin?preview=1&mobile=1&native=0',
+  app: '/aymm-demo',
+  catalog: '/aymm-catalog',
+  login: '/aymm-login',
 };
 
-export const STAGING_HUB = `${STAGING_BASE}${DEMO_LINKS.catalog}`;
-export const STAGING_DEVICE_HUB = `${STAGING_BASE}${DEMO_LINKS.app}`;
-export const STAGING_MOBILE_LOGIN = `${STAGING_BASE}${DEMO_LINKS.login}`;
+/** Full URLs for docs, PRs, and chat — not ephemeral tunnel hostnames. */
+export const BRANDED_STAGING_URLS = {
+  catalog: `${STAGING_BASE}${DEMO_LINKS.catalog}`,
+  demo: `${STAGING_BASE}${DEMO_LINKS.app}`,
+  login: `${STAGING_BASE}${DEMO_LINKS.login}`,
+};
+
+export const STAGING_HUB = BRANDED_STAGING_URLS.catalog;
+export const STAGING_DEVICE_HUB = BRANDED_STAGING_URLS.demo;
+export const STAGING_MOBILE_LOGIN = BRANDED_STAGING_URLS.login;
 
 export const SCREEN_CATALOG = [
   // Phase 1 — Onboarding

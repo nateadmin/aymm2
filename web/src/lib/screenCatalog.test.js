@@ -17,11 +17,10 @@ test('catalog no longer includes the extra onboarding frame', () => {
   assert.equal(SCREEN_CATALOG.some((screen) => screen.title === 'Onboarding (extra)'), false);
 });
 
-test('demo and login stay in the framed phone mock', () => {
-  assert.match(DEMO_LINKS.app, /mobile=1/);
-  assert.match(DEMO_LINKS.app, /native=0/);
-  assert.match(DEMO_LINKS.login, /mobile=1/);
-  assert.match(DEMO_LINKS.login, /native=0/);
+test('demo links use stable branded paths on aymm.app', () => {
+  assert.equal(DEMO_LINKS.catalog, '/aymm-catalog');
+  assert.equal(DEMO_LINKS.app, '/aymm-demo');
+  assert.equal(DEMO_LINKS.login, '/aymm-login');
   assert.equal(REVIEW_PROFILE_ROUTE, '/Prototype/my-profile');
 });
 

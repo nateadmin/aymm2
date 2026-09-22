@@ -8,7 +8,15 @@ Public URLs: https://aymm.app and https://aymmapp.com (DNS A records → 185.198
 
 ## Staging (review every built screen here)
 
-**https://aymm.app/screens** — all implemented routes; login is skipped on staging automatically.
+Use these **stable aymm.app links** (do not share random tunnel hostnames):
+
+| Link | URL |
+|------|-----|
+| **aymm catalog** | https://aymm.app/aymm-catalog |
+| **aymm demo** | https://aymm.app/aymm-demo |
+| **login** | https://aymm.app/aymm-login |
+
+Sample sign-in: `design@aymm.app` / `DesignReview1`. Login bypass is on for staging automatically.
 
 Agents link staging URLs only (not design PNGs). Design sources for dev: `docs/ui-design/SOURCE.md`.
 

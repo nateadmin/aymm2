@@ -35,6 +35,9 @@ export const PUBLIC_ROUTES = [
   '/AboutUs',
   '/PrivacyPolicy',
   '/screens',
+  '/aymm-catalog',
+  '/aymm-demo',
+  '/aymm-login',
 ];
 
 export const AUTH_LAYOUT_ROUTES = [
