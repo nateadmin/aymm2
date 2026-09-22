@@ -8,15 +8,13 @@ Public URLs: https://aymm.app and https://aymmapp.com (DNS A records → 185.198
 
 ## Staging (review every built screen here)
 
-Use these **stable aymm.app links**. Temporary previews must use the same names (`aymm-catalog`, `aymm-demo`, `aymm-login`) — never random tunnel hostnames.
+Permanent public review links (share these only):
 
 | Link | URL |
 |------|-----|
-| **aymm catalog** | https://aymm.app/aymm-catalog (alias: [/screens?preview=1&mobile=1](https://aymm.app/screens?preview=1&mobile=1)) |
+| **aymm catalog** | https://aymm.app/aymm-catalog |
 | **aymm demo** | https://aymm.app/aymm-demo |
 | **login** | https://aymm.app/aymm-login |
-
-Until the latest build is deployed to aymm.app, use the **screens** catalog URL in the table above — it is the same grid.
 
 Sample sign-in: `design@aymm.app` / `DesignReview1`. Login bypass is on for staging automatically.
 

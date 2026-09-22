@@ -16,11 +16,14 @@ export const DEMO_LINKS = {
   login: '/aymm-login',
 };
 
-/** Full URLs for docs, PRs, and chat — not ephemeral tunnel hostnames. */
+/**
+ * Permanent public review links (aymm.app — do not share trycloudflare / loca.lt).
+ * Catalog URL stays on /aymm-catalog with the full screenshot gallery.
+ */
 export const BRANDED_STAGING_URLS = {
-  catalog: `${STAGING_BASE}${DEMO_LINKS.catalog}`,
-  demo: `${STAGING_BASE}${DEMO_LINKS.app}`,
-  login: `${STAGING_BASE}${DEMO_LINKS.login}`,
+  catalog: `${STAGING_BASE}/aymm-catalog`,
+  demo: `${STAGING_BASE}/aymm-demo`,
+  login: `${STAGING_BASE}/aymm-login`,
 };
 
 export const STAGING_HUB = BRANDED_STAGING_URLS.catalog;

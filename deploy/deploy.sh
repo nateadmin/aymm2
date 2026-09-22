@@ -66,6 +66,15 @@ restart_service() {
   fi
 }
 
+sync_apache_vhost() {
+  local vhost_src="${REPO_DIR}/deploy/apache-aymm.conf"
+  if [[ -f "${vhost_src}" && -d /etc/apache2/sites-available ]]; then
+    install -m 644 "${vhost_src}" /etc/apache2/sites-available/aymm.conf
+    apache2ctl configtest
+    systemctl reload apache2
+  fi
+}
+
 pull_latest() {
   sudo -u "${DEPLOY_USER}" git -C "${REPO_DIR}" fetch origin "${LIVE_BRANCH}"
   sudo -u "${DEPLOY_USER}" git -C "${REPO_DIR}" checkout "${LIVE_BRANCH}"
@@ -82,6 +91,7 @@ main() {
   deploy_release
   write_version_env
   restart_service
+  sync_apache_vhost
   log "Deploy complete"
 }
 

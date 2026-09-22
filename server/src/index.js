@@ -48,9 +48,8 @@ app.use('/api/uploads', uploadRoutes);
 app.use('/api/entities', entityRoutes);
 app.use('/uploads', express.static(uploadDir));
 
-/** Branded staging entry points (works even before SPA bundle includes matching routes). */
+/** Short paths for demo/login when an older SPA bundle lacks matching routes. */
 const BRANDED_STAGING_REDIRECTS = {
-  '/aymm-catalog': '/screens?preview=1&mobile=1',
   '/aymm-demo': '/Welcome?preview=1&mobile=1&native=0',
   '/aymm-login': '/EmailLogin?preview=1&mobile=1&native=0',
 };
