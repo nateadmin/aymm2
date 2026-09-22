@@ -1,6 +1,7 @@
 :root {
   --aymm-red: #fe5658;
   --aymm-purple: #3f214d;
+  --aymm-rose: var(--aymm-red);
   --aymm-muted-purple: #6f6575;
   --aymm-warm-gray: #c8bec5;
   --aymm-light-border: #e2dae0;
@@ -11,6 +12,7 @@
   --aymm-blush: #fff8f8;
   --aymm-blush-border: #ffbcbc;
   --aymm-blush-surface: #fff5f5;
+  --aymm-cream: #faf7f9;
   --aymm-phase-purple-surface: #f4f0f7;
   --aymm-phase-purple-border: #c5bad0;
   --aymm-phase-violet: #6b3e8a;
@@ -53,7 +55,19 @@
   --space-3xl: 3rem;
   --space-splash-top: 5rem;
   --space-screen-x: 1.5rem;
-  --space-screen-bottom: 2.5rem;
+  --space-screen-bottom: 2rem;
+  /* Non-zero only inside the desktop phone-frame mock (.mobile-canvas .mobile-screen). */
+  --space-frame-inset: 0px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --keyboard-inset: 0px;
+  /* Stable small viewport; JS sets --app-visible-height from visualViewport on phones. */
+  --app-min-height: 100vh;
+  --app-min-height: 100svh;
+  --app-visible-height: 100svh;
+  --app-offset-top: 0px;
+  --browser-chrome-inset: 0px;
+  --space-screen-footer: calc(var(--space-screen-bottom) + var(--safe-area-bottom));
 
   --text-xs: 0.75rem;
   --text-sm: 0.8125rem;

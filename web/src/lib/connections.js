@@ -10,7 +10,6 @@ export function getConnectionTypeForProfile(profile) {
 export function getPrimaryActionLabel(viewerProfile, targetProfile) {
   const type = getConnectionTypeForProfile(targetProfile);
   if (type === 'adopt') return 'Adopt';
-  if (type === 'aymf') return 'AYMF?';
   return 'AYMM?';
 }
 

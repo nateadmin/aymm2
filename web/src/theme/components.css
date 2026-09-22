@@ -38,6 +38,29 @@
   font-size: var(--text-splash);
 }
 
+.aymm-brand-wordmark--inline {
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  font-weight: 400;
+}
+
+.aymm-brand-wordmark--button {
+  font-size: 2.125rem;
+  line-height: 1;
+  color: inherit;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transform: translateY(0.06rem);
+}
+
+.aymm-brand-wordmark--hero {
+  font-size: var(--text-3xl);
+  line-height: 1;
+  color: var(--aymm-purple);
+  font-weight: 400;
+}
+
 .aymm-button {
   appearance: none;
   display: inline-flex;
@@ -74,7 +97,7 @@
 }
 
 .aymm-button--primary:active:not(:disabled) {
-  background: #e84d4f;
+  background: color-mix(in srgb, var(--aymm-red) 88%, var(--aymm-purple));
 }
 
 .aymm-button--outline {
@@ -113,6 +136,50 @@
   width: auto;
   max-width: none;
   padding: 0;
+}
+
+.input-action-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.625rem;
+  align-items: stretch;
+  width: 100%;
+  max-width: var(--button-max-width);
+}
+
+.input-action-row > .aymm-input {
+  max-width: none;
+  width: 100%;
+  min-height: var(--input-height);
+}
+
+.input-action-row .aymm-button--inline {
+  width: auto;
+  max-width: none;
+  min-height: var(--input-height);
+  height: auto;
+  align-self: stretch;
+  padding: 0 1.125rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.input-action-row__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--input-height);
+  padding: 0 1.125rem;
+  border: 1.5px solid var(--aymm-red);
+  border-radius: var(--radius-input);
+  background: var(--aymm-white);
+  color: var(--aymm-red);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 .aymm-field {
@@ -350,7 +417,7 @@
 .modal-shell__panel {
   position: relative;
   width: min(36rem, calc(100vw - 2rem));
-  max-height: calc(100dvh - 2rem);
+  max-height: calc(var(--app-visible-height, var(--app-min-height)) - 2rem);
   overflow: auto;
   background: var(--aymm-white);
   border-radius: var(--radius-button);
@@ -424,6 +491,13 @@
   text-align: center;
 }
 
+.app-main__content .screen-pad.browse-page {
+  flex: initial;
+  min-height: auto;
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+}
+
 .browse-page,
 .browse-hero,
 .browse-empty {
@@ -439,10 +513,10 @@
 
 .browse-hero__title {
   margin: 0;
-  font-family: var(--font-heading);
   font-size: var(--text-3xl);
   color: var(--aymm-purple);
 }
+
 
 .browse-hero__subtitle,
 .home-section-title {
@@ -638,7 +712,7 @@
 .chat-view {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  min-height: calc(100dvh - var(--bottom-nav-height));
+  min-height: calc(var(--app-visible-height, var(--app-min-height)) - var(--bottom-nav-height));
 }
 
 .chat-view__header,
@@ -876,6 +950,8 @@
 
 .about-page__logo {
   justify-self: center;
+  width: 5rem;
+  height: auto;
 }
 
 .about-page__copy {

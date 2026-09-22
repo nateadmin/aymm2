@@ -1,7 +1,6 @@
 import { Mail, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import MobileScreen from '@/components/mobile/MobileScreen';
-import BackButton from '@/components/mobile/BackButton';
+import AuthPage from '@/components/mobile/AuthPage';
 import HeartLogo from '@/components/brand/HeartLogo';
 import SocialAuthButton from '@/components/ui/SocialAuthButton';
 
@@ -34,32 +33,32 @@ export default function Register() {
   const navigate = useNavigate();
 
   return (
-    <MobileScreen>
-      <div className="screen-pad screen-pad--auth">
-        <BackButton to="/Welcome" />
-
-        <div className="screen-pad screen-pad--center" style={{ padding: 0 }}>
-          <HeartLogo style={{ width: '2.5rem', height: '2.5rem' }} />
+    <AuthPage
+      backTo="/Welcome"
+      header={(
+        <>
+          <HeartLogo />
           <h1 className="auth-heading auth-heading--brand">Create account</h1>
           <p className="auth-subheading">Join thousands building family bonds</p>
-        </div>
-
-        <div className="auth-stack">
-          <SocialAuthButton icon={<FacebookIcon />}>Sign up with Facebook</SocialAuthButton>
-          <SocialAuthButton icon={<InstagramIcon />}>Sign up with Instagram</SocialAuthButton>
-          <div className="auth-divider">or</div>
-          <SocialAuthButton icon={<Mail size={18} />} onClick={() => navigate('/EmailRegister')}>
-            Sign up with Email
-          </SocialAuthButton>
-          <SocialAuthButton icon={<Phone size={18} />} onClick={() => navigate('/PhoneLogin')}>
-            Sign up with Phone
-          </SocialAuthButton>
-        </div>
-
+        </>
+      )}
+      footer={(
         <p className="auth-footer">
           Already have an account? <button type="button" onClick={() => navigate('/Login')}>Sign In</button>
         </p>
+      )}
+    >
+      <div className="auth-stack">
+        <SocialAuthButton icon={<FacebookIcon />}>Sign up with Facebook</SocialAuthButton>
+        <SocialAuthButton icon={<InstagramIcon />}>Sign up with Instagram</SocialAuthButton>
+        <div className="auth-divider">or</div>
+        <SocialAuthButton icon={<Mail size={18} />} onClick={() => navigate('/EmailRegister')}>
+          Sign up with Email
+        </SocialAuthButton>
+        <SocialAuthButton icon={<Phone size={18} />} onClick={() => navigate('/PhoneLogin')}>
+          Sign up with Phone
+        </SocialAuthButton>
       </div>
-    </MobileScreen>
+    </AuthPage>
   );
 }

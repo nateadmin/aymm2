@@ -52,7 +52,7 @@ export default function Demo() {
         ) : null}
 
         <p className="demo-page__footer">
-          <Link to={withPreviewQuery('/screens')}>Browse all 55 screens</Link>
+          <Link to={withPreviewQuery('/screens')}>Browse all screens</Link>
         </p>
       </div>
     </MobileScreen>

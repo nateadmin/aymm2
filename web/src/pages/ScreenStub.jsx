@@ -1,6 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
-import MobileScreen from '@/components/mobile/MobileScreen';
-import { getScreenBySlug, PHASE_LABELS, STAGING_HUB, withPreviewQuery } from '@/lib/screenCatalog';
+import {
+  getScreenBySlug,
+  screenThumbnailUrl,
+  PHASE_LABELS,
+  SCREEN_CATALOG,
+  screenCardPath,
+  withPreviewQuery,
+} from '@/lib/screenCatalog';
 
 export default function ScreenStub() {
   const { slug } = useParams();
@@ -8,33 +14,58 @@ export default function ScreenStub() {
 
   if (!screen) {
     return (
-      <MobileScreen>
-        <div className="screen-pad screen-pad--center">
-          <h1 className="screen-stub__title">Screen not found</h1>
-          <Link to={withPreviewQuery('/screens')}>Back to staging hub</Link>
-        </div>
-      </MobileScreen>
+      <div className="design-ref">
+        <p>Screen not found.</p>
+        <Link to={withPreviewQuery('/screens', { mobile: false })}>Back to all cards</Link>
+      </div>
     );
   }
 
+  const prev = SCREEN_CATALOG.find((item) => item.id === screen.id - 1);
+  const next = SCREEN_CATALOG.find((item) => item.id === screen.id + 1);
+
   return (
-    <MobileScreen>
-      <div className="screen-pad screen-stub">
-        <p className="screen-stub__phase">{PHASE_LABELS[screen.phase]}</p>
-        <h1 className="screen-stub__title">{screen.title}</h1>
-        <p className="screen-stub__copy">
-          Screen {String(screen.id).padStart(2, '0')} of 55 — UI not built yet. This placeholder
-          keeps the staging map complete while we implement the real flow.
+    <div className="design-ref">
+      <header className="design-ref__header">
+        <Link to={withPreviewQuery('/screens', { mobile: false })} className="design-ref__back">
+          ← All cards
+        </Link>
+        <p className="design-ref__phase">{PHASE_LABELS[screen.phase]}</p>
+        <h1 className="design-ref__title">
+          {String(screen.id).padStart(2, '0')}. {screen.title}
+        </h1>
+        <p className="design-ref__status">
+          Card {String(screen.id).padStart(2, '0')} of {SCREEN_CATALOG.length}
         </p>
-        <div className="screen-stub__actions">
-          <Link to={withPreviewQuery('/screens')} className="aymm-button aymm-button--primary">
-            All screens
-          </Link>
-          <a className="screen-stub__ext" href={STAGING_HUB}>
-            Share hub link
-          </a>
-        </div>
+        <Link to={withPreviewQuery(screen.route, { native: false })} className="design-ref__open">
+          Open built screen
+        </Link>
+      </header>
+
+      <div className="design-ref__phone">
+        <img
+          src={screenThumbnailUrl(screen)}
+          alt={`${screen.title} live preview`}
+          className="design-ref__image"
+        />
       </div>
-    </MobileScreen>
+
+      <nav className="design-ref__nav">
+        {prev ? (
+          <Link to={withPreviewQuery(screenCardPath(prev), { mobile: false })}>
+            ← {prev.title}
+          </Link>
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <Link to={withPreviewQuery(screenCardPath(next), { mobile: false })}>
+            {next.title} →
+          </Link>
+        ) : (
+          <span />
+        )}
+      </nav>
+    </div>
   );
 }

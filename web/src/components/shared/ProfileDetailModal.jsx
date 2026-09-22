@@ -1,4 +1,5 @@
 import Modal from '@/components/ui/Modal';
+import PrimaryActionLabel from '@/components/brand/PrimaryActionLabel';
 import Button from '@/components/ui/Button';
 import { PLACEHOLDER_AVATAR } from '@/lib/constants';
 import { getPrimaryActionLabel } from '@/lib/connections';
@@ -26,7 +27,9 @@ export default function ProfileDetailModal({
         <img src={photo} alt="" className="profile-detail__photo" />
         <p className="aymm-muted">{profile.identity_type} · {profile.location || 'Location TBD'}</p>
         <div className="aymm-panel aymm-panel--surface">{profile.bio || 'Bio coming soon.'}</div>
-        <Button onClick={() => onPrimaryAction?.(profile)} disabled={profile.is_demo}>{primaryLabel}</Button>
+        <Button onClick={() => onPrimaryAction?.(profile)} disabled={profile.is_demo}>
+          <PrimaryActionLabel label={primaryLabel} />
+        </Button>
         <div className="page-shell__grid page-shell__grid--actions">
           <button type="button" className="aymm-pill-action" onClick={() => onMessage?.(profile)}>Message</button>
           <button type="button" className="aymm-pill-action" onClick={() => onChallenge?.(profile)}>Challenge</button>

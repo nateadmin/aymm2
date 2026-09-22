@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { isMockAuthEnabled, MOCK_LOGIN_EMAIL } from '@/lib/mockAuth';
+import { isStagingPreviewEnabled } from '@/lib/stagingPreview';
+import { DESIGN_HOME_ROUTE } from '@/lib/session';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 import ProfileCard from '@/components/shared/ProfileCard';
 import ProfileDetailModal from '@/components/shared/ProfileDetailModal';
 import ProfileChatModal from '@/components/shared/ProfileChatModal';
@@ -12,11 +17,24 @@ import { useSendMessage } from '@/hooks/useSendMessage';
 import { useMessages } from '@/hooks/useMessages';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
+import AymmQuestion from '@/components/brand/AymmQuestion';
 import { formatLabel } from '@/lib/format';
 
 export default function Home() {
+  const navigate = useNavigate();
   const { push } = useToast();
-  const { profile: authProfile } = useAuth();
+  const { profile: authProfile, user } = useAuth();
+
+  useEffect(() => {
+    const email = (user?.email || authProfile?.user_email || '').trim().toLowerCase();
+    const onDesignHome =
+      isStagingPreviewEnabled()
+      || isMockAuthEnabled()
+      || email === MOCK_LOGIN_EMAIL;
+    if (onDesignHome) {
+      navigate(withPreviewQuery(DESIGN_HOME_ROUTE, { native: false }), { replace: true });
+    }
+  }, [navigate, authProfile?.user_email, user?.email]);
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
   const activeProfile = myProfile || authProfile;
   const {
@@ -68,7 +86,7 @@ export default function Home() {
   return (
     <div className="screen-pad browse-page">
       <header className="browse-hero">
-        <h1 className="browse-hero__title">AYMM?</h1>
+        <h1 className="browse-hero__title"><AymmQuestion variant="hero" /></h1>
         <p className="browse-hero__subtitle">Find your family connection</p>
       </header>
 

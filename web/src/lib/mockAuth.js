@@ -2,7 +2,9 @@ import { isDesignReviewHost } from './stagingPreview.js';
 
 const MOCK_TOKEN_PREFIX = 'mock:';
 const MOCK_SESSION_KEY = 'aymm_mock_session';
+const MOCK_RESET_KEY = 'aymm_mock_reset';
 let memorySession = null;
+let memoryReset = null;
 
 export const MOCK_LOGIN_EMAIL = 'design@aymm.app';
 export const MOCK_LOGIN_PASSWORD = 'DesignReview1';
@@ -110,18 +112,21 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
   }
 
   const existing = loadMockSession();
+  const demoProfile = {
+    user_email: normalized,
+    display_name: 'Design Review',
+    identity_type: 'daughter',
+    setup_complete: true,
+  };
   const session = {
     token: `${MOCK_TOKEN_PREFIX}${normalized}`,
     user: buildUser(normalized),
     profile: completeProfile
-      ? existing?.profile?.setup_complete
-        ? existing.profile
-        : {
-            user_email: normalized,
-            display_name: 'Design Review',
-            identity_type: 'daughter',
-            setup_complete: true,
-          }
+      ? matchesDemo
+        ? demoProfile
+        : existing?.profile?.setup_complete
+          ? existing.profile
+          : demoProfile
       : existing?.profile ?? null,
   };
 
@@ -161,6 +166,95 @@ export function mockUploadImage(file) {
     reader.onerror = () => reject(new Error('upload_failed'));
     reader.readAsDataURL(file);
   });
+}
+
+function saveMockReset(reset) {
+  memoryReset = reset;
+  try {
+    if (reset) {
+      sessionStorage.setItem(MOCK_RESET_KEY, JSON.stringify(reset));
+    } else {
+      sessionStorage.removeItem(MOCK_RESET_KEY);
+    }
+  } catch {
+    // ignore storage failures
+  }
+}
+
+export function loadMockReset() {
+  if (memoryReset) return memoryReset;
+  try {
+    const raw = sessionStorage.getItem(MOCK_RESET_KEY);
+    if (raw) {
+      memoryReset = JSON.parse(raw);
+      return memoryReset;
+    }
+  } catch {
+    // ignore storage failures
+  }
+  return null;
+}
+
+export function mockRequestPasswordReset({ channel, email, phone }) {
+  if (channel === 'email' && !isValidEmail(email || '')) {
+    const error = new Error('email_required');
+    error.status = 400;
+    error.payload = { error: 'email_required' };
+    throw error;
+  }
+  if (channel === 'phone' && !(phone || '').trim()) {
+    const error = new Error('phone_required');
+    error.status = 400;
+    error.payload = { error: 'phone_required' };
+    throw error;
+  }
+
+  saveMockReset({
+    channel,
+    email: email?.trim().toLowerCase(),
+    phone: phone?.trim(),
+    requestedAt: Date.now(),
+  });
+  return { ok: true };
+}
+
+export function mockResetPassword({ email, phone, password, code }) {
+  const pending = loadMockReset();
+  const pass = password?.trim();
+  const normalizedEmail = email?.trim().toLowerCase();
+  const normalizedPhone = phone?.trim();
+
+  if (!pass || pass.length < 8) {
+    const error = new Error('password_required');
+    error.status = 400;
+    error.payload = { error: 'password_required' };
+    throw error;
+  }
+
+  if (!code || String(code).length < 6) {
+    const error = new Error('invalid_code');
+    error.status = 400;
+    error.payload = { error: 'invalid_code' };
+    throw error;
+  }
+
+  const matchesPending = pending
+    && (pending.email === normalizedEmail || pending.phone === normalizedPhone);
+
+  if (!matchesPending) {
+    const error = new Error('reset_not_found');
+    error.status = 400;
+    error.payload = { error: 'reset_not_found' };
+    throw error;
+  }
+
+  const session = loadMockSession();
+  if (session && session.user?.email === normalizedEmail) {
+    saveMockSession(session);
+  }
+
+  saveMockReset(null);
+  return { ok: true };
 }
 
 export function mockMe(token) {

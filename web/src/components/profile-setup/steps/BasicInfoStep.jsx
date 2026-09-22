@@ -1,33 +1,15 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MobileScreen from '@/components/mobile/MobileScreen';
+import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
-import TextField from '@/components/ui/TextField';
+import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
-import { geocodeZipcode } from '@/lib/geocoding';
-import { useToast } from '@/lib/toast';
 
 export default function BasicInfoStep() {
   const navigate = useNavigate();
   const { form, updateField, saveDraft, saving } = useProfileSetup();
-  const { push } = useToast();
-  const [located, setLocated] = useState(Boolean(form.lat && form.location));
 
-  const handleZipLookup = async () => {
-    try {
-      const result = await geocodeZipcode(form.zipcode);
-      updateField('location', result.location);
-      updateField('lat', result.lat);
-      updateField('lon', result.lon);
-      updateField('zipcode', result.zipcode);
-      setLocated(true);
-      push('Located from zipcode.', 'success');
-    } catch {
-      setLocated(false);
-      push('Could not locate that zipcode.', 'error');
-    }
-  };
-
-  const valid = form.display_name && form.age && form.zipcode && form.location;
+  const valid = form.display_name.trim() && form.age.trim() && form.location.trim();
 
   const handleContinue = async () => {
     const saved = await saveDraft('basic-info');
@@ -37,39 +19,68 @@ export default function BasicInfoStep() {
   };
 
   return (
-    <div className="page-shell__grid">
-      <TextField
-        label="Display name"
-        name="display_name"
-        value={form.display_name}
-        onChange={(e) => updateField('display_name', e.target.value)}
-      />
-      <TextField
-        label="Age"
-        name="age"
-        type="number"
-        value={form.age}
-        onChange={(e) => updateField('age', e.target.value)}
-      />
-      <TextField
-        label="Zipcode"
-        name="zipcode"
-        value={form.zipcode}
-        onChange={(e) => updateField('zipcode', e.target.value)}
-      />
-      <Button variant="outline" onClick={handleZipLookup}>Locate zipcode</Button>
-      {located ? <p className="aymm-muted">Located {form.location}</p> : null}
-      <TextField
-        label="City / Town"
-        name="location"
-        value={form.location}
-        onChange={(e) => updateField('location', e.target.value)}
-      />
-      <div className="public-page__actions">
-        <Button disabled={!valid || saving} onClick={handleContinue}>
+    <MobileScreen>
+      <div className="screen-pad screen-pad--handheld mobile-onboarding">
+        <div className="mobile-onboarding__content">
+          <BackButton to="/ProfileSetup/upload-video" />
+          <MobileOnboardingProgress step={3} />
+
+          <div>
+            <h1 className="auth-heading auth-heading--brand">About you</h1>
+            <p className="auth-subheading">Just the basics — nothing complicated</p>
+          </div>
+
+          <div className="auth-stack">
+            <label className="auth-field">
+              <span className="auth-field__label">Your Name</span>
+              <input
+                className="aymm-input"
+                type="text"
+                name="display_name"
+                placeholder="What should we call you?"
+                value={form.display_name}
+                onChange={(event) => updateField('display_name', event.target.value)}
+                autoComplete="name"
+              />
+            </label>
+
+            <label className="auth-field">
+              <span className="auth-field__label">Your Age</span>
+              <input
+                className="aymm-input"
+                type="number"
+                name="age"
+                placeholder="How old are you?"
+                value={form.age}
+                onChange={(event) => updateField('age', event.target.value)}
+                inputMode="numeric"
+                min="18"
+              />
+            </label>
+
+            <label className="auth-field">
+              <span className="auth-field__label">Location</span>
+              <input
+                className="aymm-input"
+                type="text"
+                name="location"
+                placeholder="City, State"
+                value={form.location}
+                onChange={(event) => updateField('location', event.target.value)}
+                autoComplete="address-level2"
+              />
+            </label>
+          </div>
+        </div>
+
+        <Button
+          variant={valid ? 'primary' : 'disabled'}
+          disabled={!valid || saving}
+          onClick={handleContinue}
+        >
           Continue
         </Button>
       </div>
-    </div>
+    </MobileScreen>
   );
 }
