@@ -88,6 +88,19 @@ Platform follow-up after first boot:
 
 ## Deploy
 
+### GitHub Actions (push to `main`)
+
+Workflow: `.github/workflows/deploy-staging.yml` SSHs to Contabo as **root** and runs `deploy/deploy.sh`.
+
+1. Generate a deploy key (or reuse one): `ssh-keygen -t ed25519 -f aymm-deploy -N ""`
+2. Append `aymm-deploy.pub` to **`/root/.ssh/authorized_keys`** on `185.198.27.3`
+3. In GitHub → **nateadmin/aymm2** → Settings → Secrets → Actions, add **`DEPLOY_SSH_KEY`** (full contents of the **private** key file)
+4. Re-run **Deploy staging** (Actions tab) or push to `main`
+
+If the secret is missing, the workflow fails with `can't connect without a private SSH key or password` and **https://aymm.app stays on an old SPA**. Routes such as `/aymm-catalog`, `/aymm-demo`, and `/screens` exist only in newer builds; on a stale bundle the app shows **Page not found** (HTTP 200, React 404).
+
+### Manual (same result)
+
 On the server as root:
 
 ```bash
@@ -119,6 +132,8 @@ Agents: do not report a deploy job complete until every post-deploy URL below re
 - GET `http://127.0.0.1:3000/Home` on server → 200 SPA shell
 - GET `https://aymm.app/api/health` → 200
 - GET `https://aymm.app/Welcome` → 200
+- GET `https://aymm.app/aymm-catalog` → 200 SPA shell (gallery title **AYMM demo**, 54 screen cards)
+- GET `https://aymm.app/api/version` → `version` matches latest `main` (not a September 2026 SHA)
 - Brand font bundled in build (`dist/assets/two-turtle-doves-*.woff2` > 10 KB after deploy)
 - WordPress unchanged: GET `https://aldvingomes.com/` → 200
 
