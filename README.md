@@ -12,9 +12,11 @@ Use these **stable aymm.app links** (do not share random tunnel hostnames):
 
 | Link | URL |
 |------|-----|
-| **aymm catalog** | https://aymm.app/aymm-catalog |
+| **aymm catalog** | https://aymm.app/aymm-catalog (alias: [/screens?preview=1&mobile=1](https://aymm.app/screens?preview=1&mobile=1)) |
 | **aymm demo** | https://aymm.app/aymm-demo |
 | **login** | https://aymm.app/aymm-login |
+
+Until the latest build is deployed to aymm.app, use the **screens** catalog URL in the table above — it is the same grid.
 
 Sample sign-in: `design@aymm.app` / `DesignReview1`. Login bypass is on for staging automatically.
 

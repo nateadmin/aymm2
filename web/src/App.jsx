@@ -27,6 +27,7 @@ import FamilyTables from '@/pages/FamilyTables';
 import Newsfeed from '@/pages/Newsfeed';
 import Profile from '@/pages/Profile';
 import AdminDashboard from '@/pages/AdminDashboard';
+import BrandedCatalog from '@/pages/BrandedCatalog';
 import ScreenIndex from '@/pages/ScreenIndex';
 import ScreenStub from '@/pages/ScreenStub';
 import Discovery from '@/pages/Discovery';
@@ -131,7 +132,7 @@ export default function App() {
               <Route path="/Login" element={<Login />} />
               <Route path="/Register" element={<Register />} />
               <Route path="/demo" element={<Demo />} />
-              <Route path="/aymm-catalog" element={<Navigate to="/screens?preview=1&mobile=1" replace />} />
+              <Route path="/aymm-catalog" element={<BrandedCatalog />} />
               <Route path="/aymm-demo" element={<Navigate to="/Welcome?preview=1&mobile=1&native=0" replace />} />
               <Route path="/aymm-login" element={<Navigate to="/EmailLogin?preview=1&mobile=1&native=0" replace />} />
               <Route path="/EmailLogin" element={<EmailLogin />} />

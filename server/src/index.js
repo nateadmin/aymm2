@@ -48,7 +48,20 @@ app.use('/api/uploads', uploadRoutes);
 app.use('/api/entities', entityRoutes);
 app.use('/uploads', express.static(uploadDir));
 
+/** Branded staging entry points (works even before SPA bundle includes matching routes). */
+const BRANDED_STAGING_REDIRECTS = {
+  '/aymm-catalog': '/screens?preview=1&mobile=1',
+  '/aymm-demo': '/Welcome?preview=1&mobile=1&native=0',
+  '/aymm-login': '/EmailLogin?preview=1&mobile=1&native=0',
+};
+
 if (fs.existsSync(webDist)) {
+  for (const [from, to] of Object.entries(BRANDED_STAGING_REDIRECTS)) {
+    app.get(from, (_req, res) => {
+      res.redirect(302, to);
+    });
+  }
+
   app.use(express.static(webDist, { index: false }));
 
   app.get('*', (req, res, next) => {
