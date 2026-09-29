@@ -94,7 +94,7 @@ Cloud agents cannot SSH (port 22 is blocked from that sandbox). After pushing `m
 node deploy/deploy-remote.js
 ```
 
-That script logs into Infisical (project AYMM, prod), reads `DEPLOY_SECRET`, and POSTs `https://aymm.app/api/internal/deploy` with `{ "app": "aymm" }`. The host service (`contabo-deploy`, `127.0.0.1:3050`) runs only `/opt/aymm/repo/deploy/deploy.sh`. Poll `GET https://aymm.app/api/internal/deploy/<id>` or `GET https://aymm.app/api/internal/deploy/latest?app=aymm` with the same bearer token.
+That script logs into Infisical (project AYMM, prod), reads `DEPLOY_SECRET`, and POSTs `https://aymm.app/api/internal/deploy` with `{ "app": "aymm" }`. The host service (`contabo-deploy`, `127.0.0.1:3050`) first fast-forwards the app's checkout to `main` as the `deploy` user (so a new app can deliver its first `deploy.sh` through the door), then runs only that app's `deploy/deploy.sh`: `/opt/aymm/repo/deploy/deploy.sh` for `aymm`, `/opt/philosophy-untangled/repo/deploy/deploy.sh` for `philosophy-untangled`. The service runs `deploy-run.js` fresh from `/opt/aymm/repo/deploy` for every job, so an AYMM deploy also updates the door's runner without a restart. Poll `GET https://aymm.app/api/internal/deploy/<id>` or `GET https://aymm.app/api/internal/deploy/latest?app=aymm` with the same bearer token.
 
 On the server as root (laptops / Cursor SSH only):
 
