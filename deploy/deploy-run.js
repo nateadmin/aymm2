@@ -13,7 +13,10 @@ function argValue(flag) {
 }
 
 function gitSha(repoDir) {
-  const result = spawnSync('git', ['-C', repoDir, 'rev-parse', 'HEAD'], { encoding: 'utf8' });
+  const result = spawnSync('git', ['-C', repoDir, 'rev-parse', 'HEAD'], {
+    encoding: 'utf8',
+    env: { ...process.env, PATH: process.env.PATH || '/usr/sbin:/usr/bin:/sbin:/bin' },
+  });
   if (result.status === 0) return String(result.stdout || '').trim();
   return '';
 }
@@ -70,7 +73,11 @@ export async function runDeployJob({
       throw new Error(`deploy script missing: ${script || app}`);
     }
     write(`running ${script}`);
-    const childEnv = { ...env, HOME: env.HOME || '/root' };
+    const childEnv = {
+      ...env,
+      HOME: env.HOME || '/root',
+      PATH: env.PATH || '/usr/sbin:/usr/bin:/sbin:/bin',
+    };
     delete childEnv.NODE_ENV;
     await runCommand('bash', [script], {
       cwd: repoDir,

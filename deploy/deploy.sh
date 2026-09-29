@@ -59,7 +59,7 @@ write_version_env() {
 }
 
 restart_service() {
-  if systemctl list-unit-files | grep -q '^aymm.service'; then
+  if [[ -f /etc/systemd/system/aymm.service ]] || systemctl cat aymm.service >/dev/null 2>&1; then
     systemctl restart aymm.service
     sleep 2
     systemctl is-active --quiet aymm.service
