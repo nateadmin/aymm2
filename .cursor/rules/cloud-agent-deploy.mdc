@@ -1,0 +1,6 @@
+---
+description: Cloud agent deploys over HTTPS only
+alwaysApply: true
+---
+
+Claude Code cloud sessions cannot SSH. Deploy with `node deploy/deploy-remote.js`, then smoke the live URLs. Do not tunnel and do not hand deploy commands to the owner.

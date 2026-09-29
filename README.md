@@ -88,10 +88,24 @@ Platform follow-up after first boot:
 
 ## Deploy
 
-On the server as root:
+Cloud agents cannot SSH (port 22 is blocked from that sandbox). After pushing `main`, deploy over HTTPS:
+
+```bash
+node deploy/deploy-remote.js
+```
+
+That script logs into Infisical (project AYMM, prod), reads `DEPLOY_SECRET`, and POSTs `https://aymm.app/api/internal/deploy` with `{ "app": "aymm" }`. The host service (`contabo-deploy`, `127.0.0.1:3050`) runs only `/opt/aymm/repo/deploy/deploy.sh`. Poll `GET https://aymm.app/api/internal/deploy/<id>` or `GET https://aymm.app/api/internal/deploy/latest?app=aymm` with the same bearer token.
+
+On the server as root (laptops / Cursor SSH only):
 
 ```bash
 bash /opt/aymm/repo/deploy/deploy.sh
+```
+
+Install or refresh the HTTPS door:
+
+```bash
+bash /opt/aymm/repo/deploy/install-deploy-service.sh
 ```
 
 ## Smoke checks
@@ -108,7 +122,7 @@ Agents: do not report a deploy job complete until every post-deploy URL below re
 ### Deploy
 
 1. Push to `main`.
-2. `bash /opt/aymm/repo/deploy/deploy.sh` on the server.
+2. `node deploy/deploy-remote.js` (cloud agent) or `bash /opt/aymm/repo/deploy/deploy.sh` on the server.
 3. `systemctl is-active aymm` and `ss -tlnp | grep 3000`.
 
 ### Post-deploy

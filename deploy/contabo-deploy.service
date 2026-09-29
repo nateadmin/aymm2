@@ -1,0 +1,16 @@
+[Unit]
+Description=Contabo HTTPS deploy API
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/aymm/repo/deploy
+Environment=NODE_ENV=production
+EnvironmentFile=-/etc/contabo-deploy/deploy.env
+ExecStart=/usr/bin/node /opt/aymm/repo/deploy/deploy-http-server.js
+KillMode=process
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
