@@ -16,7 +16,7 @@ infisical_plain() {
   local env_name="$2"
   local key="$3"
   local token="$4"
-  infisical secrets get "${key}" \
+  INFISICAL_PROJECT_ID="${project_id}" infisical secrets get "${key}" \
     --projectId="${project_id}" \
     --env="${env_name}" \
     --plain --silent --token "${token}" 2>/dev/null || true
@@ -28,31 +28,37 @@ write_deploy_env() {
   local pu_bootstrap="/etc/philosophy-untangled/infisical-machine.env"
   local aymm_id="a8d5abac-f12d-4f70-9ba0-064c63d927f4"
   local pu_id="62d21130-f58d-4b00-93e4-e221bef5fe33"
+  local client_id="${INFISICAL_CLIENT_ID:-}"
+  local client_secret="${INFISICAL_CLIENT_SECRET:-}"
   if [[ -f "${aymm_bootstrap}" ]]; then
     # shellcheck disable=SC1090
     source "${aymm_bootstrap}"
+    client_id="${INFISICAL_CLIENT_ID:-${client_id}}"
+    client_secret="${INFISICAL_CLIENT_SECRET:-${client_secret}}"
   fi
-  if [[ -z "${INFISICAL_CLIENT_ID:-}" || -z "${INFISICAL_CLIENT_SECRET:-}" ]]; then
+  if [[ -z "${client_id}" || -z "${client_secret}" ]]; then
     log "Infisical machine credentials missing; leave ${ENV_FILE} as-is if present"
     return 0
   fi
   local token
   token="$(infisical login --method=universal-auth \
-    --client-id="${INFISICAL_CLIENT_ID}" \
-    --client-secret="${INFISICAL_CLIENT_SECRET}" \
+    --client-id="${client_id}" \
+    --client-secret="${client_secret}" \
     --silent 2>/dev/null | awk '/^eyJ/ {print; exit}')"
   if [[ -z "${token}" ]]; then
     log "Infisical login failed"
     return 1
   fi
   if [[ -f "${pu_bootstrap}" ]]; then
-    # shellcheck disable=SC1090
-    source "${pu_bootstrap}"
-    pu_id="${INFISICAL_PROJECT_ID:-${pu_id}}"
+    pu_id="$(awk -F= '/^INFISICAL_PROJECT_ID=/{print $2}' "${pu_bootstrap}")"
   fi
   local aymm_secret pu_secret
   aymm_secret="$(infisical_plain "${aymm_id}" prod DEPLOY_SECRET "${token}")"
   pu_secret="$(infisical_plain "${pu_id}" prod DEPLOY_SECRET "${token}")"
+  if [[ -n "${aymm_secret}" && -n "${pu_secret}" && "${aymm_secret}" == "${pu_secret}" ]]; then
+    log "DEPLOY_SECRET values matched; refusing to write duplicate tokens"
+    return 1
+  fi
   umask 077
   cat > "${ENV_FILE}" <<EOF
 AYMM_DEPLOY_SECRET=${aymm_secret}

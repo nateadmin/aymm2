@@ -70,9 +70,11 @@ export async function runDeployJob({
       throw new Error(`deploy script missing: ${script || app}`);
     }
     write(`running ${script}`);
+    const childEnv = { ...env, HOME: env.HOME || '/root' };
+    delete childEnv.NODE_ENV;
     await runCommand('bash', [script], {
       cwd: repoDir,
-      env: { ...env, HOME: env.HOME || '/root' },
+      env: childEnv,
       timeoutMs: remaining(),
       onOutput: (chunk) => store.appendLog(id, chunk),
     });
