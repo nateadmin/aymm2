@@ -23,6 +23,30 @@ function gitSha(repoDir) {
   return '';
 }
 
+/**
+ * Bring the app's checkout up to date before looking for its deploy script, so a
+ * brand-new app can deliver its first deploy.sh through the door. Failures are
+ * logged and ignored: the app's own deploy.sh pulls again and reports properly.
+ */
+export function pullRepo(repoDir, { branch = 'main', write = () => {}, run = spawnSync } = {}) {
+  if (!repoDir || !fs.existsSync(path.join(repoDir, '.git'))) return false;
+  const env = { ...process.env, HOME: process.env.HOME || '/root', PATH: process.env.PATH || '/usr/sbin:/usr/bin:/sbin:/bin' };
+  const steps = [
+    ['fetch', 'origin', branch],
+    ['checkout', branch],
+    ['pull', '--ff-only', 'origin', branch],
+  ];
+  for (const args of steps) {
+    const result = run('sudo', ['-H', '-u', 'deploy', 'git', '-C', repoDir, ...args], { encoding: 'utf8', env });
+    if (result.status !== 0) {
+      write(`pre-pull ${args[0]} failed: ${scrubLogText(String(result.stderr || result.stdout || '')).trim()}`);
+      return false;
+    }
+  }
+  write(`pre-pull ${branch} ok`);
+  return true;
+}
+
 function runCommand(command, args, { cwd, env, onOutput, timeoutMs }) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, { cwd, env, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -71,6 +95,7 @@ export async function runDeployJob({
   let sha = '';
   let status = 'failed';
   try {
+    pullRepo(repoDir, { write });
     if (!script || !fs.existsSync(script)) {
       throw new Error(`deploy script missing: ${script || app}`);
     }
