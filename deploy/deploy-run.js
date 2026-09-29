@@ -13,7 +13,9 @@ function argValue(flag) {
 }
 
 function gitSha(repoDir) {
-  const result = spawnSync('git', ['-C', repoDir, 'rev-parse', 'HEAD'], {
+  // The systemd service has no HOME, so root's global safe.directory is not read
+  // and the deploy-owned repo is rejected as "dubious ownership" without this.
+  const result = spawnSync('git', ['-c', `safe.directory=${repoDir}`, '-C', repoDir, 'rev-parse', 'HEAD'], {
     encoding: 'utf8',
     env: { ...process.env, PATH: process.env.PATH || '/usr/sbin:/usr/bin:/sbin:/bin' },
   });
