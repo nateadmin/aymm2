@@ -1,10 +1,11 @@
 import CommunityScreen from '@/components/community/CommunityScreen';
 import BackButton from '@/components/mobile/BackButton';
-import { JOHNSON_TABLE } from '@/lib/communityContent';
+import { useCommunityTableListing } from '@/hooks/useCommunityTableListing';
+import { formatDietaryCertification } from '@/lib/communityTableListing';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function FamilyTableDetails() {
-  const table = JOHNSON_TABLE;
+  const { table } = useCommunityTableListing();
 
   return (
     <CommunityScreen showBottomNav={false} bodyClassName="community-table-detail-screen">
@@ -24,9 +25,12 @@ export default function FamilyTableDetails() {
           <dl className="community-table-detail__about-facts">
             <div><dt>Host Family</dt><dd>{table.hostFamily}</dd></div>
             <div><dt>Event Date</dt><dd>{table.eventDate}</dd></div>
+            <div><dt>Seats Available</dt><dd>{table.seatsLeft}</dd></div>
             <div><dt>Guest Capacity</dt><dd>{table.guestCapacity}</dd></div>
             <div><dt>Sleeping Arrangements</dt><dd>{table.sleeping}</dd></div>
             <div><dt>Food</dt><dd>{table.foodFull}</dd></div>
+            <div><dt>Dietary</dt><dd>{formatDietaryCertification(table.dietaryCertification)}</dd></div>
+            <div><dt>For Guests</dt><dd>{table.guestExpectations}</dd></div>
           </dl>
         </div>
       </div>

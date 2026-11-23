@@ -2534,6 +2534,29 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   color: var(--aymm-purple);
 }
 
+.community-table-detail__host-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding: 1rem;
+}
+
+.community-table-detail__host-title {
+  font-size: 1rem;
+  margin: 0 0 0.25rem;
+}
+
+.community-table-detail__host-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.community-register-table__listing {
+  margin-top: 1rem;
+}
+
 .community-table-detail__actions {
   display: grid;
   gap: 0.75rem;
