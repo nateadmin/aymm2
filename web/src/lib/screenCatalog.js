@@ -1,5 +1,5 @@
 /**
- * Wireframe screen map (54 screens, 4 phases).
+ * Wireframe screen map (53 screens, 4 phases).
  * Short demo paths (append to staging host): see DEMO_LINKS.
  */
 
@@ -57,7 +57,6 @@ export const SCREEN_CATALOG = [
   { id: 23, phase: 2, slug: 'connection-success', title: 'Connection Success', route: '/Discovery/connection-success', status: 'live' },
   { id: 24, phase: 2, slug: 'seeking-parent-reasons', title: 'Seeking Parent Reasons', route: '/Discovery/seeking-parent-reasons', status: 'live' },
   { id: 25, phase: 2, slug: 'seeking-child-reasons', title: 'Seeking Child Reasons', route: '/Discovery/seeking-child-reasons', status: 'live' },
-  { id: 26, phase: 2, slug: 'seeking-sibling-reasons', title: 'Seeking Sibling Reasons', route: '/Discovery/seeking-sibling-reasons', status: 'live' },
   { id: 27, phase: 2, slug: 'lifestyle-questions', title: 'Lifestyle Questions', route: '/Discovery/lifestyle-questions', status: 'live' },
   { id: 28, phase: 2, slug: 'personal-questions', title: 'Personal Questions', route: '/Discovery/personal-questions', status: 'live' },
   { id: 29, phase: 2, slug: 'family-questions', title: 'Family Questions', route: '/Discovery/family-questions', status: 'live' },
@@ -120,7 +119,7 @@ const DESIGN_SOURCE_BY_SCREEN_ID = (() => {
 
   let poolIndex = 0;
   for (let screenId = 1; screenId <= 55; screenId += 1) {
-    if (screenId === 19) continue;
+    if (screenId === 19 || screenId === 26) continue;
     mapping.set(screenId, pool[poolIndex]);
     poolIndex += 1;
   }
@@ -136,7 +135,7 @@ export function designSourcePath(screenId) {
 }
 
 /** Bump when live screen captures are regenerated (cache bust for staging thumbnails). */
-export const SCREEN_CAPTURE_VERSION = '20250921-single-frame';
+export const SCREEN_CAPTURE_VERSION = '20251123-no-sibling-reasons';
 
 function assetBase() {
   const envBase = import.meta.env?.BASE_URL;

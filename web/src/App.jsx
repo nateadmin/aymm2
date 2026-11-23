@@ -62,7 +62,6 @@ const DISCOVERY_PREVIEW_SLUGS = [
   'connection-success',
   'seeking-parent-reasons',
   'seeking-child-reasons',
-  'seeking-sibling-reasons',
   'lifestyle-questions',
   'personal-questions',
   'family-questions',

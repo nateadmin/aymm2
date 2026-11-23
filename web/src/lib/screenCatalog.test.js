@@ -12,7 +12,7 @@ import {
 } from './screenCatalog.js';
 
 test('catalog no longer includes the extra onboarding frame', () => {
-  assert.equal(SCREEN_CATALOG.length, 54);
+  assert.equal(SCREEN_CATALOG.length, 53);
   assert.equal(getScreenBySlug('onboarding-extra'), undefined);
   assert.equal(SCREEN_CATALOG.some((screen) => screen.title === 'Onboarding (extra)'), false);
 });

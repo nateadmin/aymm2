@@ -14,14 +14,6 @@ export const SEEKING_CHILD_REASONS = [
   { id: 'experience_bond', label: 'I never had children and want to experience that bond' },
 ];
 
-export const SEEKING_SIBLING_REASONS = [
-  { id: 'only_child', label: 'I\'m an only child and always wanted siblings' },
-  { id: 'new_city', label: 'I moved to a new city and want community' },
-  { id: 'share_experiences', label: 'I want someone to share experiences with' },
-  { id: 'distant_siblings', label: 'My siblings are distant and I want closeness' },
-  { id: 'lifelong_friend', label: 'I\'d love a lifelong friend who feels like family' },
-];
-
 export const LIFESTYLE_QUESTIONS = [
   { field: 'real_life_visits', label: 'Are you able to visit someone in real life?' },
   { field: 'can_host_visitors', label: 'Are you able to host visitors at your home?' },
