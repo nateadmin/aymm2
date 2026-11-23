@@ -24,6 +24,9 @@ export default function FamilyTableDetails() {
 
           <dl className="community-table-detail__about-facts">
             <div><dt>Host Family</dt><dd>{table.hostFamily}</dd></div>
+            <div><dt>Family username</dt><dd>{table.hostUsername || '—'}</dd></div>
+            <div><dt>Address</dt><dd>{table.address || '—'}</dd></div>
+            <div><dt>Phone</dt><dd>{table.phone || '—'}</dd></div>
             <div><dt>Event Date</dt><dd>{table.eventDate}</dd></div>
             <div><dt>Seats Available</dt><dd>{table.seatsLeft}</dd></div>
             <div><dt>Guest Capacity</dt><dd>{table.guestCapacity}</dd></div>

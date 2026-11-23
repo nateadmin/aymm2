@@ -3,9 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import CommunityScreen from '@/components/community/CommunityScreen';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
-import HostFamilyTableFields from '@/components/community/HostFamilyTableFields';
+import FamilyTableHostForm from '@/components/community/FamilyTableHostForm';
 import { useCommunityTableListing } from '@/hooks/useCommunityTableListing';
-import { formatDietaryCertification } from '@/lib/communityTableListing';
+import {
+  formatDietaryCertification,
+  isRegisterFormComplete,
+  registerFormFromTable,
+  tablePatchFromRegisterForm,
+} from '@/lib/communityTableListing';
 import { REVIEW_HOME_ROUTE, withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function FamilyTableListing() {
@@ -15,28 +20,13 @@ export default function FamilyTableListing() {
   const [draft, setDraft] = useState(null);
 
   const openHostEditor = () => {
-    setDraft({
-      seatsLeft: String(table.seatsLeft ?? ''),
-      eventDateISO: table.eventDateISO ?? '',
-      eventDate: table.eventDate ?? '',
-      food: table.food ?? '',
-      foodFull: table.foodFull ?? table.food ?? '',
-      dietaryCertification: table.dietaryCertification ?? 'neither',
-      guestExpectations: table.guestExpectations ?? '',
-    });
+    setDraft(registerFormFromTable(table));
     setHostOpen(true);
   };
 
   const saveHostDetails = () => {
-    if (!draft) return;
-    const seatsLeft = Number(draft.seatsLeft);
-    updateTable({
-      ...draft,
-      seatsLeft: Number.isFinite(seatsLeft) ? seatsLeft : table.seatsLeft,
-      guestCapacity: Number.isFinite(seatsLeft)
-        ? `${seatsLeft} seat${seatsLeft === 1 ? '' : 's'} available`
-        : table.guestCapacity,
-    });
+    if (!draft || !isRegisterFormComplete(draft)) return;
+    updateTable(tablePatchFromRegisterForm(draft));
     setHostOpen(false);
     setDraft(null);
   };
@@ -74,29 +64,41 @@ export default function FamilyTableListing() {
           </div>
 
           <dl className="community-table-detail__facts">
+            <div><dt>Family username</dt><dd>{table.hostUsername || '—'}</dd></div>
+            <div><dt>Address</dt><dd>{table.address || '—'}</dd></div>
+            <div><dt>Phone</dt><dd>{table.phone || '—'}</dd></div>
             <div><dt>Date</dt><dd>{table.eventDate || table.holiday}</dd></div>
             <div><dt>Seats available</dt><dd>{table.seatsLeft}</dd></div>
             <div><dt>Food</dt><dd>{table.food}</dd></div>
             <div><dt>Dietary</dt><dd>{formatDietaryCertification(table.dietaryCertification)}</dd></div>
             <div><dt>For guests</dt><dd>{table.guestExpectations || 'Host has not added expectations yet.'}</dd></div>
+            <div><dt>About gathering</dt><dd>{table.about || '—'}</dd></div>
             <div><dt>Religion</dt><dd>{table.religion}</dd></div>
           </dl>
 
           <section className="community-table-detail__host-panel aymm-panel">
             <div className="community-table-detail__host-header">
               <h2 className="community-table-detail__host-title">Host your table</h2>
-              <p className="aymm-muted">Add seats, date, food, kosher/halal, and what guests should expect or bring.</p>
+              <p className="aymm-muted">
+                Same fields as Register Table — update your listing any time.
+              </p>
             </div>
             {hostOpen && draft ? (
               <>
-                <HostFamilyTableFields value={draft} onChange={setDraft} />
+                <FamilyTableHostForm value={draft} onChange={setDraft} />
                 <div className="community-table-detail__host-actions">
-                  <Button onClick={saveHostDetails}>Save listing</Button>
+                  <Button
+                    variant={isRegisterFormComplete(draft) ? 'primary' : 'disabled'}
+                    disabled={!isRegisterFormComplete(draft)}
+                    onClick={saveHostDetails}
+                  >
+                    Save listing
+                  </Button>
                   <Button variant="outline" onClick={() => { setHostOpen(false); setDraft(null); }}>Cancel</Button>
                 </div>
               </>
             ) : (
-              <Button variant="outline" onClick={openHostEditor}>Edit listing details</Button>
+              <Button variant="outline" onClick={openHostEditor}>Edit listing</Button>
             )}
           </section>
 
@@ -122,7 +124,7 @@ export default function FamilyTableListing() {
               variant="outline"
               onClick={() => navigate(withPreviewQuery('/Community/register-table'))}
             >
-              Register a new table
+              Open register form
             </Button>
           </div>
         </div>
