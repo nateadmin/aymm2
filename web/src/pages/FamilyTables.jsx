@@ -14,6 +14,7 @@ import { useEntityList } from '@/hooks/useEntityList';
 import { useSendMessage } from '@/hooks/useSendMessage';
 import { useToast } from '@/lib/toast';
 import { formatLabel } from '@/lib/format';
+import { DIETARY_CERTIFICATION_OPTIONS, formatDietaryCertification } from '@/lib/communityTableListing';
 
 const LANGUAGES = [
   'English', 'Spanish', 'French', 'Arabic', 'Mandarin', 'Hindi', 'Portuguese',
@@ -34,6 +35,8 @@ const EMPTY_FORM = {
   alcohol_served: false,
   event_date: '',
   description: '',
+  dietary_certification: 'neither',
+  guest_expectations: '',
 };
 
 export default function FamilyTables() {
@@ -249,6 +252,8 @@ export default function FamilyTables() {
               <li>Religion: {formatLabel(selectedTable.religion) || 'Any'}</li>
               <li>Language: {selectedTable.language || 'Any'}</li>
               <li>Food: {selectedTable.food_type || 'Not specified'}</li>
+              <li>Dietary: {formatDietaryCertification(selectedTable.dietary_certification)}</li>
+              <li>For guests: {selectedTable.guest_expectations || 'Not specified'}</li>
               <li>Alcohol: {selectedTable.alcohol_served ? 'Served' : 'Not served'}</li>
               <li>Beds available: {selectedTable.beds_available ?? 0}</li>
             </ul>
@@ -303,6 +308,28 @@ export default function FamilyTables() {
           <TextField label="Total seats" name="total_seats" type="number" value={form.total_seats} onChange={(e) => setForm({ ...form, total_seats: e.target.value })} />
           <TextField label="Beds available" name="beds_available" type="number" value={form.beds_available} onChange={(e) => setForm({ ...form, beds_available: e.target.value })} />
           <TextField label="Food type" name="food_type" value={form.food_type} onChange={(e) => setForm({ ...form, food_type: e.target.value })} />
+          <label className="aymm-field">
+            <span className="aymm-label">Kosher or halal?</span>
+            <select
+              className="aymm-select"
+              value={form.dietary_certification}
+              onChange={(e) => setForm({ ...form, dietary_certification: e.target.value })}
+            >
+              {DIETARY_CERTIFICATION_OPTIONS.map((item) => (
+                <option key={item.value} value={item.value}>{item.label}</option>
+              ))}
+            </select>
+          </label>
+          <label className="aymm-field">
+            <span className="aymm-label">What guests should expect or bring</span>
+            <textarea
+              className="aymm-textarea"
+              value={form.guest_expectations}
+              onChange={(e) => setForm({ ...form, guest_expectations: e.target.value })}
+              rows={3}
+              placeholder="Meal provided? Side dishes welcome?"
+            />
+          </label>
           <label className="aymm-field">
             <span className="aymm-label">Religion</span>
             <select className="aymm-select" value={form.religion} onChange={(e) => setForm({ ...form, religion: e.target.value })}>

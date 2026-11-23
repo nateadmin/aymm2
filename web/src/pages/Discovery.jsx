@@ -17,7 +17,6 @@ import {
   PERSONAL_QUESTION_FIELDS,
   SEEKING_CHILD_REASONS,
   SEEKING_PARENT_REASONS,
-  SEEKING_SIBLING_REASONS,
 } from '@/lib/discoveryContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 
@@ -60,19 +59,6 @@ export default function Discovery() {
             backTo={withPreviewQuery('/screens')}
             continueTo={withPreviewQuery('/Discovery/lifestyle-questions')}
             initialValue="positive_presence"
-          />
-        )}
-      />
-      <Route
-        path="seeking-sibling-reasons"
-        element={(
-          <DiscoveryRadioScreen
-            title="Why are you seeking a sibling?"
-            subtitle="Choose the one that resonates most"
-            options={SEEKING_SIBLING_REASONS}
-            backTo={withPreviewQuery('/screens')}
-            continueTo={withPreviewQuery('/Discovery/lifestyle-questions')}
-            initialValue="share_experiences"
           />
         )}
       />
