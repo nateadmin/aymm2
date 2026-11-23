@@ -4,12 +4,13 @@ const VARIANT_CLASS = {
   hero: 'aymm-brand-wordmark--hero',
 };
 
-/** Brand-styled "AYMM?" label for buttons and headlines. */
-export default function AymmQuestion({ variant = 'inline', className = '' }) {
+/** Brand-styled "AYMM?" / "AYMF?" label for buttons and headlines. */
+export default function AymmQuestion({ variant = 'inline', brand = 'aymm', className = '' }) {
   const variantClass = VARIANT_CLASS[variant] || VARIANT_CLASS.inline;
+  const text = brand === 'aymf' ? 'AYMF?' : 'AYMM?';
   return (
     <span className={`aymm-brand-wordmark ${variantClass}${className ? ` ${className}` : ''}`}>
-      AYMM?
+      {text}
     </span>
   );
 }
