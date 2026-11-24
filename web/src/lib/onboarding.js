@@ -6,6 +6,7 @@ export const ONBOARDING_STEPS = [
   { id: 'seeking-a', path: '/ProfileSetup/seeking-a', label: 'Seeking a' },
   { id: 'religion', path: '/ProfileSetup/religion', label: 'Religion' },
   { id: 'questions', path: '/ProfileSetup/questions', label: 'Questions' },
+  { id: 'bio', path: '/ProfileSetup/bio', label: 'About Me' },
   { id: 'review', path: '/ProfileSetup/review', label: 'Review' },
   { id: 'complete', path: '/ProfileSetup/complete', label: 'Complete' },
 ];

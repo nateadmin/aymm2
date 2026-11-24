@@ -58,12 +58,12 @@ export default function MyProfileView({
           </Button>
         ) : null}
 
-        {bio ? (
-          <section className="prototype-my-profile__section">
-            <h2 className="prototype-my-profile__section-title">{aboutTitle}</h2>
-            <p className="prototype-my-profile__bio">{bio}</p>
-          </section>
-        ) : null}
+        <section className="prototype-my-profile__section">
+          <h2 className="prototype-my-profile__section-title">{aboutTitle}</h2>
+          <p className={`prototype-my-profile__bio${bio?.trim() ? '' : ' prototype-my-profile__bio--empty'}`}>
+            {bio?.trim() ? bio : 'Your About Me story will appear here after you add it during onboarding or from Edit Profile.'}
+          </p>
+        </section>
 
         {answerRows.length > 0 ? (
           <section className="prototype-my-profile__section">

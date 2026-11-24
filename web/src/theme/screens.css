@@ -2933,6 +2933,24 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   font-weight: 400;
 }
 
+.prototype-my-profile__bio--empty {
+  color: var(--aymm-muted-purple);
+}
+
+.onboarding-bio-field {
+  margin-top: 0.5rem;
+}
+
+.onboarding-bio-field__textarea {
+  min-height: 10rem;
+  resize: vertical;
+}
+
+.onboarding-bio-field__hint {
+  margin: 0.5rem 0 0;
+  font-size: var(--text-sm);
+}
+
 .prototype-my-profile__bio {
   margin: 0;
   font-size: var(--text-md);

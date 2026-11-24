@@ -16,7 +16,7 @@ export default function QuestionsStep() {
   const handleContinue = async () => {
     const saved = await saveDraft('questions');
     if (saved) {
-      navigate('/ProfileSetup/review');
+      navigate('/ProfileSetup/bio');
     }
   };
 

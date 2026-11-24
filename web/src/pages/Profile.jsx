@@ -54,7 +54,10 @@ export default function Profile() {
       aboutTitle={isFamily ? 'About Us' : 'About Me'}
       answerRows={buildMyProfileAnswerRows(profile)}
       onOpenSettings={() => navigate(withPreviewQuery('/Profile/settings', { native: false, preview: '0' }))}
-      onEditProfile={() => navigate(withPreviewQuery('/ProfileSetup/basic-info', { preview: '0' }))}
+      onEditProfile={() => navigate(withPreviewQuery(
+        profile.bio?.trim() ? '/ProfileSetup/basic-info' : '/ProfileSetup/bio',
+        { preview: '0' },
+      ))}
     />
   );
 }

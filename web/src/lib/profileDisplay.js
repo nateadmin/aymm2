@@ -1,5 +1,5 @@
-import { formatLabel } from '@/lib/format';
-import { labelForIdentity } from '@/lib/constants';
+import { formatLabel } from './format.js';
+import { labelForIdentity } from './constants.js';
 
 export function formatProfileLocation(profile) {
   const parts = [profile?.city, profile?.state].filter(Boolean);
