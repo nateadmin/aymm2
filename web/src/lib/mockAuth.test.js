@@ -13,8 +13,9 @@ import {
   clearMockSession,
 } from './mockAuth.js';
 
-test('isMockAuthEnabled is off on live staging hosts', () => {
+test('isMockAuthEnabled is off on live staging without preview=1', () => {
   assert.equal(isMockAuthEnabled('aymm.app'), false);
+  assert.equal(isMockAuthEnabled('www.aymm.app'), false);
   assert.equal(isMockAuthEnabled('aymm2-web--5173--abc.local.webcontainer.io'), true);
   assert.equal(isMockAuthEnabled('nateadmin.github.io'), true);
   assert.equal(isMockAuthEnabled('demo.trycloudflare.com'), true);

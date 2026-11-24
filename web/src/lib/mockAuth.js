@@ -21,12 +21,15 @@ const STAGING_HOSTS = new Set([
   'www.aymmapp.com',
 ]);
 
-/** Mock auth for StackBlitz/Codespaces/local dev — not on live staging (real API there). */
+/** Mock auth on review hosts; on aymm.app only when `?preview=1` (else real API). */
 export function isMockAuthEnabled(hostname = typeof window !== 'undefined' ? window.location.hostname : '') {
   if (import.meta.env?.VITE_PRODUCTION_API === '1' && !isStagingPreviewEnabled()) {
     return false;
   }
-  if (!hostname || STAGING_HOSTS.has(hostname)) return false;
+  if (!hostname) return false;
+  if (STAGING_HOSTS.has(hostname)) {
+    return isStagingPreviewEnabled();
+  }
   return isDesignReviewHost(hostname);
 }
 
