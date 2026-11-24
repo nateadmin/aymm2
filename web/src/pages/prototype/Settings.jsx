@@ -3,9 +3,11 @@ import PrototypeScreen from '@/components/prototype/PrototypeScreen';
 import BackButton from '@/components/mobile/BackButton';
 import { MY_PROFILE, SETTINGS_SECTIONS } from '@/lib/prototypeContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
+import { useAppLogout } from '@/hooks/useAppLogout';
 
 export default function Settings() {
   const profile = MY_PROFILE;
+  const signOut = useAppLogout();
 
   return (
     <PrototypeScreen showBottomNav={false}>
@@ -29,7 +31,12 @@ export default function Settings() {
             <h2 className="prototype-settings__section-title">{section.title}</h2>
             <div className="prototype-settings__list">
               {section.items.map((item) => (
-                <button key={item} type="button" className="prototype-settings__row">
+                <button
+                  key={item}
+                  type="button"
+                  className="prototype-settings__row"
+                  onClick={item === 'Log Out' ? () => { void signOut(); } : undefined}
+                >
                   <span>{item}</span>
                   <ChevronRight size={16} />
                 </button>

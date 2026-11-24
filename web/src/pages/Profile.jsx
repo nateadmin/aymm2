@@ -13,12 +13,14 @@ import { useConnections } from '@/hooks/useConnections';
 import { useProfileMap } from '@/hooks/useProfileMap';
 import { useEntityList } from '@/hooks/useEntityList';
 import { useToast } from '@/lib/toast';
+import { useAppLogout } from '@/hooks/useAppLogout';
 import { CHILD_IDENTITIES, PARENT_IDENTITIES, PLACEHOLDER_AVATAR, labelForIdentity } from '@/lib/constants';
 
 export default function Profile() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user, profile: authProfile, hasProfile, isAdmin, logout } = useAuth();
+  const signOut = useAppLogout();
+  const { user, profile: authProfile, hasProfile, isAdmin } = useAuth();
 
   useEffect(() => {
     if (shouldUseDesignReviewShell({ user, profile: authProfile, hasProfile })) {
@@ -182,10 +184,7 @@ export default function Profile() {
           <button
             type="button"
             className="profile-menu__item profile-menu__item--logout"
-            onClick={async () => {
-              await logout();
-              navigate('/Welcome');
-            }}
+            onClick={() => { void signOut(); }}
           >
             Logout
           </button>
