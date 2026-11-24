@@ -18,6 +18,7 @@ const STAGING_HOSTS = new Set([
 
 /** Mock auth for StackBlitz/Codespaces/local dev — not on live staging (real API there). */
 export function isMockAuthEnabled(hostname = typeof window !== 'undefined' ? window.location.hostname : '') {
+  if (import.meta.env?.VITE_PRODUCTION_API === '1') return false;
   if (!hostname || STAGING_HOSTS.has(hostname)) return false;
   return isDesignReviewHost(hostname);
 }

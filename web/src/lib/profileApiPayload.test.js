@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { profilePayloadForApi } from './profileApiPayload.js';
+import { pickDeferredProfilePayload, profilePayloadForApi } from './profileApiPayload.js';
 
 test('profilePayloadForApi omits deferred columns on draft saves', () => {
   const payload = {
@@ -15,8 +15,15 @@ test('profilePayloadForApi omits deferred columns on draft saves', () => {
   assert.equal('question_family_meaning' in draft, false);
 });
 
-test('profilePayloadForApi includes deferred columns on final submit', () => {
-  const payload = { intro_video_url: '/uploads/v.mp4' };
-  const finalPayload = profilePayloadForApi(payload, { includeDeferred: true });
-  assert.equal(finalPayload.intro_video_url, '/uploads/v.mp4');
+test('pickDeferredProfilePayload keeps only set deferred fields', () => {
+  const picked = pickDeferredProfilePayload({
+    display_name: 'Nate',
+    intro_video_url: '/uploads/v.mp4',
+    question_family_meaning: '',
+    question_hoping_for: 'Hope',
+  });
+  assert.equal(picked.intro_video_url, '/uploads/v.mp4');
+  assert.equal(picked.question_hoping_for, 'Hope');
+  assert.equal('display_name' in picked, false);
+  assert.equal('question_family_meaning' in picked, false);
 });

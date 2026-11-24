@@ -17,3 +17,14 @@ export function profilePayloadForApi(payload, { includeDeferred = false } = {}) 
   }
   return next;
 }
+
+export function pickDeferredProfilePayload(payload) {
+  const next = {};
+  for (const key of DEFERRED_PROFILE_API_FIELDS) {
+    const value = payload[key];
+    if (value !== '' && value !== undefined && value !== null) {
+      next[key] = value;
+    }
+  }
+  return next;
+}
