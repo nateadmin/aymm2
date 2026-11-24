@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { isMockAuthEnabled, MOCK_LOGIN_EMAIL } from '@/lib/mockAuth';
-import { isStagingPreviewEnabled } from '@/lib/stagingPreview';
 import { REVIEW_PROFILE_ROUTE, withPreviewQuery } from '@/lib/screenCatalog';
+import { shouldUseDesignReviewShell } from '@/lib/session';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import PageShell from '@/components/PageShell';
 import Modal from '@/components/ui/Modal';
@@ -19,18 +18,13 @@ import { CHILD_IDENTITIES, PARENT_IDENTITIES, PLACEHOLDER_AVATAR, labelForIdenti
 export default function Profile() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user, isAdmin, logout } = useAuth();
+  const { user, profile: authProfile, isAdmin, logout } = useAuth();
 
   useEffect(() => {
-    const email = user?.email?.trim().toLowerCase();
-    const useDesignProfile =
-      isStagingPreviewEnabled()
-      || isMockAuthEnabled()
-      || email === MOCK_LOGIN_EMAIL;
-    if (useDesignProfile) {
+    if (shouldUseDesignReviewShell({ user, profile: authProfile })) {
       navigate(withPreviewQuery(REVIEW_PROFILE_ROUTE, { native: false }), { replace: true });
     }
-  }, [navigate, user?.email]);
+  }, [navigate, user, authProfile]);
   const { profile, isLoading } = useMyProfile();
   const { accepted } = useConnections();
   const { getProfile } = useProfileMap();

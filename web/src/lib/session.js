@@ -1,5 +1,16 @@
-import { isMockAuthEnabled, MOCK_LOGIN_EMAIL } from './mockAuth.js';
+import { isMockAuthEnabled, isMockToken, MOCK_LOGIN_EMAIL } from './mockAuth.js';
 import { isStagingPreviewEnabled } from './stagingPreview.js';
+
+const SESSION_TOKEN_KEY = 'aymm_session_token';
+
+function readSessionToken() {
+  if (typeof localStorage === 'undefined') return null;
+  try {
+    return localStorage.getItem(SESSION_TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
 
 /** Built “Home” screen in the screen catalog (frame #42). */
 export const DESIGN_HOME_ROUTE = '/Prototype/home';
@@ -13,12 +24,21 @@ function isDemoReviewSession(session) {
   return email === MOCK_LOGIN_EMAIL;
 }
 
-function shouldUseDesignHome(session) {
+export function shouldUseDesignReviewShell(session = {}) {
+  const token = session.token ?? readSessionToken();
+  const completed = hasCompletedProfile(session?.profile);
+  if (completed && session?.user?.email && !isMockToken(token)) {
+    return false;
+  }
   return (
     isStagingPreviewEnabled()
     || isMockAuthEnabled()
     || isDemoReviewSession(session)
   );
+}
+
+function shouldUseDesignHome(session) {
+  return shouldUseDesignReviewShell(session);
 }
 
 export function getPostAuthPath(session) {
