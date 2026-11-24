@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PrototypeScreen from '@/components/prototype/PrototypeScreen';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
@@ -9,22 +9,19 @@ import { withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function CompatibilityChallenge() {
   const navigate = useNavigate();
+  const location = useLocation();
   const challenge = COMPATIBILITY_CHALLENGE;
   const [selected, setSelected] = useState('alone');
+  const returnTo = location.state?.returnTo;
+  const backTarget = returnTo
+    ? returnTo
+  : withPreviewQuery('/Prototype/profile-carousel');
 
   return (
     <PrototypeScreen showBottomNav={false}>
       <div className="screen-pad screen-pad--handheld mobile-onboarding prototype-challenge">
         <div className="mobile-onboarding__content">
-          <BackButton to={withPreviewQuery('/Prototype/profile-carousel')} />
-
-          <div className="prototype-challenge__progress">
-            <span>Step {challenge.step} of {challenge.total}</span>
-            <span className="prototype-challenge__percent">{challenge.percent}%</span>
-          </div>
-          <div className="prototype-challenge__bar" aria-hidden="true">
-            <span style={{ width: `${challenge.percent}%` }} />
-          </div>
+          <BackButton to={backTarget} />
 
           <div>
             <p className="prototype-challenge__eyebrow">{challenge.label}</p>
@@ -53,8 +50,8 @@ export default function CompatibilityChallenge() {
           </div>
         </div>
 
-        <Button onClick={() => navigate(withPreviewQuery('/Prototype/profile-carousel'))}>
-          Next Question
+        <Button onClick={() => navigate(backTarget)}>
+          Continue
         </Button>
       </div>
     </PrototypeScreen>

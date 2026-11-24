@@ -1,13 +1,17 @@
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/lib/auth';
+import { resolveAppRoute } from '@/lib/appRoutes';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import HeartLogo from '@/components/brand/HeartLogo';
 import Button from '@/components/ui/Button';
 import { DAUGHTER_PROFILE } from '@/lib/discoveryProfiles';
-import { REVIEW_HOME_ROUTE, withPreviewQuery } from '@/lib/screenCatalog';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function ConnectionSuccess() {
   const navigate = useNavigate();
+  const { user, profile, hasProfile } = useAuth();
+  const reviewSession = { user, profile, hasProfile };
   const photo = DAUGHTER_PROFILE.profile_photos[0];
 
   return (
@@ -49,14 +53,14 @@ export default function ConnectionSuccess() {
         </div>
 
         <div className="connection-success__actions">
-          <Button onClick={() => navigate(withPreviewQuery(REVIEW_HOME_ROUTE))}>
+          <Button onClick={() => navigate(withPreviewQuery(resolveAppRoute('home', reviewSession)))}>
             Keep Browsing
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate(withPreviewQuery('/Messages'))}
+            onClick={() => navigate(withPreviewQuery('/Messages'), { state: { tab: 'requests' } })}
           >
-            Go to My Connections
+            Go to Letters
           </Button>
         </div>
       </div>

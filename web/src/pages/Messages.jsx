@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ArrowLeft, Check, Send, X } from 'lucide-react';
 import PageShell from '@/components/PageShell';
@@ -17,6 +17,13 @@ export default function Messages() {
   const location = useLocation();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('open');
+
+  useEffect(() => {
+    const tab = location.state?.tab;
+    if (tab === 'requests' || tab === 'open' || tab === 'connections') {
+      setActiveTab(tab);
+    }
+  }, [location.state]);
   const [selectedEmail, setSelectedEmail] = useState(location.state?.selectedConvo || null);
   const [replyText, setReplyText] = useState('');
   const { messages, letterRequests, unreadCount, isLoading } = useMessages();

@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
+import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import HomeHubLayout, { timeOfDayGreeting } from '@/components/home/HomeHubLayout';
@@ -17,6 +18,7 @@ import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
 import { formatLabel } from '@/lib/format';
 import { PLACEHOLDER_AVATAR } from '@/lib/constants';
+import { COMPATIBILITY_CHALLENGE } from '@/lib/prototypeContent';
 
 function profileLocation(profile) {
   const parts = [profile.city, profile.state].filter(Boolean);
@@ -49,6 +51,8 @@ export default function Home() {
   const [messageProfile, setMessageProfile] = useState(null);
   const [religionProfile, setReligionProfile] = useState(null);
   const [shareProfile, setShareProfile] = useState(null);
+  const [challengeProfile, setChallengeProfile] = useState(null);
+  const [challengeAnswer, setChallengeAnswer] = useState('alone');
   const [messageText, setMessageText] = useState('');
 
   const greeting = useMemo(() => {
@@ -156,7 +160,11 @@ export default function Home() {
           setViewProfile(null);
           setMessageProfile(item);
         }}
-        onChallenge={() => push('Challenge sent!', 'success')}
+        onChallenge={(item) => {
+          setViewProfile(null);
+          setChallengeProfile(item);
+          setChallengeAnswer('alone');
+        }}
         onRecommend={setShareProfile}
         onReligion={setReligionProfile}
       />
@@ -185,6 +193,49 @@ export default function Home() {
             ? 'This user has set their religion to private.'
             : formatLabel(religionProfile?.religion) || 'Not specified'}
         </p>
+      </Modal>
+
+      <Modal
+        open={Boolean(challengeProfile)}
+        title="Compatibility challenge"
+        onClose={() => setChallengeProfile(null)}
+      >
+        <p className="auth-subheading">{COMPATIBILITY_CHALLENGE.question}</p>
+        <div className="identity-role-list" role="radiogroup" aria-label={COMPATIBILITY_CHALLENGE.question}>
+          {COMPATIBILITY_CHALLENGE.options.map((option) => {
+            const selected = challengeAnswer === option.id;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                className={`identity-role-option identity-role-option--text${selected ? ' identity-role-option--selected' : ''}`}
+                onClick={() => setChallengeAnswer(option.id)}
+              >
+                <span className="identity-role-option__label">{option.label}</span>
+                <span className="identity-role-option__radio" aria-hidden="true">
+                  {selected ? <Check size={14} strokeWidth={3} /> : null}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <Button
+          disabled={!challengeProfile?.user_email || challengeProfile?.is_demo || sendMessage.isPending}
+          onClick={async () => {
+            if (!challengeProfile?.user_email || challengeProfile.is_demo) return;
+            const option = COMPATIBILITY_CHALLENGE.options.find((item) => item.id === challengeAnswer);
+            await sendMessage.mutateAsync({
+              toEmail: challengeProfile.user_email,
+              content: `Compatibility challenge: ${COMPATIBILITY_CHALLENGE.question}\nMy answer: ${option?.label || challengeAnswer}`,
+              forceRequest: true,
+            });
+            setChallengeProfile(null);
+          }}
+        >
+          Send challenge
+        </Button>
       </Modal>
 
       <Modal

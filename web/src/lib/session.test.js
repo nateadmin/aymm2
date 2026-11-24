@@ -33,6 +33,13 @@ test('getPostAuthPath routes completed users to Home', () => {
   assert.equal(getPostAuthPath({ hasProfile: false }), '/ProfileSetup/upload-photo');
 });
 
+test('getPostAuthPath routes family accounts to FamilyTables', () => {
+  assert.equal(
+    getPostAuthPath({ profile: { setup_complete: true, identity_type: 'family' } }),
+    '/FamilyTables',
+  );
+});
+
 test('getPostAuthPath routes Phase 2 mock personas to live Home', () => {
   assert.equal(
     getPostAuthPath({

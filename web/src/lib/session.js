@@ -54,6 +54,7 @@ export function getPostAuthPath(session) {
   const complete = hasCompletedProfile(session?.profile) || session?.hasProfile;
   if (!complete) return '/ProfileSetup/upload-photo';
   if (shouldUseDesignHome(session)) return DESIGN_HOME_ROUTE;
+  if (session?.profile?.identity_type === 'family') return '/FamilyTables';
   return '/Home';
 }
 

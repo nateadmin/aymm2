@@ -30,8 +30,18 @@ function settingsRowAction(label) {
       return { type: 'navigate', to: '/FamilyTables' };
     case 'Report a Problem':
       return { type: 'report' };
+    case 'My connections':
     case 'Help Center':
       return { type: 'connections' };
+    case 'Change Password':
+      return { type: 'navigate', to: '/ForgotPassword' };
+    case 'Phone Number':
+    case 'Email Address':
+      return { type: 'contact' };
+    case 'Notifications':
+      return { type: 'notifications' };
+    case 'Religion Preferences':
+      return { type: 'navigate', to: '/ProfileSetup/religion' };
     case 'Who Can Message Me':
       return { type: 'blocks' };
     case 'Log Out':
@@ -54,7 +64,16 @@ export default function ProfileSettings() {
   const [showConnections, setShowConnections] = useState(false);
   const [showBlocks, setShowBlocks] = useState(false);
   const [showReport, setShowReport] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [reportText, setReportText] = useState('');
+  const [notificationPrefs, setNotificationPrefs] = useState(() => {
+    try {
+      const raw = localStorage.getItem('aymm_notification_prefs');
+      return raw ? JSON.parse(raw) : { messages: true, tables: true, marketing: false };
+    } catch {
+      return { messages: true, tables: true, marketing: false };
+    }
+  });
 
   const blocksQuery = useEntityList('Block', { blocker_email: user?.email }, {
     enabled: Boolean(user?.email),
@@ -112,6 +131,15 @@ export default function ProfileSettings() {
     if (action.type === 'report') setShowReport(true);
     if (action.type === 'connections') setShowConnections(true);
     if (action.type === 'blocks') setShowBlocks(true);
+    if (action.type === 'notifications') setShowNotifications(true);
+    if (action.type === 'contact') {
+      push('Contact support to update account details.', 'success');
+    }
+  };
+
+  const saveNotificationPrefs = (next) => {
+    setNotificationPrefs(next);
+    localStorage.setItem('aymm_notification_prefs', JSON.stringify(next));
   };
 
   return (
@@ -147,6 +175,18 @@ export default function ProfileSettings() {
                       <span>{item}</span>
                       <ChevronRight size={16} />
                     </Link>
+                  );
+                }
+                if (action?.type === 'contact') {
+                  return (
+                    <button
+                      key={item}
+                      type="button"
+                      className="prototype-settings__row prototype-settings__row--static"
+                      onClick={() => handleRow(item)}
+                    >
+                      <span>{item}</span>
+                    </button>
                   );
                 }
                 return (
@@ -190,6 +230,33 @@ export default function ProfileSettings() {
             ))}
           </ul>
         ) : <p className="aymm-muted">No blocked users.</p>}
+      </Modal>
+
+      <Modal open={showNotifications} title="Notifications" onClose={() => setShowNotifications(false)}>
+        <label className="auth-field">
+          <input
+            type="checkbox"
+            checked={notificationPrefs.messages}
+            onChange={(e) => saveNotificationPrefs({ ...notificationPrefs, messages: e.target.checked })}
+          />
+          <span>Messages &amp; requests</span>
+        </label>
+        <label className="auth-field">
+          <input
+            type="checkbox"
+            checked={notificationPrefs.tables}
+            onChange={(e) => saveNotificationPrefs({ ...notificationPrefs, tables: e.target.checked })}
+          />
+          <span>Family table updates</span>
+        </label>
+        <label className="auth-field">
+          <input
+            type="checkbox"
+            checked={notificationPrefs.marketing}
+            onChange={(e) => saveNotificationPrefs({ ...notificationPrefs, marketing: e.target.checked })}
+          />
+          <span>News &amp; tips from AYMM</span>
+        </label>
       </Modal>
 
       <Modal open={showReport} title="Report a problem" onClose={() => setShowReport(false)}>

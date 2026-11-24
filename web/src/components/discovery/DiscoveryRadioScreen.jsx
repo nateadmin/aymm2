@@ -26,6 +26,7 @@ export default function DiscoveryRadioScreen({
             <p className="auth-subheading">{subtitle}</p>
           </div>
 
+          <p className="discovery-fixture-note">Preview only — answers aren&apos;t saved.</p>
           <div className="identity-role-list" role="radiogroup" aria-label={title}>
             {options.map((option) => {
               const isSelected = selected === option.id;

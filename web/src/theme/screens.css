@@ -1928,6 +1928,12 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   gap: 1rem;
 }
 
+.discovery-fixture-note {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--aymm-muted-purple);
+}
+
 .discovery-yesno-list,
 .discovery-form-list {
   display: grid;

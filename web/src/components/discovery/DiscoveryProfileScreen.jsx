@@ -1,5 +1,7 @@
 import { Info, MessageCircle, Star } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/lib/auth';
+import { resolveLettersRoute } from '@/lib/appRoutes';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
 import PrimaryActionLabel from '@/components/brand/PrimaryActionLabel';
@@ -9,6 +11,9 @@ import { withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function DiscoveryProfileScreen({ profile, backTo = '/screens' }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, profile: authProfile, hasProfile } = useAuth();
+  const reviewSession = { user, profile: authProfile, hasProfile };
   const photo = profile.profile_photos?.[0];
   const identityLabel = labelForIdentity(profile.identity_type);
   const religionLabel = labelForReligion(profile.religion);
@@ -58,12 +63,19 @@ export default function DiscoveryProfileScreen({ profile, backTo = '/screens' })
             <button
               type="button"
               className="discovery-profile__action"
-              onClick={() => navigate(withPreviewQuery('/Messages'))}
+              onClick={() => navigate(withPreviewQuery(resolveLettersRoute(reviewSession)))}
             >
               <MessageCircle size={22} strokeWidth={1.75} />
               <span>Message</span>
             </button>
-            <button type="button" className="discovery-profile__action">
+            <button
+              type="button"
+              className="discovery-profile__action"
+              onClick={() => navigate(
+                withPreviewQuery('/Prototype/compatibility-challenge'),
+                { state: { returnTo: `${location.pathname}${location.search}` } },
+              )}
+            >
               <Info size={22} strokeWidth={1.75} />
               <span>Challenge</span>
             </button>

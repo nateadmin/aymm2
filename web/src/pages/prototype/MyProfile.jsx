@@ -22,7 +22,10 @@ export default function MyProfile() {
           { label: 'Location', value: profile.location },
         ]}
         onOpenSettings={() => navigate(withPreviewQuery('/Prototype/settings'))}
-        onEditProfile={() => navigate(withPreviewQuery('/ProfileSetup/basic-info'))}
+        onEditProfile={() => navigate(
+          withPreviewQuery('/ProfileSetup/basic-info'),
+          { state: { returnTo: withPreviewQuery('/Prototype/my-profile') } },
+        )}
       />
     </PrototypeScreen>
   );
