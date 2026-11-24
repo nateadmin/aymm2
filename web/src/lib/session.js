@@ -1,5 +1,5 @@
 import { isMockAuthEnabled, isMockToken, MOCK_LOGIN_EMAIL } from './mockAuth.js';
-import { isStagingPreviewEnabled } from './stagingPreview.js';
+import { isRealAppPreviewForced, isStagingPreviewEnabled } from './stagingPreview.js';
 
 const SESSION_TOKEN_KEY = 'aymm_session_token';
 
@@ -29,8 +29,10 @@ export function shouldUseDesignReviewShell(session = {}) {
 
   const token = session.token ?? readSessionToken();
   const completed = hasCompletedProfile(session?.profile) || Boolean(session?.hasProfile);
-  if (completed && session?.user?.email && !isMockToken(token)) {
-    return false;
+  const email = (session?.user?.email || session?.profile?.user_email || '').trim();
+  if (completed && email) {
+    if (!isMockToken(token)) return false;
+    if (isRealAppPreviewForced() || !isMockAuthEnabled()) return false;
   }
   return isStagingPreviewEnabled() || isMockAuthEnabled();
 }

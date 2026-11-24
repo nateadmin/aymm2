@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DESIGN_HOME_ROUTE, shouldUseDesignReviewShell } from '@/lib/session';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import HomeHubLayout, { timeOfDayGreeting } from '@/components/home/HomeHubLayout';
 import QuickActionList from '@/components/home/QuickActionList';
@@ -35,12 +34,6 @@ export default function Home() {
   const profilesSectionRef = useRef(null);
   const { push } = useToast();
   const { profile: authProfile, user, hasProfile } = useAuth();
-
-  useEffect(() => {
-    if (shouldUseDesignReviewShell({ user, profile: authProfile, hasProfile })) {
-      navigate(withPreviewQuery(DESIGN_HOME_ROUTE, { native: false }), { replace: true });
-    }
-  }, [navigate, authProfile, user, hasProfile]);
 
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
   const activeProfile = myProfile || authProfile;
@@ -100,14 +93,6 @@ export default function Home() {
   };
 
   if (isLoading && !activeProfile) {
-    return (
-      <div className="app-loading">
-        <div className="app-loading__spinner" aria-label="Loading" />
-      </div>
-    );
-  }
-
-  if (shouldUseDesignReviewShell({ user, profile: authProfile, hasProfile })) {
     return (
       <div className="app-loading">
         <div className="app-loading__spinner" aria-label="Loading" />

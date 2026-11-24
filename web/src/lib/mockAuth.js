@@ -1,4 +1,4 @@
-import { isDesignReviewHost } from './stagingPreview.js';
+import { isDesignReviewHost, isRealAppPreviewForced } from './stagingPreview.js';
 
 const MOCK_TOKEN_PREFIX = 'mock:';
 const MOCK_SESSION_KEY = 'aymm_mock_session';
@@ -20,7 +20,9 @@ const STAGING_HOSTS = new Set([
 export function isMockAuthEnabled(hostname = typeof window !== 'undefined' ? window.location.hostname : '') {
   if (import.meta.env?.VITE_PRODUCTION_API === '1') return false;
   if (!hostname || STAGING_HOSTS.has(hostname)) return false;
-  return isDesignReviewHost(hostname);
+  if (!isDesignReviewHost(hostname)) return false;
+  if (isRealAppPreviewForced()) return false;
+  return true;
 }
 
 export function isMockToken(token) {

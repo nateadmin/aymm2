@@ -13,6 +13,7 @@ import {
   mockResetPassword,
   mockSaveProfile,
 } from '@/lib/mockAuth';
+import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 
 const AuthContext = createContext(null);
 
@@ -40,7 +41,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   const bootstrap = useCallback(async () => {
-    const token = getStoredToken();
+    let token = getStoredToken();
+    if (token && isMockToken(token) && isRealAppPreviewForced()) {
+      setStoredToken(null);
+      clearMockSession();
+      token = null;
+    }
     if (!token) {
       setUser(null);
       setProfile(null);
