@@ -8,6 +8,7 @@ import IAmAStep from '@/components/profile-setup/steps/IAmAStep';
 import SeekingAStep from '@/components/profile-setup/steps/SeekingAStep';
 import ReligionStep from '@/components/profile-setup/steps/ReligionStep';
 import QuestionsStep from '@/components/profile-setup/steps/QuestionsStep';
+import BioStep from '@/components/profile-setup/steps/BioStep';
 import ReviewStep from '@/components/profile-setup/steps/ReviewStep';
 import CompleteStep from '@/components/profile-setup/steps/CompleteStep';
 
@@ -23,7 +24,7 @@ export default function ProfileSetup() {
         <Route path="seeking-a" element={<SeekingAStep />} />
         <Route path="religion" element={<ReligionStep />} />
         <Route path="questions" element={<QuestionsStep />} />
-        <Route path="bio" element={<Navigate to="/ProfileSetup/review" replace />} />
+        <Route path="bio" element={<BioStep />} />
         <Route path="review" element={<ReviewStep />} />
         <Route path="complete" element={<CompleteStep />} />
       </Routes>

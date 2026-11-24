@@ -79,6 +79,17 @@ export function isStagingPreviewEnabled() {
   }
 }
 
+/** True when the user forced real login/app behavior (?preview=0) on a review host. */
+export function isRealAppPreviewForced() {
+  const param = readPreviewParam();
+  if (param === '0') return true;
+  try {
+    return sessionStorage.getItem(STORAGE_KEY) === 'off';
+  } catch {
+    return false;
+  }
+}
+
 export function disableStagingPreview() {
   sessionStorage.setItem(STORAGE_KEY, 'off');
 }

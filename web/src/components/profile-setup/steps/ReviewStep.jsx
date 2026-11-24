@@ -87,14 +87,22 @@ export default function ReviewStep() {
       value: labelForReligion(form.religion) || 'No preference',
       editPath: '/ProfileSetup/religion',
     },
+    {
+      icon: <User size={20} />,
+      title: 'About Me',
+      value: form.bio?.trim()
+        ? `${form.bio.trim().slice(0, 80)}${form.bio.length > 80 ? '…' : ''}`
+        : 'Not added yet',
+      editPath: '/ProfileSetup/bio',
+    },
   ];
 
   return (
     <MobileScreen bodyClassName="mobile-onboarding-scroll">
       <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
         <div className="mobile-onboarding__content">
-          <BackButton to="/ProfileSetup/questions" />
-          <MobileOnboardingProgress step={8} />
+          <BackButton to="/ProfileSetup/bio" />
+          <MobileOnboardingProgress step={9} />
 
           <div>
             <h1 className="auth-heading auth-heading--brand">Review your profile</h1>

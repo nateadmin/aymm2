@@ -3,7 +3,7 @@ import {
   MOCK_DISCOVERY_PASSWORD,
 } from './mockDiscoveryAccounts.js';
 import { clearMockConnections } from './mockConnections.js';
-import { isDesignReviewHost, isStagingPreviewEnabled } from './stagingPreview.js';
+import { isDesignReviewHost, isRealAppPreviewForced, isStagingPreviewEnabled } from './stagingPreview.js';
 
 const MOCK_TOKEN_PREFIX = 'mock:';
 const MOCK_SESSION_KEY = 'aymm_mock_session';
@@ -23,6 +23,7 @@ const STAGING_HOSTS = new Set([
 
 /** Mock auth on review hosts; on aymm.app only when `?preview=1` (else real API). */
 export function isMockAuthEnabled(hostname = typeof window !== 'undefined' ? window.location.hostname : '') {
+  if (isRealAppPreviewForced()) return false;
   if (import.meta.env?.VITE_PRODUCTION_API === '1' && !isStagingPreviewEnabled()) {
     return false;
   }

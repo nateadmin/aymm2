@@ -48,8 +48,9 @@ export const SCREEN_CATALOG = [
   { id: 14, phase: 1, slug: 'seeking-a', title: 'Seeking A', route: '/ProfileSetup/seeking-a', status: 'live' },
   { id: 15, phase: 1, slug: 'religion', title: 'Religion', route: '/ProfileSetup/religion', status: 'live' },
   { id: 16, phase: 1, slug: 'questions', title: 'Questions', route: '/ProfileSetup/questions', status: 'live' },
-  { id: 17, phase: 1, slug: 'review', title: 'Review', route: '/ProfileSetup/review', status: 'live' },
-  { id: 18, phase: 1, slug: 'complete', title: 'Complete', route: '/ProfileSetup/complete', status: 'live' },
+  { id: 17, phase: 1, slug: 'bio', title: 'About Me', route: '/ProfileSetup/bio', status: 'live' },
+  { id: 18, phase: 1, slug: 'review', title: 'Review', route: '/ProfileSetup/review', status: 'live' },
+  { id: 19, phase: 1, slug: 'complete', title: 'Complete', route: '/ProfileSetup/complete', status: 'live' },
   // Phase 2 — Discovery & Connection
   { id: 20, phase: 2, slug: 'daughter-profile', title: 'Daughter Profile', route: '/Discovery/daughter-profile', status: 'live' },
   { id: 21, phase: 2, slug: 'mother-profile', title: 'Mother Profile', route: '/Discovery/mother-profile', status: 'live' },
