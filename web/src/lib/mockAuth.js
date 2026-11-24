@@ -1,4 +1,9 @@
-import { isDesignReviewHost } from './stagingPreview.js';
+import {
+  getMockDiscoveryAccount,
+  MOCK_DISCOVERY_PASSWORD,
+} from './mockDiscoveryAccounts.js';
+import { clearMockConnections } from './mockConnections.js';
+import { isDesignReviewHost, isStagingPreviewEnabled } from './stagingPreview.js';
 
 const MOCK_TOKEN_PREFIX = 'mock:';
 const MOCK_SESSION_KEY = 'aymm_mock_session';
@@ -18,7 +23,9 @@ const STAGING_HOSTS = new Set([
 
 /** Mock auth for StackBlitz/Codespaces/local dev — not on live staging (real API there). */
 export function isMockAuthEnabled(hostname = typeof window !== 'undefined' ? window.location.hostname : '') {
-  if (import.meta.env?.VITE_PRODUCTION_API === '1') return false;
+  if (import.meta.env?.VITE_PRODUCTION_API === '1' && !isStagingPreviewEnabled()) {
+    return false;
+  }
   if (!hostname || STAGING_HOSTS.has(hostname)) return false;
   return isDesignReviewHost(hostname);
 }
@@ -56,6 +63,7 @@ export function loadMockSession() {
 
 export function clearMockSession() {
   memorySession = null;
+  clearMockConnections();
   try {
     sessionStorage.removeItem(MOCK_SESSION_KEY);
   } catch {
@@ -101,11 +109,13 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
   const normalized = email.trim().toLowerCase();
   const pass = password.trim();
 
+  const discoveryAccount = getMockDiscoveryAccount(normalized);
+  const matchesDiscovery = discoveryAccount && pass === MOCK_DISCOVERY_PASSWORD;
   const matchesDemo =
     normalized === MOCK_LOGIN_EMAIL && pass === MOCK_LOGIN_PASSWORD;
   const matchesAnyDemo = isValidEmail(normalized) && pass.length >= 8;
 
-  if (!matchesDemo && !matchesAnyDemo) {
+  if (!matchesDiscovery && !matchesDemo && !matchesAnyDemo) {
     const error = new Error('invalid_credentials');
     error.status = 401;
     error.payload = { error: 'invalid_credentials' };
@@ -123,11 +133,13 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
     token: `${MOCK_TOKEN_PREFIX}${normalized}`,
     user: buildUser(normalized),
     profile: completeProfile
-      ? matchesDemo
-        ? demoProfile
-        : existing?.profile?.setup_complete
-          ? existing.profile
-          : demoProfile
+      ? matchesDiscovery
+        ? discoveryAccount.profile
+        : matchesDemo
+          ? demoProfile
+          : existing?.profile?.setup_complete
+            ? existing.profile
+            : demoProfile
       : existing?.profile ?? null,
   };
 

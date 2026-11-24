@@ -9,6 +9,7 @@ import {
   screenThumbnailUrl,
   withPreviewQuery,
 } from '@/lib/screenCatalog';
+import { MOCK_DISCOVERY_ACCOUNT_LIST, MOCK_DISCOVERY_PASSWORD } from '@/lib/mockDiscoveryAccounts';
 import {
   disableStagingPreview,
   enableStagingPreview,
@@ -43,6 +44,12 @@ export default function ScreenIndex() {
         </p>
         <p className="screen-index__meta">
           Sample login: <strong>design@aymm.app</strong> / <strong>DesignReview1</strong>
+        </p>
+        <p className="screen-index__meta">
+          Phase 2 mock personas (use <strong>?preview=1</strong>): password{' '}
+          <strong>{MOCK_DISCOVERY_PASSWORD}</strong>
+          {' — '}
+          {MOCK_DISCOVERY_ACCOUNT_LIST.map((a) => a.email).join(', ')}
         </p>
         <div className="screen-index__filters" role="tablist" aria-label="Filter screens by phase">
           <button

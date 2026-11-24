@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { MOCK_DISCOVERY_PASSWORD } from './mockDiscoveryAccounts.js';
 import {
   MOCK_LOGIN_EMAIL,
   MOCK_LOGIN_PASSWORD,
@@ -31,6 +32,13 @@ test('mockLogin accepts demo credentials', () => {
   const demo = mockLogin(MOCK_LOGIN_EMAIL, MOCK_LOGIN_PASSWORD);
   assert.equal(demo.user.email, MOCK_LOGIN_EMAIL);
   assert.equal(demo.profile.setup_complete, true);
+});
+
+test('mockLogin loads Phase 2 discovery persona profile', () => {
+  clearMockSession();
+  const session = mockLogin('daughter.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
+  assert.equal(session.profile.identity_type, 'daughter');
+  assert.equal(session.profile.display_name, 'Sarah');
 });
 
 test('mockSaveProfile stores onboarding progress', () => {

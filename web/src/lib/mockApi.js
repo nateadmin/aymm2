@@ -1,4 +1,14 @@
 import {
+  getMockDiscoveryAccount,
+  listMockDiscoveryBrowseProfiles,
+} from './mockDiscoveryAccounts.js';
+import {
+  createMockConnection,
+  deleteMockConnection,
+  listMockConnections,
+  updateMockConnection,
+} from './mockConnections.js';
+import {
   isMockAuthEnabled,
   isMockToken,
   loadMockSession,
@@ -35,16 +45,41 @@ export function tryMockApi(path, method = 'GET', body, token) {
     const session = loadMockSession();
     if (entityPath.entity === 'Profile') {
       const userEmail = entityPath.params.get('user_email');
-      if (userEmail && session?.profile) {
-        return session.profile.user_email === userEmail ? [session.profile] : [];
+      if (userEmail) {
+        if (session?.profile?.user_email === userEmail) {
+          return [session.profile];
+        }
+        const account = getMockDiscoveryAccount(userEmail);
+        return account ? [account.profile] : [];
       }
-      return [];
+      const browseAs = session?.user?.email;
+      return listMockDiscoveryBrowseProfiles(browseAs);
+    }
+    if (entityPath.entity === 'Connection') {
+      const filters = Object.fromEntries(entityPath.params.entries());
+      return listMockConnections(filters);
     }
     return [];
   }
 
   if (path.startsWith('/api/entities/') && upperMethod === 'GET') {
     return [];
+  }
+
+  if (path.startsWith('/api/entities/Connection') && upperMethod === 'POST') {
+    return createMockConnection(body);
+  }
+
+  const connectionPatch = path.match(/^\/api\/entities\/Connection\/([^/?]+)/);
+  if (connectionPatch) {
+    const id = connectionPatch[1];
+    if (upperMethod === 'PATCH') {
+      return updateMockConnection(id, body) || {};
+    }
+    if (upperMethod === 'DELETE') {
+      deleteMockConnection(id);
+      return {};
+    }
   }
 
   if (path.startsWith('/api/entities/') && ['POST', 'PATCH', 'PUT', 'DELETE'].includes(upperMethod)) {
