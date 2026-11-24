@@ -90,7 +90,7 @@ export default function Home() {
         </div>
       ) : (
         <section>
-          <h2 className="home-section-title">Profiles</h2>
+          <h2 className="home-section-title">Profiles near you</h2>
           <SwipeRail
             items={browseProfiles}
             emptyLabel="No profiles to show."

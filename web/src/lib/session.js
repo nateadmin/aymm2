@@ -1,3 +1,4 @@
+import { isMockDiscoveryEmail } from './mockDiscoveryAccounts.js';
 import { isMockAuthEnabled, isMockToken, MOCK_LOGIN_EMAIL } from './mockAuth.js';
 import { isStagingPreviewEnabled } from './stagingPreview.js';
 
@@ -19,13 +20,21 @@ export function hasCompletedProfile(profile) {
   return Boolean(profile?.setup_complete);
 }
 
+function sessionEmail(session) {
+  return (session?.user?.email || session?.profile?.user_email || '').trim().toLowerCase();
+}
+
 function isDemoReviewSession(session) {
-  const email = (session?.user?.email || session?.profile?.user_email || '').trim().toLowerCase();
-  return email === MOCK_LOGIN_EMAIL;
+  return sessionEmail(session) === MOCK_LOGIN_EMAIL;
+}
+
+function isMockDiscoverySession(session) {
+  return isMockDiscoveryEmail(sessionEmail(session));
 }
 
 export function shouldUseDesignReviewShell(session = {}) {
   if (isDemoReviewSession(session)) return true;
+  if (isMockDiscoverySession(session)) return false;
 
   const token = session.token ?? readSessionToken();
   const completed = hasCompletedProfile(session?.profile) || Boolean(session?.hasProfile);
