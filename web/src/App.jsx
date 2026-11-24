@@ -26,6 +26,7 @@ import Messages from '@/pages/Messages';
 import FamilyTables from '@/pages/FamilyTables';
 import Newsfeed from '@/pages/Newsfeed';
 import Profile from '@/pages/Profile';
+import ProfileSettings from '@/pages/ProfileSettings';
 import AdminDashboard from '@/pages/AdminDashboard';
 import BrandedCatalog from '@/pages/BrandedCatalog';
 import ScreenIndex from '@/pages/ScreenIndex';
@@ -185,6 +186,7 @@ export default function App() {
                     <Route path="/FamilyTables" element={<FamilyTables />} />
                     <Route path="/Newsfeed" element={<Newsfeed />} />
                     <Route path="/Profile" element={<Profile />} />
+                    <Route path="/Profile/settings" element={<ProfileSettings />} />
                     <Route path="/AdminDashboard" element={<AdminDashboard />} />
                   </Route>
                 </Route>
