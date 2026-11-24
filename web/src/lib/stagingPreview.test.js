@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isDesignReviewHost } from './stagingPreview.js';
+import { isDesignReviewHost, isRealAppPreviewForced } from './stagingPreview.js';
 
 test('isDesignReviewHost matches staging and review environments', () => {
   assert.equal(isDesignReviewHost('aymm.app'), true);

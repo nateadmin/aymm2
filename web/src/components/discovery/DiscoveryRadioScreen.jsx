@@ -17,8 +17,8 @@ export default function DiscoveryRadioScreen({
   const [selected, setSelected] = useState(initialValue);
 
   return (
-    <MobileScreen>
-      <div className="screen-pad screen-pad--handheld mobile-onboarding">
+    <MobileScreen bodyClassName="mobile-onboarding-scroll">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
         <div className="mobile-onboarding__content">
           <BackButton to={backTo} />
           <div>
@@ -26,6 +26,7 @@ export default function DiscoveryRadioScreen({
             <p className="auth-subheading">{subtitle}</p>
           </div>
 
+          <p className="discovery-fixture-note">Preview only — answers aren&apos;t saved.</p>
           <div className="identity-role-list" role="radiogroup" aria-label={title}>
             {options.map((option) => {
               const isSelected = selected === option.id;

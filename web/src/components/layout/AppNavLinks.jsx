@@ -1,18 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getVisibleNavItems } from '@/lib/navigation';
-import {
-  REVIEW_HOME_ROUTE,
-  REVIEW_PROFILE_ROUTE,
-  withPreviewQuery,
-} from '@/lib/screenCatalog';
-import { shouldUseDesignReviewShell } from '@/lib/session';
+import { resolveAppRoute } from '@/lib/appRoutes';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 import { useAuth } from '@/lib/auth';
 
 function reviewPath(path, session) {
-  if (!shouldUseDesignReviewShell(session)) return path;
-  if (path === '/Home') return REVIEW_HOME_ROUTE;
-  if (path === '/Profile') return REVIEW_PROFILE_ROUTE;
+  if (path === '/Home') return resolveAppRoute('home', session);
+  if (path === '/Profile') return resolveAppRoute('profile', session);
   return path;
 }
 

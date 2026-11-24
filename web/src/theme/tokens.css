@@ -54,6 +54,7 @@
   --space-2xl: 2.5rem;
   --space-3xl: 3rem;
   --space-splash-top: 5rem;
+  --space-handheld-top: 0.75rem;
   --space-screen-x: 1.5rem;
   --space-screen-bottom: 2rem;
   /* Extra clearance below primary CTAs on phones (home indicator / gesture bar). */

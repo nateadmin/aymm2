@@ -11,10 +11,13 @@ import {
   registerFormFromTable,
   tablePatchFromRegisterForm,
 } from '@/lib/communityTableListing';
-import { REVIEW_HOME_ROUTE, withPreviewQuery } from '@/lib/screenCatalog';
+import { useAuth } from '@/lib/auth';
+import { resolveAppRoute } from '@/lib/appRoutes';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function FamilyTableListing() {
   const navigate = useNavigate();
+  const { user, profile, hasProfile } = useAuth();
   const { table, updateTable } = useCommunityTableListing();
   const [hostOpen, setHostOpen] = useState(false);
   const [draft, setDraft] = useState(null);
@@ -35,7 +38,7 @@ export default function FamilyTableListing() {
     <CommunityScreen bodyClassName="community-table-detail-screen">
       <div className="community-table-detail">
         <div className="community-table-detail__toolbar">
-          <BackButton to={withPreviewQuery(REVIEW_HOME_ROUTE)} />
+          <BackButton to={withPreviewQuery(resolveAppRoute('home', { user, profile, hasProfile }))} />
         </div>
 
         <div className="community-table-detail__hero">

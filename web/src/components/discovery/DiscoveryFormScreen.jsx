@@ -35,6 +35,7 @@ export default function DiscoveryFormScreen({
             <p className="auth-subheading">{subtitle}</p>
           </div>
 
+          <p className="discovery-fixture-note">Preview only — answers aren&apos;t saved.</p>
           <div className="discovery-form-list">
             {fields.map((field) => (
               <label key={field.field} className="auth-field">

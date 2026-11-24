@@ -346,6 +346,16 @@ html[data-mobile-preview] .app-main__content {
   );
 }
 
+.app-main__content:has(> .prototype-my-profile) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+a.prototype-settings__row {
+  text-decoration: none;
+  color: inherit;
+}
+
 html[data-mobile-preview] .bottom-nav {
   display: block !important;
 }

@@ -1,5 +1,6 @@
+import { isMockDiscoveryEmail } from './mockDiscoveryAccounts.js';
 import { isMockAuthEnabled, isMockToken, MOCK_LOGIN_EMAIL } from './mockAuth.js';
-import { isStagingPreviewEnabled } from './stagingPreview.js';
+import { isRealAppPreviewForced, isStagingPreviewEnabled } from './stagingPreview.js';
 
 const SESSION_TOKEN_KEY = 'aymm_session_token';
 
@@ -19,18 +20,28 @@ export function hasCompletedProfile(profile) {
   return Boolean(profile?.setup_complete);
 }
 
+function sessionEmail(session) {
+  return (session?.user?.email || session?.profile?.user_email || '').trim().toLowerCase();
+}
+
 function isDemoReviewSession(session) {
-  const email = (session?.user?.email || session?.profile?.user_email || '').trim().toLowerCase();
-  return email === MOCK_LOGIN_EMAIL;
+  return sessionEmail(session) === MOCK_LOGIN_EMAIL;
+}
+
+function isMockDiscoverySession(session) {
+  return isMockDiscoveryEmail(sessionEmail(session));
 }
 
 export function shouldUseDesignReviewShell(session = {}) {
   if (isDemoReviewSession(session)) return true;
+  if (isMockDiscoverySession(session)) return false;
 
   const token = session.token ?? readSessionToken();
   const completed = hasCompletedProfile(session?.profile) || Boolean(session?.hasProfile);
-  if (completed && session?.user?.email && !isMockToken(token)) {
-    return false;
+  const email = (session?.user?.email || session?.profile?.user_email || '').trim();
+  if (completed && email) {
+    if (!isMockToken(token)) return false;
+    if (isRealAppPreviewForced() || !isMockAuthEnabled()) return false;
   }
   return isStagingPreviewEnabled() || isMockAuthEnabled();
 }
@@ -43,6 +54,7 @@ export function getPostAuthPath(session) {
   const complete = hasCompletedProfile(session?.profile) || session?.hasProfile;
   if (!complete) return '/ProfileSetup/upload-photo';
   if (shouldUseDesignHome(session)) return DESIGN_HOME_ROUTE;
+  if (session?.profile?.identity_type === 'family') return '/FamilyTables';
   return '/Home';
 }
 

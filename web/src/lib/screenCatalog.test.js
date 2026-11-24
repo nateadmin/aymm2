@@ -1,20 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  buildLiveTestPath,
+  buildLiveTestUrl,
   DEMO_LINKS,
   REVIEW_PROFILE_ROUTE,
   SCREEN_CAPTURE_VERSION,
   SCREEN_CATALOG,
   getScreenBySlug,
   screenCardPath,
+  screensForPhase,
   screenThumbnailUrl,
   withPreviewQuery,
 } from './screenCatalog.js';
 
 test('catalog no longer includes the extra onboarding frame', () => {
-  assert.equal(SCREEN_CATALOG.length, 53);
+  assert.equal(SCREEN_CATALOG.length, 54);
   assert.equal(getScreenBySlug('onboarding-extra'), undefined);
   assert.equal(SCREEN_CATALOG.some((screen) => screen.title === 'Onboarding (extra)'), false);
+  assert.equal(getScreenBySlug('bio')?.route, '/ProfileSetup/bio');
 });
 
 test('demo links use stable branded paths on aymm.app', () => {
@@ -26,7 +30,7 @@ test('demo links use stable branded paths on aymm.app', () => {
 
 test('withPreviewQuery can keep the catalog on desktop and screens on mobile', () => {
   assert.equal(withPreviewQuery('/screens', { mobile: false }), '/screens?preview=1&mobile=0');
-  assert.equal(withPreviewQuery('/Prototype/home'), '/Prototype/home?preview=1&mobile=1');
+  assert.equal(withPreviewQuery('/Prototype/home'), '/Prototype/home?preview=1&mobile=1&fixture=1');
 });
 
 test('withPreviewQuery can force real-device layout for one link', () => {
@@ -57,4 +61,35 @@ test('screenThumbnailUrl keeps Figma frames for design-only entries', () => {
     screenThumbnailUrl({ id: 99, slug: 'unused-frame', status: 'frame' }),
     '/design-frames/frame-99.png',
   );
+});
+
+test('buildLiveTestPath pins preview=0 and mobile=1', () => {
+  assert.equal(buildLiveTestPath('/EmailLogin'), '/EmailLogin?preview=0&mobile=1');
+});
+
+test('buildLiveTestPath adds fixture=1 for Phase 4 prototype routes', () => {
+  assert.equal(
+    buildLiveTestPath('/Prototype/home'),
+    '/Prototype/home?preview=0&mobile=1&fixture=1',
+  );
+});
+
+test('withPreviewQuery adds fixture=1 for Prototype paths', () => {
+  assert.equal(
+    withPreviewQuery('/Prototype/adoption-approved', { preview: '0' }),
+    '/Prototype/adoption-approved?preview=0&mobile=1&fixture=1',
+  );
+});
+
+test('buildLiveTestUrl joins origin and path', () => {
+  assert.equal(
+    buildLiveTestUrl('/Welcome', 'https://example.test'),
+    'https://example.test/Welcome?preview=0&mobile=1',
+  );
+});
+
+test('screensForPhase returns Phase 1 onboarding cards', () => {
+  const phase1 = screensForPhase(1);
+  assert.equal(phase1.length, 19);
+  assert.equal(phase1[0].slug, 'splash');
 });

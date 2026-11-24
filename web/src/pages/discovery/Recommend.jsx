@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import { RECOMMEND_CHANNELS } from '@/lib/discoveryContent';
 import { RECOMMEND_PROFILE } from '@/lib/discoveryProfiles';
 import { labelForIdentity } from '@/lib/constants';
+import { useToast } from '@/lib/toast';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 
 const CHANNEL_ICONS = {
@@ -17,6 +18,7 @@ const CHANNEL_ICONS = {
 
 export default function Recommend() {
   const navigate = useNavigate();
+  const { push } = useToast();
   const [channel, setChannel] = useState('aymm');
   const [query, setQuery] = useState('');
   const photo = RECOMMEND_PROFILE.profile_photos[0];
@@ -91,7 +93,10 @@ export default function Recommend() {
         <Button
           variant={canSend ? 'primary' : 'disabled'}
           disabled={!canSend}
-          onClick={() => navigate(withPreviewQuery('/screens'))}
+          onClick={() => {
+            push('Recommendation ready to send.', 'success');
+            navigate(withPreviewQuery('/Discovery/daughter-profile'));
+          }}
         >
           Send Recommendation
         </Button>

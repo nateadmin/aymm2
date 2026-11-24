@@ -57,7 +57,11 @@ export default function ProfileCarousel() {
         </Button>
 
         <div className="discovery-profile__action-grid">
-          <button type="button" className="discovery-profile__action">
+          <button
+            type="button"
+            className="discovery-profile__action"
+            onClick={() => navigate(withPreviewQuery('/Community/open-conversation'))}
+          >
             <span>Msg</span>
           </button>
           <button
@@ -67,7 +71,11 @@ export default function ProfileCarousel() {
           >
             <span>Challenge</span>
           </button>
-          <button type="button" className="discovery-profile__action">
+          <button
+            type="button"
+            className="discovery-profile__action"
+            onClick={() => navigate(withPreviewQuery('/Discovery/recommend'))}
+          >
             <span>Recommend</span>
           </button>
           <button

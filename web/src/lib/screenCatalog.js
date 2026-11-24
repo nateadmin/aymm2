@@ -48,8 +48,9 @@ export const SCREEN_CATALOG = [
   { id: 14, phase: 1, slug: 'seeking-a', title: 'Seeking A', route: '/ProfileSetup/seeking-a', status: 'live' },
   { id: 15, phase: 1, slug: 'religion', title: 'Religion', route: '/ProfileSetup/religion', status: 'live' },
   { id: 16, phase: 1, slug: 'questions', title: 'Questions', route: '/ProfileSetup/questions', status: 'live' },
-  { id: 17, phase: 1, slug: 'review', title: 'Review', route: '/ProfileSetup/review', status: 'live' },
-  { id: 18, phase: 1, slug: 'complete', title: 'Complete', route: '/ProfileSetup/complete', status: 'live' },
+  { id: 17, phase: 1, slug: 'bio', title: 'About Me', route: '/ProfileSetup/bio', status: 'live' },
+  { id: 18, phase: 1, slug: 'review', title: 'Review', route: '/ProfileSetup/review', status: 'live' },
+  { id: 19, phase: 1, slug: 'complete', title: 'Complete', route: '/ProfileSetup/complete', status: 'live' },
   // Phase 2 — Discovery & Connection
   { id: 20, phase: 2, slug: 'daughter-profile', title: 'Daughter Profile', route: '/Discovery/daughter-profile', status: 'live' },
   { id: 21, phase: 2, slug: 'mother-profile', title: 'Mother Profile', route: '/Discovery/mother-profile', status: 'live' },
@@ -211,10 +212,56 @@ function resolvePreviewQueryValue(explicit) {
   return '1';
 }
 
-export function withPreviewQuery(route, { mobile = true, native, preview } = {}) {
+function shouldUseFixtureQuery(route, fixture) {
+  if (fixture === '1' || fixture === true) return true;
+  if (routeNeedsFixtureShell(route)) return true;
+  if (typeof window === 'undefined') return false;
+  try {
+    return new URLSearchParams(window.location.search).get('fixture') === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function withPreviewQuery(route, { mobile = true, native, preview, fixture } = {}) {
   let path = appendQuery(route, 'preview', resolvePreviewQueryValue(preview));
   if (mobile === true) path = appendQuery(path, 'mobile', '1');
   if (mobile === false) path = appendQuery(path, 'mobile', '0');
   if (shouldKeepNativePreview({ native })) path = appendQuery(path, 'native', '1');
+  if (shouldUseFixtureQuery(route, fixture)) path = appendQuery(path, 'fixture', '1');
   return path;
+}
+
+export function routeNeedsFixtureShell(route) {
+  return String(route || '').startsWith('/Prototype/');
+}
+
+/** Real API + handheld layout (preview-tester workflow). */
+export const LIVE_TEST_PREVIEW = { preview: '0', mobile: true, native: false };
+
+export function buildLiveTestPath(route) {
+  const options = { ...LIVE_TEST_PREVIEW };
+  if (routeNeedsFixtureShell(route)) options.fixture = '1';
+  return withPreviewQuery(route, options);
+}
+
+/** In-app navigation from the screen catalog (matches Live test query). */
+export function catalogScreenPath(route, { mobile = true, native = false } = {}) {
+  const options = {
+    preview: LIVE_TEST_PREVIEW.preview,
+    mobile,
+    native,
+  };
+  if (routeNeedsFixtureShell(route)) options.fixture = '1';
+  return withPreviewQuery(route, options);
+}
+
+export function buildLiveTestUrl(route, baseUrl = getReviewBase()) {
+  const path = buildLiveTestPath(route);
+  const origin = String(baseUrl || STAGING_BASE).replace(/\/$/, '');
+  return `${origin}${path}`;
+}
+
+export function screensForPhase(phase) {
+  return SCREEN_CATALOG.filter((screen) => screen.phase === Number(phase));
 }

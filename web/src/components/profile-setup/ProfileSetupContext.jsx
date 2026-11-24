@@ -13,6 +13,7 @@ import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
 import {
   ONBOARDING_STEPS,
+  clearOnboardingPersistence,
   draftStorageKey,
   getDefaultForm,
   getOnboardingResumeStep,
@@ -20,6 +21,7 @@ import {
   stepStorageKey,
 } from '@/lib/onboarding';
 import { buildProfilePayload } from '@/lib/onboardingPayload';
+import { resolveProfileBio } from '@/lib/profileDisplay';
 import { pickDeferredProfilePayload, profilePayloadForApi } from '@/lib/profileApiPayload';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import {
@@ -61,6 +63,7 @@ function normalizeProfile(profile) {
     question_family_meaning: profile.question_family_meaning || '',
     question_stay_in_touch: profile.question_stay_in_touch || '',
     question_hoping_for: profile.question_hoping_for || '',
+    bio: profile.bio || '',
   };
 }
 
@@ -180,13 +183,17 @@ export function ProfileSetupProvider({ children }) {
     }
   }, [loading, hasProfile, authProfile, user, location.pathname, navigate]);
 
+  const onboardingLocked = Boolean(authProfile?.setup_complete);
+
   const updateField = useCallback((key, value) => {
     setForm((current) => {
       const next = { ...current, [key]: value };
-      persistDraft(actorEmail, next);
+      if (!onboardingLocked) {
+        persistDraft(actorEmail, next);
+      }
       return next;
     });
-  }, [actorEmail]);
+  }, [actorEmail, onboardingLocked]);
 
   const toggleArrayValue = useCallback((key, value) => {
     setForm((current) => {
@@ -197,10 +204,12 @@ export function ProfileSetupProvider({ children }) {
           ? list.filter((item) => item !== value)
           : [...list, value],
       };
-      persistDraft(actorEmail, next);
+      if (!onboardingLocked) {
+        persistDraft(actorEmail, next);
+      }
       return next;
     });
-  }, [actorEmail]);
+  }, [actorEmail, onboardingLocked]);
 
   const addPhoto = useCallback((url) => {
     setForm((current) => {
@@ -208,10 +217,12 @@ export function ProfileSetupProvider({ children }) {
         ...current,
         profile_photos: [...(current.profile_photos || []), url],
       };
-      persistDraft(actorEmail, next);
+      if (!onboardingLocked) {
+        persistDraft(actorEmail, next);
+      }
       return next;
     });
-  }, [actorEmail]);
+  }, [actorEmail, onboardingLocked]);
 
   const removePhoto = useCallback((index) => {
     setForm((current) => {
@@ -219,15 +230,19 @@ export function ProfileSetupProvider({ children }) {
         ...current,
         profile_photos: (current.profile_photos || []).filter((_, i) => i !== index),
       };
-      persistDraft(actorEmail, next);
+      if (!onboardingLocked) {
+        persistDraft(actorEmail, next);
+      }
       return next;
     });
-  }, [actorEmail]);
+  }, [actorEmail, onboardingLocked]);
 
   const saveDraft = useCallback(async (stepId, { setupComplete = false, includeSetupComplete = false } = {}) => {
     if (!actorEmail) return false;
 
-    persistDraft(actorEmail, form, stepId);
+    if (!onboardingLocked) {
+      persistDraft(actorEmail, form, stepId);
+    }
 
     if (isPreviewOnlyOnboarding(user?.email)) {
       return true;
@@ -242,16 +257,41 @@ export function ProfileSetupProvider({ children }) {
 
     setSaving(true);
     try {
-      const { profile } = await profileApi.saveMine(
-        profilePayloadForApi(
-          buildProfilePayload(form, { setupComplete, includeSetupComplete }),
-          { includeDeferred: includeSetupComplete },
-        ),
-      );
+      const fullPayload = buildProfilePayload(form, { setupComplete, includeSetupComplete });
+      const apiBody = stepId === 'bio' && onboardingLocked
+        ? { bio: form.bio?.trim() || null }
+        : profilePayloadForApi(fullPayload, { includeDeferred: includeSetupComplete });
+
+      const { profile: savedRow } = await profileApi.saveMine(apiBody);
+      const { profile: verified } = await profileApi.getMine();
+      const storyWanted = stepId === 'bio' ? form.bio?.trim() : '';
+      if (storyWanted && !resolveProfileBio(verified, savedRow)?.trim()) {
+        push('Your story could not be saved on the server. Please try again.', 'error');
+        return false;
+      }
+      const serverProfile = verified ?? savedRow;
       setHasDbProfile(true);
-      setProfileState((previous) => mergeProfileState(previous ?? authProfile, profile, {
+      const merged = mergeProfileState(authProfile, serverProfile, {
         preserveSetupComplete: !includeSetupComplete,
-      }));
+      });
+      if (storyWanted && !merged.bio?.trim()) {
+        merged.bio = storyWanted;
+      }
+      setProfileState(merged);
+      if (onboardingLocked) {
+        clearOnboardingPersistence(actorEmail);
+      }
+      queryClient.setQueryData(['Profile', 'me', user?.email], merged);
+      const filterKey = JSON.stringify({ user_email: user?.email });
+      queryClient.setQueryData(
+        ['Profile', 'list', filterKey, undefined, undefined],
+        (old) => {
+          if (!Array.isArray(old) || !old.length) {
+            return merged ? [merged] : old;
+          }
+          return [{ ...old[0], ...merged }, ...old.slice(1)];
+        },
+      );
       await queryClient.invalidateQueries({ queryKey: ['Profile'] });
       return true;
     } catch {
@@ -260,7 +300,17 @@ export function ProfileSetupProvider({ children }) {
     } finally {
       setSaving(false);
     }
-  }, [actorEmail, user?.email, form, hasDbProfile, authProfile, push, queryClient, setProfileState]);
+  }, [
+    actorEmail,
+    user?.email,
+    form,
+    hasDbProfile,
+    authProfile,
+    onboardingLocked,
+    push,
+    queryClient,
+    setProfileState,
+  ]);
 
   const completeOnboarding = useCallback(async () => {
     if (!actorEmail) {

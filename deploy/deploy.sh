@@ -37,6 +37,7 @@ deploy_release() {
     source "/etc/${PROJECT}/database.env"
     set +a
     npm run migrate
+    npm run seed-discovery-demos || log "Warning: seed-discovery-demos failed (Phase 2 demos may be missing)"
   else
     log "Skipping migrations; /etc/${PROJECT}/database.env not found"
   fi

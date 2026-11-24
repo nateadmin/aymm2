@@ -1,44 +1,77 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import MobileScreen from '@/components/mobile/MobileScreen';
+import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
+import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
+import { useAuth } from '@/lib/auth';
+import { useToast } from '@/lib/toast';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 import { BIO_MIN_LENGTH } from '@/lib/constants';
 
 export default function BioStep() {
   const navigate = useNavigate();
+  const { profile: authProfile, hasProfile } = useAuth();
+  const { push } = useToast();
   const { form, updateField, saveDraft, saving, isFamily } = useProfileSetup();
-  const remaining = BIO_MIN_LENGTH - (form.bio?.length || 0);
-  const valid = (form.bio?.length || 0) >= BIO_MIN_LENGTH;
+  const editingCompleteProfile = Boolean(authProfile?.setup_complete || hasProfile);
+  const length = form.bio?.length || 0;
+  const remaining = BIO_MIN_LENGTH - length;
+  const valid = length >= BIO_MIN_LENGTH;
 
   const handleContinue = async () => {
     const saved = await saveDraft('bio');
-    if (saved) {
-      navigate('/ProfileSetup/review');
+    if (!saved) return;
+    if (editingCompleteProfile) {
+      push('Your story was saved.', 'success');
+      navigate(withPreviewQuery('/Profile', { native: false, preview: '0' }), { replace: true });
+      return;
     }
+    navigate('/ProfileSetup/review');
   };
 
   return (
-    <div className="page-shell__grid">
-      <p className="aymm-muted">
-        Tell everyone about {isFamily ? 'your family' : 'yourself'}. Minimum {BIO_MIN_LENGTH} characters.
-      </p>
-      <label className="aymm-field">
-        <span className="aymm-label">Bio</span>
-        <textarea
-          className="aymm-textarea"
-          value={form.bio}
-          onChange={(e) => updateField('bio', e.target.value)}
-          rows={8}
-        />
-      </label>
-      <p className="aymm-muted">
-        {valid ? 'Ready to continue' : `${remaining} characters remaining`}
-      </p>
-      <div className="public-page__actions">
-        <Button disabled={!valid || saving} onClick={handleContinue}>
-          Continue
+    <MobileScreen bodyClassName="mobile-onboarding-scroll">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
+        <div className="mobile-onboarding__content">
+          <BackButton
+            to={editingCompleteProfile
+              ? withPreviewQuery('/Profile', { native: false, preview: '0' })
+              : '/ProfileSetup/questions'}
+          />
+          {!editingCompleteProfile ? <MobileOnboardingProgress step={8} /> : null}
+
+          <div>
+            <h1 className="auth-heading auth-heading--brand">About Me</h1>
+            <p className="auth-subheading">
+              Share your story so families can get to know {isFamily ? 'your family' : 'you'}.
+            </p>
+          </div>
+
+          <label className="auth-field onboarding-bio-field">
+            <span className="auth-field__label">Your story</span>
+            <textarea
+              className="aymm-textarea onboarding-bio-field__textarea"
+              name="bio"
+              rows={8}
+              placeholder="Tell us about yourself — what you are hoping for, what matters to you, and what makes you, you."
+              value={form.bio}
+              onChange={(event) => updateField('bio', event.target.value)}
+            />
+          </label>
+          <p className="auth-subheading onboarding-bio-field__hint">
+            {valid ? 'Ready to continue' : `${Math.max(remaining, 0)} characters remaining (minimum ${BIO_MIN_LENGTH})`}
+          </p>
+        </div>
+
+        <Button
+          variant={valid ? 'primary' : 'disabled'}
+          disabled={!valid || saving}
+          onClick={handleContinue}
+        >
+          {editingCompleteProfile ? 'Save' : 'Continue'}
         </Button>
       </div>
-    </div>
+    </MobileScreen>
   );
 }

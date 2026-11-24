@@ -5,10 +5,14 @@ import {
   PHASE_LABELS,
   SCREEN_CATALOG,
   STATUS_LABELS,
+  buildLiveTestUrl,
+  catalogScreenPath,
   screenCardPath,
   screenThumbnailUrl,
   withPreviewQuery,
 } from '@/lib/screenCatalog';
+import { MOCK_DISCOVERY_ACCOUNT_LIST, MOCK_DISCOVERY_PASSWORD } from '@/lib/mockDiscoveryAccounts';
+import { PHASE2_LIVE_DEMO_ACCOUNTS, PHASE2_LIVE_DEMO_PASSWORD } from '@/lib/phase2LiveDemoAccounts';
 import {
   disableStagingPreview,
   enableStagingPreview,
@@ -43,6 +47,29 @@ export default function ScreenIndex() {
         </p>
         <p className="screen-index__meta">
           Sample login: <strong>design@aymm.app</strong> / <strong>DesignReview1</strong>
+        </p>
+        <p className="screen-index__meta">
+          Phase testing with your account: use <strong>Live test</strong> on each card (
+          <code>?preview=0&amp;mobile=1</code>
+          ). Log in first for profile-setup steps (
+          <code>preview-tester+nov24@wefoundd.com</code>
+          ).
+        </p>
+        <p className="screen-index__meta">
+          Phase 2 in-memory demos (<strong>?preview=1</strong>), password{' '}
+          <strong>{MOCK_DISCOVERY_PASSWORD}</strong>:{' '}
+          {MOCK_DISCOVERY_ACCOUNT_LIST.map((a) => a.email).join(', ')}
+        </p>
+        <p className="screen-index__meta">
+          Phase 4 prototype cards need <code>&amp;fixture=1</code> with{' '}
+          <code>?preview=0</code> so a logged-in account can open <code>/Prototype/*</code>{' '}
+          instead of being sent to live Home.
+        </p>
+        <p className="screen-index__meta">
+          Phase 2 on live API (<strong>?preview=0</strong>), after{' '}
+          <code>npm run seed-discovery-demos</code> on the server — password{' '}
+          <strong>{PHASE2_LIVE_DEMO_PASSWORD}</strong>:{' '}
+          {PHASE2_LIVE_DEMO_ACCOUNTS.map((a) => a.email).join(', ')}
         </p>
         <div className="screen-index__filters" role="tablist" aria-label="Filter screens by phase">
           <button
@@ -86,7 +113,7 @@ export default function ScreenIndex() {
             {SCREEN_CATALOG.filter((s) => s.phase === phase).map((screen) => (
               <li key={screen.id} className="screen-card">
                 <Link
-                  to={withPreviewQuery(screen.route, { native: false })}
+                  to={catalogScreenPath(screen.route)}
                   className="screen-card__thumb"
                 >
                   <img
@@ -111,11 +138,19 @@ export default function ScreenIndex() {
                       View this card
                     </Link>
                     <Link
-                      to={withPreviewQuery(screen.route, { native: false })}
+                      to={catalogScreenPath(screen.route)}
                       className="screen-card__action screen-card__action--primary"
                     >
                       open screen
                     </Link>
+                    <a
+                      href={buildLiveTestUrl(screen.route)}
+                      className="screen-card__action"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Live test
+                    </a>
                   </div>
                 </div>
               </li>

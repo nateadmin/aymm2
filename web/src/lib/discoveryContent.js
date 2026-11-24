@@ -31,6 +31,8 @@ export const PERSONAL_QUESTION_FIELDS = [
 ];
 
 export const FAMILY_QUESTION_FIELDS = [
+  { field: 'family_traditions', label: 'Family Traditions', placeholder: 'What does your family do together?' },
+  { field: 'holiday_preferences', label: 'Holiday Preferences', placeholder: 'How do you celebrate holidays?' },
   { field: 'beds_available', label: 'Hosting Capacity', placeholder: 'How many people can you comfortably host?' },
   { field: 'sibling_count', label: 'Number of Siblings', placeholder: '0, 1, 2 or more...' },
   { field: 'family_vibe', label: 'Family Personality', placeholder: 'How would you describe your family?' },

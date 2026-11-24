@@ -57,6 +57,7 @@ export default function DiscoveryYesNoScreen({
             <p className="auth-subheading">{subtitle}</p>
           </div>
 
+          <p className="discovery-fixture-note">Preview only — answers aren&apos;t saved.</p>
           <div className="discovery-yesno-list">
             {questions.map((question) => (
               <YesNoToggle

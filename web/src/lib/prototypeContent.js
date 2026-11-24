@@ -73,7 +73,7 @@ export const SETTINGS_SECTIONS = [
   },
   {
     title: 'Support',
-    items: ['Help Center', 'Report a Problem', 'About AYMM?'],
+    items: ['My connections', 'Report a Problem', 'About AYMM?'],
   },
   {
     title: 'Account Actions',
@@ -120,8 +120,8 @@ export const MESSAGE_REQUEST_DETAIL = {
 
 export const COMPATIBILITY_CHALLENGE = {
   step: 1,
-  total: 3,
-  percent: 33,
+  total: 1,
+  percent: 100,
   label: 'Compatibility Challenge',
   question: 'When you need support, what do you usually do first?',
   options: [
