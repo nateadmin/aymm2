@@ -212,12 +212,23 @@ function resolvePreviewQueryValue(explicit) {
   return '1';
 }
 
+function shouldUseFixtureQuery(route, fixture) {
+  if (fixture === '1' || fixture === true) return true;
+  if (routeNeedsFixtureShell(route)) return true;
+  if (typeof window === 'undefined') return false;
+  try {
+    return new URLSearchParams(window.location.search).get('fixture') === '1';
+  } catch {
+    return false;
+  }
+}
+
 export function withPreviewQuery(route, { mobile = true, native, preview, fixture } = {}) {
   let path = appendQuery(route, 'preview', resolvePreviewQueryValue(preview));
   if (mobile === true) path = appendQuery(path, 'mobile', '1');
   if (mobile === false) path = appendQuery(path, 'mobile', '0');
   if (shouldKeepNativePreview({ native })) path = appendQuery(path, 'native', '1');
-  if (fixture === '1' || fixture === true) path = appendQuery(path, 'fixture', '1');
+  if (shouldUseFixtureQuery(route, fixture)) path = appendQuery(path, 'fixture', '1');
   return path;
 }
 

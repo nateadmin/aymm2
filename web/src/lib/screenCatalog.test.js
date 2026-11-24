@@ -30,7 +30,7 @@ test('demo links use stable branded paths on aymm.app', () => {
 
 test('withPreviewQuery can keep the catalog on desktop and screens on mobile', () => {
   assert.equal(withPreviewQuery('/screens', { mobile: false }), '/screens?preview=1&mobile=0');
-  assert.equal(withPreviewQuery('/Prototype/home'), '/Prototype/home?preview=1&mobile=1');
+  assert.equal(withPreviewQuery('/Prototype/home'), '/Prototype/home?preview=1&mobile=1&fixture=1');
 });
 
 test('withPreviewQuery can force real-device layout for one link', () => {
@@ -71,6 +71,13 @@ test('buildLiveTestPath adds fixture=1 for Phase 4 prototype routes', () => {
   assert.equal(
     buildLiveTestPath('/Prototype/home'),
     '/Prototype/home?preview=0&mobile=1&fixture=1',
+  );
+});
+
+test('withPreviewQuery adds fixture=1 for Prototype paths', () => {
+  assert.equal(
+    withPreviewQuery('/Prototype/adoption-approved', { preview: '0' }),
+    '/Prototype/adoption-approved?preview=0&mobile=1&fixture=1',
   );
 });
 

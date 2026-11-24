@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
-import { withPreviewQuery } from '@/lib/screenCatalog';
+import { routeNeedsFixtureShell, withPreviewQuery } from '@/lib/screenCatalog';
 import { isCatalogFixtureReview } from '@/lib/stagingPreview';
 import { shouldUseDesignReviewShell } from '@/lib/session';
 
@@ -14,13 +14,24 @@ export default function PrototypeRealUserRedirect({ children }) {
     || isCatalogFixtureReview();
 
   useEffect(() => {
-    if (usePrototype) return;
+    if (shouldUseDesignReviewShell({ user, profile, hasProfile })) return;
+    if (isCatalogFixtureReview()) return;
+
     const path = location.pathname;
+    if (routeNeedsFixtureShell(path)) {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fixture') !== '1') {
+        params.set('fixture', '1');
+        navigate(`${path}?${params.toString()}`, { replace: true });
+      }
+      return;
+    }
+
     const target = path.includes('/my-profile') || path.includes('/settings')
       ? '/Profile'
       : '/Home';
     navigate(withPreviewQuery(target, { native: false, preview: '0' }), { replace: true });
-  }, [usePrototype, location.pathname, navigate]);
+  }, [user, profile, hasProfile, location.pathname, location.search, navigate]);
 
   if (!usePrototype) {
     return (

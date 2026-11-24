@@ -113,7 +113,7 @@ export default function ScreenIndex() {
             {SCREEN_CATALOG.filter((s) => s.phase === phase).map((screen) => (
               <li key={screen.id} className="screen-card">
                 <Link
-                  to={withPreviewQuery(screen.route, { native: false })}
+                  to={catalogScreenPath(screen.route)}
                   className="screen-card__thumb"
                 >
                   <img
