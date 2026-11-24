@@ -1,17 +1,24 @@
+import { useQuery } from '@tanstack/react-query';
+import { profileApi } from '@/api/profile';
 import { useAuth } from '@/lib/auth';
 import { mergeProfileState } from '@/lib/session';
-import { useEntityList } from './useEntityList';
 
 export function useMyProfile() {
   const { user, profile: authProfile } = useAuth();
-  const query = useEntityList('Profile', { user_email: user?.email }, {
+  const query = useQuery({
+    queryKey: ['Profile', 'me', user?.email],
+    queryFn: async () => {
+      const { profile } = await profileApi.getMine();
+      return profile ?? null;
+    },
     enabled: Boolean(user?.email),
+    staleTime: 0,
   });
 
-  const listProfile = query.data?.[0] ?? null;
-  const profile = listProfile && authProfile
-    ? mergeProfileState(listProfile, authProfile)
-    : listProfile ?? authProfile ?? null;
+  const fromMe = query.data ?? null;
+  const profile = fromMe && authProfile
+    ? mergeProfileState(fromMe, authProfile)
+    : fromMe ?? authProfile ?? null;
 
   return {
     ...query,

@@ -11,7 +11,7 @@ import { BIO_MIN_LENGTH } from '@/lib/constants';
 
 export default function BioStep() {
   const navigate = useNavigate();
-  const { profile: authProfile, hasProfile } = useAuth();
+  const { profile: authProfile, hasProfile, refresh } = useAuth();
   const { push } = useToast();
   const { form, updateField, saveDraft, saving, isFamily } = useProfileSetup();
   const editingCompleteProfile = Boolean(authProfile?.setup_complete || hasProfile);
@@ -23,6 +23,7 @@ export default function BioStep() {
     const saved = await saveDraft('bio');
     if (!saved) return;
     if (editingCompleteProfile) {
+      await refresh();
       push('Your story was saved.', 'success');
       navigate(withPreviewQuery('/Profile', { native: false, preview: '0' }), { replace: true });
       return;

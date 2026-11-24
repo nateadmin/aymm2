@@ -62,6 +62,7 @@ function normalizeProfile(profile) {
     question_family_meaning: profile.question_family_meaning || '',
     question_stay_in_touch: profile.question_stay_in_touch || '',
     question_hoping_for: profile.question_hoping_for || '',
+    bio: profile.bio || '',
   };
 }
 
@@ -255,12 +256,12 @@ export function ProfileSetupProvider({ children }) {
 
     setSaving(true);
     try {
-      const { profile } = await profileApi.saveMine(
-        profilePayloadForApi(
-          buildProfilePayload(form, { setupComplete, includeSetupComplete }),
-          { includeDeferred: includeSetupComplete },
-        ),
-      );
+      const fullPayload = buildProfilePayload(form, { setupComplete, includeSetupComplete });
+      const apiBody = stepId === 'bio' && onboardingLocked
+        ? { bio: form.bio?.trim() || null }
+        : profilePayloadForApi(fullPayload, { includeDeferred: includeSetupComplete });
+
+      const { profile } = await profileApi.saveMine(apiBody);
       setHasDbProfile(true);
       const merged = mergeProfileState(authProfile, profile, {
         preserveSetupComplete: !includeSetupComplete,
@@ -269,6 +270,7 @@ export function ProfileSetupProvider({ children }) {
       if (onboardingLocked) {
         clearOnboardingPersistence(actorEmail);
       }
+      queryClient.setQueryData(['Profile', 'me', user?.email], profile);
       const filterKey = JSON.stringify({ user_email: user?.email });
       queryClient.setQueryData(
         ['Profile', 'list', filterKey, undefined, undefined],

@@ -19,7 +19,13 @@ export default function Profile() {
     }
   }, [navigate, user, authProfile, hasProfile]);
 
-  const { profile, isLoading } = useMyProfile();
+  const { profile, isLoading, refetch } = useMyProfile();
+
+  useEffect(() => {
+    if (hasProfile && user?.email) {
+      void refetch();
+    }
+  }, [hasProfile, user?.email, refetch]);
 
   if (isLoading) {
     return (
@@ -50,7 +56,7 @@ export default function Profile() {
       age={profile.age}
       identityMeta={profileIdentityMeta(profile)}
       photoUrl={profile.profile_photos?.[0]}
-      bio={profile.bio}
+      bio={profile.bio ?? authProfile?.bio}
       aboutTitle={isFamily ? 'About Us' : 'About Me'}
       answerRows={buildMyProfileAnswerRows(profile)}
       onOpenSettings={() => navigate(withPreviewQuery('/Profile/settings', { native: false, preview: '0' }))}
