@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
 import { withPreviewQuery } from '@/lib/screenCatalog';
+import { isCatalogFixtureReview } from '@/lib/stagingPreview';
 import { shouldUseDesignReviewShell } from '@/lib/session';
 
 /** Prototype routes show design fixtures (e.g. Sarah). Real accounts use live app shells. */
@@ -9,7 +10,8 @@ export default function PrototypeRealUserRedirect({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, profile, hasProfile } = useAuth();
-  const usePrototype = shouldUseDesignReviewShell({ user, profile, hasProfile });
+  const usePrototype = shouldUseDesignReviewShell({ user, profile, hasProfile })
+    || isCatalogFixtureReview();
 
   useEffect(() => {
     if (usePrototype) return;

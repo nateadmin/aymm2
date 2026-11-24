@@ -30,6 +30,15 @@ function readPreviewParam() {
   }
 }
 
+/** Show /Prototype/* fixture shells while logged in with ?preview=0 (catalog Live test). */
+export function isCatalogFixtureReview() {
+  try {
+    return new URLSearchParams(window.location.search).get('fixture') === '1';
+  } catch {
+    return false;
+  }
+}
+
 /** True on staging, localhost, StackBlitz, WebContainer, and Codespaces hosts. */
 export function isDesignReviewHost(hostname = typeof window !== 'undefined' ? window.location.hostname : '') {
   if (!hostname) return false;

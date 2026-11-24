@@ -67,6 +67,13 @@ test('buildLiveTestPath pins preview=0 and mobile=1', () => {
   assert.equal(buildLiveTestPath('/EmailLogin'), '/EmailLogin?preview=0&mobile=1');
 });
 
+test('buildLiveTestPath adds fixture=1 for Phase 4 prototype routes', () => {
+  assert.equal(
+    buildLiveTestPath('/Prototype/home'),
+    '/Prototype/home?preview=0&mobile=1&fixture=1',
+  );
+});
+
 test('buildLiveTestUrl joins origin and path', () => {
   assert.equal(
     buildLiveTestUrl('/Welcome', 'https://example.test'),

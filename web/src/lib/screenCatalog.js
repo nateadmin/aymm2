@@ -212,19 +212,37 @@ function resolvePreviewQueryValue(explicit) {
   return '1';
 }
 
-export function withPreviewQuery(route, { mobile = true, native, preview } = {}) {
+export function withPreviewQuery(route, { mobile = true, native, preview, fixture } = {}) {
   let path = appendQuery(route, 'preview', resolvePreviewQueryValue(preview));
   if (mobile === true) path = appendQuery(path, 'mobile', '1');
   if (mobile === false) path = appendQuery(path, 'mobile', '0');
   if (shouldKeepNativePreview({ native })) path = appendQuery(path, 'native', '1');
+  if (fixture === '1' || fixture === true) path = appendQuery(path, 'fixture', '1');
   return path;
+}
+
+export function routeNeedsFixtureShell(route) {
+  return String(route || '').startsWith('/Prototype/');
 }
 
 /** Real API + handheld layout (preview-tester workflow). */
 export const LIVE_TEST_PREVIEW = { preview: '0', mobile: true, native: false };
 
 export function buildLiveTestPath(route) {
-  return withPreviewQuery(route, LIVE_TEST_PREVIEW);
+  const options = { ...LIVE_TEST_PREVIEW };
+  if (routeNeedsFixtureShell(route)) options.fixture = '1';
+  return withPreviewQuery(route, options);
+}
+
+/** In-app navigation from the screen catalog (matches Live test query). */
+export function catalogScreenPath(route, { mobile = true, native = false } = {}) {
+  const options = {
+    preview: LIVE_TEST_PREVIEW.preview,
+    mobile,
+    native,
+  };
+  if (routeNeedsFixtureShell(route)) options.fixture = '1';
+  return withPreviewQuery(route, options);
 }
 
 export function buildLiveTestUrl(route, baseUrl = getReviewBase()) {

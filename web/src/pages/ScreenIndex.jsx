@@ -6,6 +6,7 @@ import {
   SCREEN_CATALOG,
   STATUS_LABELS,
   buildLiveTestUrl,
+  catalogScreenPath,
   screenCardPath,
   screenThumbnailUrl,
   withPreviewQuery,
@@ -58,6 +59,11 @@ export default function ScreenIndex() {
           Phase 2 in-memory demos (<strong>?preview=1</strong>), password{' '}
           <strong>{MOCK_DISCOVERY_PASSWORD}</strong>:{' '}
           {MOCK_DISCOVERY_ACCOUNT_LIST.map((a) => a.email).join(', ')}
+        </p>
+        <p className="screen-index__meta">
+          Phase 4 prototype cards need <code>&amp;fixture=1</code> with{' '}
+          <code>?preview=0</code> so a logged-in account can open <code>/Prototype/*</code>{' '}
+          instead of being sent to live Home.
         </p>
         <p className="screen-index__meta">
           Phase 2 on live API (<strong>?preview=0</strong>), after{' '}
@@ -132,7 +138,7 @@ export default function ScreenIndex() {
                       View this card
                     </Link>
                     <Link
-                      to={withPreviewQuery(screen.route, { native: false })}
+                      to={catalogScreenPath(screen.route)}
                       className="screen-card__action screen-card__action--primary"
                     >
                       open screen
