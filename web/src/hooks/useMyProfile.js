@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { profileApi } from '@/api/profile';
 import { useAuth } from '@/lib/auth';
+import { resolveProfileBio } from '@/lib/profileDisplay';
 import { mergeProfileState } from '@/lib/session';
 
 export function useMyProfile() {
@@ -16,9 +17,12 @@ export function useMyProfile() {
   });
 
   const fromMe = query.data ?? null;
-  const profile = fromMe && authProfile
+  const merged = fromMe && authProfile
     ? mergeProfileState(fromMe, authProfile)
     : fromMe ?? authProfile ?? null;
+  const profile = merged
+    ? { ...merged, bio: resolveProfileBio(authProfile, merged) || merged.bio }
+    : null;
 
   return {
     ...query,

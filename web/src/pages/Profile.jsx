@@ -7,7 +7,11 @@ import MyProfileView from '@/components/profile/MyProfileView';
 import { useAuth } from '@/lib/auth';
 import { useMyProfile } from '@/hooks/useMyProfile';
 import { CHILD_IDENTITIES } from '@/lib/constants';
-import { buildMyProfileAnswerRows, profileIdentityMeta } from '@/lib/profileDisplay';
+import {
+  buildMyProfileAnswerRows,
+  profileIdentityMeta,
+  resolveProfileBio,
+} from '@/lib/profileDisplay';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -19,13 +23,8 @@ export default function Profile() {
     }
   }, [navigate, user, authProfile, hasProfile]);
 
-  const { profile, isLoading, refetch } = useMyProfile();
-
-  useEffect(() => {
-    if (hasProfile && user?.email) {
-      void refetch();
-    }
-  }, [hasProfile, user?.email, refetch]);
+  const { profile, isLoading } = useMyProfile();
+  const aboutBio = resolveProfileBio(authProfile, profile);
 
   if (isLoading) {
     return (
@@ -56,7 +55,7 @@ export default function Profile() {
       age={profile.age}
       identityMeta={profileIdentityMeta(profile)}
       photoUrl={profile.profile_photos?.[0]}
-      bio={profile.bio ?? authProfile?.bio}
+      bio={aboutBio}
       aboutTitle={isFamily ? 'About Us' : 'About Me'}
       answerRows={buildMyProfileAnswerRows(profile)}
       onOpenSettings={() => navigate(withPreviewQuery('/Profile/settings', { native: false, preview: '0' }))}

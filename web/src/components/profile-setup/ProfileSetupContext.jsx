@@ -21,6 +21,7 @@ import {
   stepStorageKey,
 } from '@/lib/onboarding';
 import { buildProfilePayload } from '@/lib/onboardingPayload';
+import { resolveProfileBio } from '@/lib/profileDisplay';
 import { pickDeferredProfilePayload, profilePayloadForApi } from '@/lib/profileApiPayload';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import {
@@ -261,16 +262,26 @@ export function ProfileSetupProvider({ children }) {
         ? { bio: form.bio?.trim() || null }
         : profilePayloadForApi(fullPayload, { includeDeferred: includeSetupComplete });
 
-      const { profile } = await profileApi.saveMine(apiBody);
+      const { profile: savedRow } = await profileApi.saveMine(apiBody);
+      const { profile: verified } = await profileApi.getMine();
+      const storyWanted = stepId === 'bio' ? form.bio?.trim() : '';
+      if (storyWanted && !resolveProfileBio(verified, savedRow)?.trim()) {
+        push('Your story could not be saved on the server. Please try again.', 'error');
+        return false;
+      }
+      const serverProfile = verified ?? savedRow;
       setHasDbProfile(true);
-      const merged = mergeProfileState(authProfile, profile, {
+      const merged = mergeProfileState(authProfile, serverProfile, {
         preserveSetupComplete: !includeSetupComplete,
       });
+      if (storyWanted && !merged.bio?.trim()) {
+        merged.bio = storyWanted;
+      }
       setProfileState(merged);
       if (onboardingLocked) {
         clearOnboardingPersistence(actorEmail);
       }
-      queryClient.setQueryData(['Profile', 'me', user?.email], profile);
+      queryClient.setQueryData(['Profile', 'me', user?.email], merged);
       const filterKey = JSON.stringify({ user_email: user?.email });
       queryClient.setQueryData(
         ['Profile', 'list', filterKey, undefined, undefined],

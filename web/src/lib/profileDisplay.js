@@ -30,3 +30,13 @@ export function buildMyProfileAnswerRows(profile) {
     { label: 'Location', value: location },
   ];
 }
+
+/** Prefer the first non-empty bio among auth, API, and form snapshots. */
+export function resolveProfileBio(...sources) {
+  for (const source of sources) {
+    const text = typeof source === 'string' ? source : source?.bio;
+    const trimmed = text?.trim();
+    if (trimmed) return trimmed;
+  }
+  return '';
+}

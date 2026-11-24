@@ -1,12 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildMyProfileAnswerRows, profileIdentityMeta } from './profileDisplay.js';
+import {
+  buildMyProfileAnswerRows,
+  profileIdentityMeta,
+  resolveProfileBio,
+} from './profileDisplay.js';
 
 test('profileIdentityMeta combines role and location', () => {
   assert.equal(
     profileIdentityMeta({ identity_type: 'daughter', city: 'Chicago', state: 'IL' }),
     'Daughter · Chicago, IL',
   );
+});
+
+test('resolveProfileBio picks first non-empty story', () => {
+  assert.equal(resolveProfileBio({ bio: '' }, { bio: 'Hello world' }), 'Hello world');
+  assert.equal(resolveProfileBio('Direct text'), 'Direct text');
 });
 
 test('buildMyProfileAnswerRows maps seeking faith and location', () => {
