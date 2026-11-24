@@ -15,6 +15,7 @@ import {
   ONBOARDING_STEPS,
   draftStorageKey,
   getDefaultForm,
+  getOnboardingResumeStep,
   getStepIndex,
   stepStorageKey,
 } from '@/lib/onboarding';
@@ -113,11 +114,9 @@ export function ProfileSetupProvider({ children }) {
           if (draft) {
             setForm({ ...getDefaultForm(), ...draft });
           }
-          if (!isProfileEditPath(location.pathname) && savedStep && getStepIndex(savedStep) >= 0) {
-            const step = ONBOARDING_STEPS.find((item) => item.id === savedStep);
-            if (step) {
-              navigate(step.path, { replace: true });
-            }
+          const resumeStep = getOnboardingResumeStep(savedStep, location.pathname);
+          if (!isProfileEditPath(location.pathname) && resumeStep) {
+            navigate(resumeStep.path, { replace: true });
           }
           setLoading(false);
         }
@@ -145,11 +144,9 @@ export function ProfileSetupProvider({ children }) {
             setForm({ ...getDefaultForm(), ...draft });
           }
 
-          if (!profile?.setup_complete && !editing && savedStep && getStepIndex(savedStep) >= 0) {
-            const step = ONBOARDING_STEPS.find((item) => item.id === savedStep);
-            if (step) {
-              navigate(step.path, { replace: true });
-            }
+          const resumeStep = getOnboardingResumeStep(savedStep, location.pathname);
+          if (!profile?.setup_complete && !editing && resumeStep) {
+            navigate(resumeStep.path, { replace: true });
           }
         }
       } catch {
@@ -235,7 +232,9 @@ export function ProfileSetupProvider({ children }) {
       return true;
     }
 
-    const needsDb = hasDbProfile || (form.display_name && form.identity_type);
+    const stepIndex = stepId ? getStepIndex(stepId) : -1;
+    const beforeBasicInfo = stepIndex >= 0 && stepIndex < getStepIndex('basic-info');
+    const needsDb = !beforeBasicInfo && (hasDbProfile || (form.display_name && form.identity_type));
     if (!needsDb) {
       return true;
     }

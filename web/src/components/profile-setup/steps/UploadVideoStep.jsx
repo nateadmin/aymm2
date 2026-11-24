@@ -38,7 +38,7 @@ export default function UploadVideoStep() {
 
   const handleContinue = async (skip = false) => {
     if (!skip && !hasVideo) return;
-    const saved = await saveDraft('upload-video');
+    const saved = await saveDraft('basic-info');
     if (saved) {
       navigate('/ProfileSetup/basic-info');
     }
