@@ -20,6 +20,7 @@ import {
   stepStorageKey,
 } from '@/lib/onboarding';
 import { buildProfilePayload } from '@/lib/onboardingPayload';
+import { profilePayloadForApi } from '@/lib/profileApiPayload';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import {
   getPostAuthPath,
@@ -242,7 +243,10 @@ export function ProfileSetupProvider({ children }) {
     setSaving(true);
     try {
       const { profile } = await profileApi.saveMine(
-        buildProfilePayload(form, { setupComplete, includeSetupComplete }),
+        profilePayloadForApi(
+          buildProfilePayload(form, { setupComplete, includeSetupComplete }),
+          { includeDeferred: includeSetupComplete },
+        ),
       );
       setHasDbProfile(true);
       setProfileState((previous) => mergeProfileState(previous ?? authProfile, profile, {
@@ -275,7 +279,10 @@ export function ProfileSetupProvider({ children }) {
       }
 
       const { profile } = await profileApi.saveMine(
-        buildProfilePayload(form, { setupComplete: true, includeSetupComplete: true }),
+        profilePayloadForApi(
+          buildProfilePayload(form, { setupComplete: true, includeSetupComplete: true }),
+          { includeDeferred: true },
+        ),
       );
       const completedProfile = { ...profile, setup_complete: true };
 

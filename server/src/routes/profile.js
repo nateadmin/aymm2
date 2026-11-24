@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { withClient } from '../db.js';
 import { serializeProfile } from '../profileSerialize.js';
 import { requireAuth } from '../middleware/auth.js';
+import { pickWritableProfileFields } from '../profileFields.js';
 
 const router = Router();
 
@@ -41,14 +42,16 @@ router.get('/me', requireAuth, async (req, res) => {
 
 router.put('/me', requireAuth, async (req, res) => {
   const email = req.user.email;
-  const payload = buildProfilePayload(req.body, email);
+  const payload = buildProfilePayload(pickWritableProfileFields(req.body), email);
   const keys = Object.keys(payload).filter((key) => key !== 'user_email');
 
   if (!keys.length) {
     return res.status(400).json({ error: 'empty_payload' });
   }
 
-  const row = await withClient(async (client) => {
+  let row;
+  try {
+    row = await withClient(async (client) => {
     const existing = await client.query(
       'SELECT * FROM profiles WHERE user_email = $1 LIMIT 1',
       [email],
@@ -80,6 +83,10 @@ router.put('/me', requireAuth, async (req, res) => {
     );
     return result.rows[0];
   });
+  } catch (error) {
+    console.error('profile_save_failed', error);
+    return res.status(400).json({ error: 'profile_save_failed' });
+  }
 
   if (!row) {
     return res.status(400).json({ error: 'display_name_and_identity_required' });
