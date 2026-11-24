@@ -951,6 +951,30 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   min-height: 100%;
 }
 
+@media (max-width: 47.99rem) {
+  :root {
+    --space-mobile-cta-inset: 0.75rem;
+    --space-screen-footer: calc(
+      var(--space-screen-bottom) + var(--safe-area-bottom) + var(--space-mobile-cta-inset)
+    );
+  }
+
+  .mobile-screen__body {
+    scroll-padding-bottom: var(--space-screen-footer);
+  }
+
+  .mobile-onboarding-scroll .screen-pad--handheld,
+  .screen-pad--handheld.mobile-onboarding--scroll {
+    padding-bottom: calc(var(--space-screen-footer) + var(--space-xs));
+  }
+
+  .screen-pad--handheld > .aymm-button:last-child,
+  .screen-pad--handheld > .mobile-onboarding__actions:last-child,
+  .auth-page__footer {
+    scroll-margin-bottom: var(--space-screen-footer);
+  }
+}
+
 .onboarding-question {
   display: grid;
   gap: 0.75rem;
