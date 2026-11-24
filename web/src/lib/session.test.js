@@ -6,6 +6,7 @@ import {
   isOnboardingEntryPath,
   isProfileEditPath,
   mergeProfileState,
+  shouldUseDesignReviewShell,
 } from './session.js';
 import { buildProfilePayload } from './onboardingPayload.js';
 
@@ -13,6 +14,17 @@ test('hasCompletedProfile respects setup_complete flag', () => {
   assert.equal(hasCompletedProfile({ setup_complete: true }), true);
   assert.equal(hasCompletedProfile({ setup_complete: false }), false);
   assert.equal(hasCompletedProfile(null), false);
+});
+
+test('shouldUseDesignReviewShell is off for completed real sessions', () => {
+  assert.equal(
+    shouldUseDesignReviewShell({
+      user: { email: 'charles@wefoundd.com' },
+      profile: { setup_complete: true },
+      token: 'real-session-token',
+    }),
+    false,
+  );
 });
 
 test('getPostAuthPath routes completed users to Home', () => {

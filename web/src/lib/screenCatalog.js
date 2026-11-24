@@ -203,8 +203,16 @@ function shouldKeepNativePreview({ native } = {}) {
   }
 }
 
-export function withPreviewQuery(route, { mobile = true, native } = {}) {
-  let path = appendQuery(route, 'preview', '1');
+function resolvePreviewQueryValue(explicit) {
+  if (explicit === '0' || explicit === '1') return explicit;
+  if (typeof window === 'undefined') return '1';
+  const current = new URLSearchParams(window.location.search).get('preview');
+  if (current === '0' || current === '1') return current;
+  return '1';
+}
+
+export function withPreviewQuery(route, { mobile = true, native, preview } = {}) {
+  let path = appendQuery(route, 'preview', resolvePreviewQueryValue(preview));
   if (mobile === true) path = appendQuery(path, 'mobile', '1');
   if (mobile === false) path = appendQuery(path, 'mobile', '0');
   if (shouldKeepNativePreview({ native })) path = appendQuery(path, 'native', '1');

@@ -6,12 +6,11 @@ import {
   REVIEW_PROFILE_ROUTE,
   withPreviewQuery,
 } from '@/lib/screenCatalog';
-import { isMockAuthEnabled } from '@/lib/mockAuth';
-import { isStagingPreviewEnabled } from '@/lib/stagingPreview';
+import { shouldUseDesignReviewShell } from '@/lib/session';
 import { useAuth } from '@/lib/auth';
 
-function reviewPath(path) {
-  if (!isStagingPreviewEnabled() && !isMockAuthEnabled()) return path;
+function reviewPath(path, session) {
+  if (!shouldUseDesignReviewShell(session)) return path;
   if (path === '/Home') return REVIEW_HOME_ROUTE;
   if (path === '/Profile') return REVIEW_PROFILE_ROUTE;
   return path;
@@ -19,7 +18,8 @@ function reviewPath(path) {
 
 export default function AppNavLinks({ className = 'app-sidebar__nav' }) {
   const location = useLocation();
-  const { isFamily, isAdmin } = useAuth();
+  const { user, profile, isFamily, isAdmin } = useAuth();
+  const reviewSession = { user, profile };
   const items = getVisibleNavItems({ isFamily, isAdmin });
 
   return (
@@ -29,7 +29,7 @@ export default function AppNavLinks({ className = 'app-sidebar__nav' }) {
         return (
           <Link
             key={path}
-            to={withPreviewQuery(reviewPath(path), { native: false })}
+            to={withPreviewQuery(reviewPath(path, reviewSession), { native: false })}
             className={`app-nav-link${active ? ' app-nav-link--active' : ''}`}
           >
             <Icon size={20} strokeWidth={active ? 2.25 : 1.75} />
