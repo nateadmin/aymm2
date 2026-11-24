@@ -105,11 +105,13 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   flex-shrink: 0;
 }
 
-.screen-pad--handheld > .aymm-button,
-.screen-pad--handheld > .mobile-onboarding__actions,
-.screen-pad--handheld > .connection-success__actions {
-  margin-top: 1.75rem;
-  flex-shrink: 0;
+@media (min-width: 48rem) {
+  .screen-pad--handheld > .aymm-button,
+  .screen-pad--handheld > .mobile-onboarding__actions,
+  .screen-pad--handheld > .connection-success__actions {
+    margin-top: 1.75rem;
+    flex-shrink: 0;
+  }
 }
 
 .screen-pad--auth {
@@ -947,10 +949,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   overflow-y: auto;
 }
 
-.mobile-onboarding--scroll {
-  min-height: 100%;
-}
-
+/* Phone layout: scrollable body region + pinned footer CTAs (not flush to viewport edge). */
 @media (max-width: 47.99rem) {
   :root {
     --space-mobile-cta-inset: 0.75rem;
@@ -960,18 +959,67 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
   }
 
   .mobile-screen__body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: 0;
     scroll-padding-bottom: var(--space-screen-footer);
   }
 
-  .mobile-onboarding-scroll .screen-pad--handheld,
-  .screen-pad--handheld.mobile-onboarding--scroll {
-    padding-bottom: calc(var(--space-screen-footer) + var(--space-xs));
+  .mobile-onboarding-scroll .mobile-screen__body {
+    overflow: hidden;
   }
 
-  .screen-pad--handheld > .aymm-button:last-child,
-  .screen-pad--handheld > .mobile-onboarding__actions:last-child,
-  .auth-page__footer {
-    scroll-margin-bottom: var(--space-screen-footer);
+  .mobile-screen__body > .screen-pad--handheld,
+  .mobile-screen__body > .screen-pad--auth {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+    padding-top: calc(var(--space-handheld-top) + var(--safe-area-top));
+    padding-bottom: 0;
+  }
+
+  .screen-pad--handheld > .mobile-onboarding__content,
+  .screen-pad--handheld > .connection-success__content,
+  .screen-pad--handheld > .complete-step__content,
+  .auth-page > .screen-back,
+  .auth-page > .auth-header {
+    flex-shrink: 0;
+  }
+
+  .auth-page > .auth-page__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .screen-pad--handheld > .aymm-button,
+  .screen-pad--handheld > .mobile-onboarding__actions,
+  .screen-pad--handheld > .connection-success__actions,
+  .auth-page > .auth-page__footer {
+    flex: 0 0 auto;
+    margin-top: auto;
+    width: 100%;
+    max-width: var(--button-max-width);
+    align-self: stretch;
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-screen-footer);
+    background: var(--aymm-white);
+    box-shadow: 0 -10px 24px -20px rgb(63 33 77 / 35%);
+  }
+
+  .mobile-onboarding--scroll {
+    min-height: 0;
+  }
+
+  .complete-step {
+    padding-top: 0;
+  }
+
+  .complete-step__content {
+    justify-content: flex-start;
   }
 }
 
