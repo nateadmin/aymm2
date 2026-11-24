@@ -17,8 +17,8 @@ export default function DiscoveryRadioScreen({
   const [selected, setSelected] = useState(initialValue);
 
   return (
-    <MobileScreen>
-      <div className="screen-pad screen-pad--handheld mobile-onboarding">
+    <MobileScreen bodyClassName="mobile-onboarding-scroll">
+      <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
         <div className="mobile-onboarding__content">
           <BackButton to={backTo} />
           <div>
