@@ -91,6 +91,7 @@ export function getDemoProfilesForIdentity(identityType) {
 }
 
 export function mergeBrowseProfiles(matchedProfiles, identityType) {
+  if (matchedProfiles.length > 0) return matchedProfiles;
   const demos = getDemoProfilesForIdentity(identityType);
   return [...matchedProfiles, ...demos];
 }

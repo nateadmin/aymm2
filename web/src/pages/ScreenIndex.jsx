@@ -10,6 +10,7 @@ import {
   withPreviewQuery,
 } from '@/lib/screenCatalog';
 import { MOCK_DISCOVERY_ACCOUNT_LIST, MOCK_DISCOVERY_PASSWORD } from '@/lib/mockDiscoveryAccounts';
+import { PHASE2_LIVE_DEMO_ACCOUNTS, PHASE2_LIVE_DEMO_PASSWORD } from '@/lib/phase2LiveDemoAccounts';
 import {
   disableStagingPreview,
   enableStagingPreview,
@@ -46,10 +47,15 @@ export default function ScreenIndex() {
           Sample login: <strong>design@aymm.app</strong> / <strong>DesignReview1</strong>
         </p>
         <p className="screen-index__meta">
-          Phase 2 mock personas (use <strong>?preview=1</strong>): password{' '}
-          <strong>{MOCK_DISCOVERY_PASSWORD}</strong>
-          {' — '}
+          Phase 2 in-memory demos (<strong>?preview=1</strong>), password{' '}
+          <strong>{MOCK_DISCOVERY_PASSWORD}</strong>:{' '}
           {MOCK_DISCOVERY_ACCOUNT_LIST.map((a) => a.email).join(', ')}
+        </p>
+        <p className="screen-index__meta">
+          Phase 2 on live API (<strong>?preview=0</strong>), after{' '}
+          <code>npm run seed-discovery-demos</code> on the server — password{' '}
+          <strong>{PHASE2_LIVE_DEMO_PASSWORD}</strong>:{' '}
+          {PHASE2_LIVE_DEMO_ACCOUNTS.map((a) => a.email).join(', ')}
         </p>
         <div className="screen-index__filters" role="tablist" aria-label="Filter screens by phase">
           <button
