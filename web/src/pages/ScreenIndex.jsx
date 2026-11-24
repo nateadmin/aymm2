@@ -5,6 +5,7 @@ import {
   PHASE_LABELS,
   SCREEN_CATALOG,
   STATUS_LABELS,
+  buildLiveTestUrl,
   screenCardPath,
   screenThumbnailUrl,
   withPreviewQuery,
@@ -45,6 +46,13 @@ export default function ScreenIndex() {
         </p>
         <p className="screen-index__meta">
           Sample login: <strong>design@aymm.app</strong> / <strong>DesignReview1</strong>
+        </p>
+        <p className="screen-index__meta">
+          Phase testing with your account: use <strong>Live test</strong> on each card (
+          <code>?preview=0&amp;mobile=1</code>
+          ). Log in first for profile-setup steps (
+          <code>preview-tester+nov24@wefoundd.com</code>
+          ).
         </p>
         <p className="screen-index__meta">
           Phase 2 in-memory demos (<strong>?preview=1</strong>), password{' '}
@@ -129,6 +137,14 @@ export default function ScreenIndex() {
                     >
                       open screen
                     </Link>
+                    <a
+                      href={buildLiveTestUrl(screen.route)}
+                      className="screen-card__action"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Live test
+                    </a>
                   </div>
                 </div>
               </li>

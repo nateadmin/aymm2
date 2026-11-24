@@ -1,12 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  buildLiveTestPath,
+  buildLiveTestUrl,
   DEMO_LINKS,
   REVIEW_PROFILE_ROUTE,
   SCREEN_CAPTURE_VERSION,
   SCREEN_CATALOG,
   getScreenBySlug,
   screenCardPath,
+  screensForPhase,
   screenThumbnailUrl,
   withPreviewQuery,
 } from './screenCatalog.js';
@@ -58,4 +61,21 @@ test('screenThumbnailUrl keeps Figma frames for design-only entries', () => {
     screenThumbnailUrl({ id: 99, slug: 'unused-frame', status: 'frame' }),
     '/design-frames/frame-99.png',
   );
+});
+
+test('buildLiveTestPath pins preview=0 and mobile=1', () => {
+  assert.equal(buildLiveTestPath('/EmailLogin'), '/EmailLogin?preview=0&mobile=1');
+});
+
+test('buildLiveTestUrl joins origin and path', () => {
+  assert.equal(
+    buildLiveTestUrl('/Welcome', 'https://example.test'),
+    'https://example.test/Welcome?preview=0&mobile=1',
+  );
+});
+
+test('screensForPhase returns Phase 1 onboarding cards', () => {
+  const phase1 = screensForPhase(1);
+  assert.equal(phase1.length, 19);
+  assert.equal(phase1[0].slug, 'splash');
 });

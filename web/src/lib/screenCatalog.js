@@ -219,3 +219,20 @@ export function withPreviewQuery(route, { mobile = true, native, preview } = {})
   if (shouldKeepNativePreview({ native })) path = appendQuery(path, 'native', '1');
   return path;
 }
+
+/** Real API + handheld layout (preview-tester workflow). */
+export const LIVE_TEST_PREVIEW = { preview: '0', mobile: true, native: false };
+
+export function buildLiveTestPath(route) {
+  return withPreviewQuery(route, LIVE_TEST_PREVIEW);
+}
+
+export function buildLiveTestUrl(route, baseUrl = getReviewBase()) {
+  const path = buildLiveTestPath(route);
+  const origin = String(baseUrl || STAGING_BASE).replace(/\/$/, '');
+  return `${origin}${path}`;
+}
+
+export function screensForPhase(phase) {
+  return SCREEN_CATALOG.filter((screen) => screen.phase === Number(phase));
+}
