@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ArrowLeft, Check, Send, X } from 'lucide-react';
 import PageShell from '@/components/PageShell';
@@ -16,7 +16,11 @@ import { formatRelativeTime } from '@/lib/format';
 export default function Messages() {
   const location = useLocation();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('open');
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = location.state?.tab;
+    return tab === 'requests' || tab === 'open' || tab === 'connections' ? tab : 'open';
+  });
+  const autoTabApplied = useRef(false);
 
   useEffect(() => {
     const tab = location.state?.tab;
@@ -28,6 +32,17 @@ export default function Messages() {
   const [replyText, setReplyText] = useState('');
   const { messages, letterRequests, unreadCount, isLoading } = useMessages();
   const { accepted, pendingIncoming, pendingOutgoing } = useConnections();
+
+  useEffect(() => {
+    if (autoTabApplied.current || location.state?.tab || isLoading) return;
+    if (letterRequests.length > 0) {
+      setActiveTab('requests');
+      autoTabApplied.current = true;
+    } else if (pendingIncoming.length > 0) {
+      setActiveTab('connections');
+      autoTabApplied.current = true;
+    }
+  }, [isLoading, letterRequests.length, pendingIncoming.length, location.state?.tab]);
   const { acceptConnection, declineConnection } = useConnectionActions();
   const sendMessage = useSendMessage();
   const { getProfile } = useProfileMap();
@@ -180,7 +195,20 @@ export default function Messages() {
                 </div>
               </button>
             );
-          }) : <p className="aymm-muted">No open chats yet.</p>}
+          }) : (
+            <div className="messages-empty">
+              <p className="aymm-muted">No open chats yet.</p>
+              {letterRequests.length ? (
+                <button
+                  type="button"
+                  className="messages-empty__link"
+                  onClick={() => setActiveTab('requests')}
+                >
+                  You have {letterRequests.length} letter request{letterRequests.length === 1 ? '' : 's'} — view Requests
+                </button>
+              ) : null}
+            </div>
+          )}
         </div>
       ) : null}
 

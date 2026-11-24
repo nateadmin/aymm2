@@ -24,7 +24,12 @@ export function useSendMessage() {
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['Message'] });
-      push(result.connected ? 'Message sent!' : 'Message request sent.', 'success');
+      push(
+        result.connected
+          ? 'Message sent!'
+          : 'Letter request sent. They’ll see it under Letters → Requests.',
+        'success',
+      );
     },
     onError: () => push('Could not send message.', 'error'),
   });

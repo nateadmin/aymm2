@@ -62,7 +62,12 @@ export default function Home() {
   }, [activeProfile?.display_name]);
 
   const pendingMessageRequest = messageProfile
-    ? messages.some((item) => item.from_email && item.to_email === messageProfile.user_email && item.is_request)
+    ? messages.some(
+      (item) =>
+        item.from_email === user?.email
+        && item.to_email === messageProfile.user_email
+        && item.is_request,
+    )
     : false;
 
   const handlePrimaryAction = (profile) => {

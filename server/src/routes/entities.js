@@ -67,14 +67,29 @@ router.get('/:entity', requireAuth, async (req, res) => {
   delete filters.sort;
   delete filters.limit;
 
-  const { sql, values } = buildFilterQuery(
-    config.table,
-    filters,
-    req.query.sort || config.sortDefault,
-    req.query.limit,
-  );
-
   const rows = await withClient(async (client) => {
+    if (entityName === 'Message') {
+      const clauses = ['(from_email = $1 OR to_email = $1)'];
+      const values = [req.user.email];
+      let index = 2;
+      for (const [key, value] of Object.entries(filters)) {
+        clauses.push(`${key} = $${index}`);
+        values.push(value);
+        index += 1;
+      }
+      const { column, direction } = parseSort(req.query.sort || config.sortDefault);
+      const limitClause = req.query.limit ? `LIMIT ${Number(req.query.limit)}` : '';
+      const sql = `SELECT * FROM ${config.table} WHERE ${clauses.join(' AND ')} ORDER BY ${column} ${direction} ${limitClause}`;
+      const result = await client.query(sql, values);
+      return result.rows.map(deserializeRow);
+    }
+
+    const { sql, values } = buildFilterQuery(
+      config.table,
+      filters,
+      req.query.sort || config.sortDefault,
+      req.query.limit,
+    );
     const result = await client.query(sql, values);
     return result.rows.map(deserializeRow);
   });
