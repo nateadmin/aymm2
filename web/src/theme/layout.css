@@ -109,7 +109,9 @@ select {
 }
 
 .app-main__content {
-  padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+  padding-bottom: calc(
+    var(--bottom-nav-height) + var(--safe-area-bottom) + var(--space-mobile-cta-inset, 0px)
+  );
 }
 
 @media (max-width: 47.99rem) {
@@ -181,7 +183,9 @@ select {
   z-index: 20;
   border-top: 1px solid var(--aymm-light-border);
   background: var(--aymm-white);
-  padding-bottom: calc(var(--space-frame-inset, 0px) + var(--safe-area-bottom));
+  padding-bottom: calc(
+    var(--space-frame-inset, 0px) + var(--safe-area-bottom) + var(--space-mobile-cta-inset, 0px)
+  );
 }
 
 .bottom-nav__inner {

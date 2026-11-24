@@ -52,9 +52,41 @@ export function syncMobilePreview(search = typeof window !== 'undefined' ? windo
   }
 }
 
+function syncRealDeviceLayout(search = typeof window !== 'undefined' ? window.location.search : '') {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+  const params = new URLSearchParams(search);
+  if (params.get('native') === '0') {
+    applyRealDevicePreview(false);
+    return;
+  }
+  if (params.get('native') === '1') {
+    applyRealDevicePreview(true);
+    return;
+  }
+  try {
+    if (sessionStorage.getItem(NATIVE_STORAGE_KEY) === 'on') {
+      applyRealDevicePreview(true);
+      return;
+    }
+    if (sessionStorage.getItem(NATIVE_STORAGE_KEY) === 'off') {
+      applyRealDevicePreview(false);
+      return;
+    }
+  } catch {
+  // sessionStorage may be unavailable in embedded contexts
+  }
+
+  const narrowViewport = window.matchMedia('(max-width: 47.99rem)').matches;
+  const desktopMobilePreview = params.get('mobile') === '1';
+  if (narrowViewport && !desktopMobilePreview) {
+    applyRealDevicePreview(true);
+  }
+}
+
 /** Call before React mounts so layout CSS applies on first paint. */
 export function initMobilePreview() {
   syncMobilePreview();
+  syncRealDeviceLayout();
 }
 
 export function isMobilePreviewEnabled() {
