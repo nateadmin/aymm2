@@ -1,13 +1,12 @@
 import { useRef, useState } from 'react';
 import { ImagePlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { getStoredToken } from '@/api/client';
+import { uploadImage } from '@/api/profile';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
-import { tryMockUpload } from '@/lib/mockApi';
 import { useToast } from '@/lib/toast';
 
 export default function UploadPhotoStep() {
@@ -31,16 +30,15 @@ export default function UploadPhotoStep() {
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      push('Photo must be 10 MB or smaller.', 'error');
+    if (file.size > 8 * 1024 * 1024) {
+      push('Photo must be 8 MB or smaller.', 'error');
       event.target.value = '';
       return;
     }
 
     setUploading(true);
     try {
-      const mock = await tryMockUpload(file, getStoredToken());
-      const url = mock?.file_url || URL.createObjectURL(file);
+      const { file_url: url } = await uploadImage(file);
       if (photos.length) {
         removePhoto(0);
       }
@@ -56,7 +54,7 @@ export default function UploadPhotoStep() {
 
   const handleContinue = async () => {
     if (!hasPhoto) return;
-    const saved = await saveDraft('upload-photo');
+    const saved = await saveDraft('upload-video');
     if (saved) {
       navigate('/ProfileSetup/upload-video');
     }
@@ -98,7 +96,7 @@ export default function UploadPhotoStep() {
                 <p className="photo-upload-panel__title">
                   {uploading ? 'Uploading…' : 'Tap to upload photo'}
                 </p>
-                <p className="photo-upload-panel__hint">JPG or PNG · Max 10 MB</p>
+                <p className="photo-upload-panel__hint">JPG or PNG · Max 8 MB</p>
               </div>
             )}
           </label>

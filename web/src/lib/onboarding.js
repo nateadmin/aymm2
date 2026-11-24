@@ -48,6 +48,25 @@ export function getStepIndex(stepId) {
   return ONBOARDING_STEPS.findIndex((step) => step.id === stepId);
 }
 
+export function getStepIdFromPath(pathname) {
+  const step = ONBOARDING_STEPS.find(
+    (item) => pathname === item.path || pathname.endsWith(item.path),
+  );
+  return step?.id ?? null;
+}
+
+/** Resume forward-only: do not send the user back to an earlier saved step. */
+export function getOnboardingResumeStep(savedStepId, pathname) {
+  const savedIndex = getStepIndex(savedStepId);
+  if (savedIndex < 0) return null;
+
+  const currentId = getStepIdFromPath(pathname);
+  const currentIndex = currentId ? getStepIndex(currentId) : -1;
+  if (savedIndex <= currentIndex) return null;
+
+  return ONBOARDING_STEPS[savedIndex];
+}
+
 export function getNextStep(stepId) {
   const index = getStepIndex(stepId);
   return index >= 0 ? ONBOARDING_STEPS[index + 1] || null : null;
