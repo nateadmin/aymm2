@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isMockAuthEnabled, MOCK_LOGIN_EMAIL } from '@/lib/mockAuth';
-import { isStagingPreviewEnabled } from '@/lib/stagingPreview';
-import { DESIGN_HOME_ROUTE } from '@/lib/session';
+import { DESIGN_HOME_ROUTE, shouldUseDesignReviewShell } from '@/lib/session';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import ProfileCard from '@/components/shared/ProfileCard';
 import ProfileDetailModal from '@/components/shared/ProfileDetailModal';
@@ -23,18 +21,13 @@ import { formatLabel } from '@/lib/format';
 export default function Home() {
   const navigate = useNavigate();
   const { push } = useToast();
-  const { profile: authProfile, user } = useAuth();
+  const { profile: authProfile, user, hasProfile } = useAuth();
 
   useEffect(() => {
-    const email = (user?.email || authProfile?.user_email || '').trim().toLowerCase();
-    const onDesignHome =
-      isStagingPreviewEnabled()
-      || isMockAuthEnabled()
-      || email === MOCK_LOGIN_EMAIL;
-    if (onDesignHome) {
+    if (shouldUseDesignReviewShell({ user, profile: authProfile, hasProfile })) {
       navigate(withPreviewQuery(DESIGN_HOME_ROUTE, { native: false }), { replace: true });
     }
-  }, [navigate, authProfile?.user_email, user?.email]);
+  }, [navigate, authProfile, user]);
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
   const activeProfile = myProfile || authProfile;
   const {

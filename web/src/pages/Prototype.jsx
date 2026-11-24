@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import PrototypeRealUserRedirect from '@/components/prototype/PrototypeRealUserRedirect';
 import Home from '@/pages/prototype/Home';
 import Settings from '@/pages/prototype/Settings';
 import MyProfile from '@/pages/prototype/MyProfile';
@@ -16,6 +17,7 @@ import RegisterTableFull from '@/pages/prototype/RegisterTableFull';
 
 export default function Prototype() {
   return (
+    <PrototypeRealUserRedirect>
     <Routes>
       <Route path="home" element={<Home />} />
       <Route path="settings" element={<Settings />} />
@@ -32,5 +34,6 @@ export default function Prototype() {
       <Route path="username-validation" element={<UsernameValidation />} />
       <Route path="register-table-full" element={<RegisterTableFull />} />
     </Routes>
+    </PrototypeRealUserRedirect>
   );
 }

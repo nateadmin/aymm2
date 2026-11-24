@@ -18,10 +18,10 @@ import { CHILD_IDENTITIES, PARENT_IDENTITIES, PLACEHOLDER_AVATAR, labelForIdenti
 export default function Profile() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user, profile: authProfile, isAdmin, logout } = useAuth();
+  const { user, profile: authProfile, hasProfile, isAdmin, logout } = useAuth();
 
   useEffect(() => {
-    if (shouldUseDesignReviewShell({ user, profile: authProfile })) {
+    if (shouldUseDesignReviewShell({ user, profile: authProfile, hasProfile })) {
       navigate(withPreviewQuery(REVIEW_PROFILE_ROUTE, { native: false }), { replace: true });
     }
   }, [navigate, user, authProfile]);

@@ -18,15 +18,17 @@ function reviewPath(path, session) {
 
 export default function BottomNav() {
   const location = useLocation();
-  const { user, profile, isFamily, isAdmin } = useAuth();
-  const reviewSession = { user, profile };
+  const { user, profile, hasProfile, isFamily, isAdmin } = useAuth();
+  const reviewSession = { user, profile, hasProfile };
   const items = getVisibleNavItems({ isFamily, isAdmin, bottomNavOnly: true });
 
   return (
     <nav className="bottom-nav" aria-label="Primary">
       <div className="bottom-nav__inner">
         {items.map(({ path, icon: Icon, label }) => {
-          const active = location.pathname === path;
+          const resolvedPath = reviewPath(path, reviewSession);
+          const active = location.pathname === path
+            || location.pathname === resolvedPath;
           return (
             <Link
               key={path}
