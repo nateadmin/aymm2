@@ -20,7 +20,7 @@ import {
   stepStorageKey,
 } from '@/lib/onboarding';
 import { buildProfilePayload } from '@/lib/onboardingPayload';
-import { profilePayloadForApi } from '@/lib/profileApiPayload';
+import { pickDeferredProfilePayload, profilePayloadForApi } from '@/lib/profileApiPayload';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import {
   getPostAuthPath,
@@ -278,13 +278,24 @@ export function ProfileSetupProvider({ children }) {
         return true;
       }
 
+      const fullPayload = buildProfilePayload(form, {
+        setupComplete: true,
+        includeSetupComplete: true,
+      });
       const { profile } = await profileApi.saveMine(
-        profilePayloadForApi(
-          buildProfilePayload(form, { setupComplete: true, includeSetupComplete: true }),
-          { includeDeferred: true },
-        ),
+        profilePayloadForApi(fullPayload, { includeDeferred: false }),
       );
-      const completedProfile = { ...profile, setup_complete: true };
+      let completedProfile = { ...profile, setup_complete: true };
+
+      const deferredPayload = pickDeferredProfilePayload(fullPayload);
+      if (Object.keys(deferredPayload).length) {
+        try {
+          const { profile: withDeferred } = await profileApi.saveMine(deferredPayload);
+          completedProfile = { ...withDeferred, setup_complete: true };
+        } catch {
+          // Optional columns (migration 004) may be missing on older production DBs.
+        }
+      }
 
       setHasDbProfile(true);
       setProfileState(completedProfile);
