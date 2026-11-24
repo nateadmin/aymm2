@@ -2435,10 +2435,11 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
 }
 
 .community-table-detail__toolbar {
-  position: absolute;
-  top: 0.75rem;
-  left: var(--space-screen-x);
-  z-index: 3;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  padding: calc(0.65rem + env(safe-area-inset-top, 0)) var(--space-screen-x) 0.35rem;
+  background: var(--aymm-white);
 }
 
 .community-table-detail__hero {
@@ -2449,13 +2450,7 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
 }
 
 .community-table-detail__hero::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  height: 5.5rem;
-  background: linear-gradient(to bottom, rgb(255 255 255 / 90%), transparent);
-  z-index: 1;
-  pointer-events: none;
+  content: none;
 }
 
 .community-table-detail__hero-image {
@@ -2485,6 +2480,8 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
 
 .community-table-detail__title {
   margin: 0;
+  padding-inline-end: 0.25rem;
+  overflow-wrap: anywhere;
 }
 
 .community-table-detail__headline {
