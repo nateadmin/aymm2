@@ -4,28 +4,42 @@ import BackButton from '@/components/mobile/BackButton';
 import Button from '@/components/ui/Button';
 import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
+import { useAuth } from '@/lib/auth';
+import { useToast } from '@/lib/toast';
+import { withPreviewQuery } from '@/lib/screenCatalog';
 import { BIO_MIN_LENGTH } from '@/lib/constants';
 
 export default function BioStep() {
   const navigate = useNavigate();
+  const { profile: authProfile, hasProfile } = useAuth();
+  const { push } = useToast();
   const { form, updateField, saveDraft, saving, isFamily } = useProfileSetup();
+  const editingCompleteProfile = Boolean(authProfile?.setup_complete || hasProfile);
   const length = form.bio?.length || 0;
   const remaining = BIO_MIN_LENGTH - length;
   const valid = length >= BIO_MIN_LENGTH;
 
   const handleContinue = async () => {
     const saved = await saveDraft('bio');
-    if (saved) {
-      navigate('/ProfileSetup/review');
+    if (!saved) return;
+    if (editingCompleteProfile) {
+      push('Your story was saved.', 'success');
+      navigate(withPreviewQuery('/Profile', { native: false, preview: '0' }), { replace: true });
+      return;
     }
+    navigate('/ProfileSetup/review');
   };
 
   return (
     <MobileScreen bodyClassName="mobile-onboarding-scroll">
       <div className="screen-pad screen-pad--handheld mobile-onboarding mobile-onboarding--scroll">
         <div className="mobile-onboarding__content">
-          <BackButton to="/ProfileSetup/questions" />
-          <MobileOnboardingProgress step={8} />
+          <BackButton
+            to={editingCompleteProfile
+              ? withPreviewQuery('/Profile', { native: false, preview: '0' })
+              : '/ProfileSetup/questions'}
+          />
+          {!editingCompleteProfile ? <MobileOnboardingProgress step={8} /> : null}
 
           <div>
             <h1 className="auth-heading auth-heading--brand">About Me</h1>
@@ -55,7 +69,7 @@ export default function BioStep() {
           disabled={!valid || saving}
           onClick={handleContinue}
         >
-          Continue
+          {editingCompleteProfile ? 'Save' : 'Continue'}
         </Button>
       </div>
     </MobileScreen>

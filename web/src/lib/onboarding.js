@@ -128,3 +128,13 @@ export function draftStorageKey(email) {
 export function stepStorageKey(email) {
   return `aymm_onboarding_step_${email}`;
 }
+
+export function clearOnboardingPersistence(email) {
+  if (!email) return;
+  try {
+    localStorage.removeItem(draftStorageKey(email));
+    localStorage.removeItem(stepStorageKey(email));
+  } catch {
+    // ignore
+  }
+}

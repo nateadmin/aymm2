@@ -1,4 +1,5 @@
 import { useAuth } from '@/lib/auth';
+import { mergeProfileState } from '@/lib/session';
 import { useEntityList } from './useEntityList';
 
 export function useMyProfile() {
@@ -7,9 +8,14 @@ export function useMyProfile() {
     enabled: Boolean(user?.email),
   });
 
+  const listProfile = query.data?.[0] ?? null;
+  const profile = listProfile && authProfile
+    ? mergeProfileState(listProfile, authProfile)
+    : listProfile ?? authProfile ?? null;
+
   return {
     ...query,
-    profile: query.data?.[0] || authProfile || null,
+    profile,
     isLoading: query.isLoading && !authProfile,
   };
 }
