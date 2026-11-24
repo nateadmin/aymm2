@@ -18,8 +18,8 @@ function reviewPath(path, session) {
 
 export default function AppNavLinks({ className = 'app-sidebar__nav' }) {
   const location = useLocation();
-  const { user, profile, isFamily, isAdmin } = useAuth();
-  const reviewSession = { user, profile };
+  const { user, profile, hasProfile, isFamily, isAdmin } = useAuth();
+  const reviewSession = { user, profile, hasProfile };
   const items = getVisibleNavItems({ isFamily, isAdmin });
 
   return (

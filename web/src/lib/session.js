@@ -25,16 +25,14 @@ function isDemoReviewSession(session) {
 }
 
 export function shouldUseDesignReviewShell(session = {}) {
+  if (isDemoReviewSession(session)) return true;
+
   const token = session.token ?? readSessionToken();
-  const completed = hasCompletedProfile(session?.profile);
+  const completed = hasCompletedProfile(session?.profile) || Boolean(session?.hasProfile);
   if (completed && session?.user?.email && !isMockToken(token)) {
     return false;
   }
-  return (
-    isStagingPreviewEnabled()
-    || isMockAuthEnabled()
-    || isDemoReviewSession(session)
-  );
+  return isStagingPreviewEnabled() || isMockAuthEnabled();
 }
 
 function shouldUseDesignHome(session) {
