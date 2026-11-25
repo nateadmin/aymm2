@@ -13,6 +13,7 @@ import { useSendMessage } from '@/hooks/useSendMessage';
 import { useProfileMap } from '@/hooks/useProfileMap';
 import { useAuth } from '@/lib/auth';
 import { formatRelativeTime } from '@/lib/format';
+import { emailsMatch, normalizeParticipantEmail } from '@/lib/connections';
 
 export default function Messages() {
   const location = useLocation();
@@ -66,7 +67,7 @@ export default function Messages() {
 
   const acceptedEmails = useMemo(
     () => accepted.map((item) => (
-      item.from_email === userEmail ? item.to_email : item.from_email
+      emailsMatch(item.from_email, userEmail) ? item.to_email : item.from_email
     )),
     [accepted, userEmail],
   );
@@ -81,10 +82,23 @@ export default function Messages() {
     return map;
   }, [messages, userEmail]);
 
-  const openConvos = Object.entries(conversations).filter(([email]) => (
-    acceptedEmails.includes(email)
-    || pendingOutgoing.some((item) => item.to_email === email)
-  ));
+  const openConvos = useMemo(() => {
+    const rows = new Map();
+    Object.entries(conversations).forEach(([email, msgs]) => {
+      const connected = acceptedEmails.some((peer) => emailsMatch(peer, email));
+      const waitingOnThem = pendingOutgoing.some((item) => emailsMatch(item.to_email, email));
+      if (connected || waitingOnThem) {
+        rows.set(normalizeParticipantEmail(email), { email, msgs });
+      }
+    });
+    acceptedEmails.forEach((peer) => {
+      const key = normalizeParticipantEmail(peer);
+      if (!rows.has(key)) {
+        rows.set(key, { email: peer, msgs: [] });
+      }
+    });
+    return [...rows.values()];
+  }, [conversations, acceptedEmails, pendingOutgoing]);
 
   const threadMessages = selectedEmail
     ? [...(conversations[selectedEmail] || [])].sort(
@@ -93,8 +107,15 @@ export default function Messages() {
     : [];
 
   const isApproved = selectedEmail
-    ? acceptedEmails.includes(selectedEmail)
+    ? acceptedEmails.some((peer) => emailsMatch(peer, selectedEmail))
     : false;
+
+  const handleAcceptConnection = async (connection) => {
+    await acceptConnection.mutateAsync(connection);
+    const partnerEmail = connection.from_email;
+    setActiveTab('open');
+    setSelectedEmail(partnerEmail);
+  };
 
   const badgeCounts = {
     open: openUnreadCount || undefined,
@@ -183,13 +204,14 @@ export default function Messages() {
 
       {activeTab === 'open' ? (
         <div className="conversation-list">
-          {openConvos.length ? openConvos.map(([email, msgs]) => {
+          {openConvos.length ? openConvos.map(({ email, msgs }) => {
             const profile = getProfile(email);
             const lastMsg = [...msgs].sort(
               (a, b) => new Date(b.created_date) - new Date(a.created_date),
             )[0];
             const hasUnread = msgs.some((item) => item.to_email === userEmail && !item.read);
-            const waiting = pendingOutgoing.some((item) => item.to_email === email);
+            const waiting = pendingOutgoing.some((item) => emailsMatch(item.to_email, email))
+              && !acceptedEmails.some((peer) => emailsMatch(peer, email));
             return (
               <button
                 key={email}
@@ -208,7 +230,11 @@ export default function Messages() {
                     {waiting ? <span className="conversation-card__chip">Pending approval</span> : null}
                     {hasUnread ? <span className="conversation-card__dot" /> : null}
                   </div>
-                  <p className="conversation-card__preview">{lastMsg?.content}</p>
+                  <p className="conversation-card__preview">
+                    {lastMsg?.content || (acceptedEmails.some((peer) => emailsMatch(peer, email))
+                      ? 'Connected — write your first letter'
+                      : 'Pending approval')}
+                  </p>
                 </div>
               </button>
             );
@@ -268,7 +294,7 @@ export default function Messages() {
                 </div>
                 <div className="connection-card__actions">
                   <Button
-                    onClick={() => acceptConnection.mutate(connection)}
+                    onClick={() => handleAcceptConnection(connection)}
                     disabled={acceptConnection.isPending}
                   >
                     <Check size={16} />

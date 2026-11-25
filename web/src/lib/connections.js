@@ -13,13 +13,21 @@ export function getPrimaryActionLabel(viewerProfile, targetProfile) {
   return 'AYMM?';
 }
 
+export function normalizeParticipantEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
+export function emailsMatch(emailA, emailB) {
+  return normalizeParticipantEmail(emailA) === normalizeParticipantEmail(emailB);
+}
+
 export function isConnected(connections, emailA, emailB) {
   return connections.some(
     (connection) =>
       connection.status === 'accepted'
       && (
-        (connection.from_email === emailA && connection.to_email === emailB)
-        || (connection.from_email === emailB && connection.to_email === emailA)
+        (emailsMatch(connection.from_email, emailA) && emailsMatch(connection.to_email, emailB))
+        || (emailsMatch(connection.from_email, emailB) && emailsMatch(connection.to_email, emailA))
       ),
   );
 }

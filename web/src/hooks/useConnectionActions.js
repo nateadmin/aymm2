@@ -18,6 +18,7 @@ export function useConnectionActions() {
   const refreshConnections = async () => {
     await queryClient.invalidateQueries({ queryKey: ['Connection'] });
     await queryClient.refetchQueries({ queryKey: ['Connection', 'mine'] });
+    await queryClient.invalidateQueries({ queryKey: ['Message'] });
   };
 
   const sendConnection = useMutation({
