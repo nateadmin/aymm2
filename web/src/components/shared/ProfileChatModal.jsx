@@ -31,9 +31,11 @@ export default function ProfileChatModal({
           placeholder="Write your letter..."
           disabled={isLocked}
         />
-        <Button onClick={onSend} disabled={isLocked || sendingMessage || !messageText?.trim()}>
-          Send letter
-        </Button>
+        <div className="modal-shell__footer">
+          <Button onClick={onSend} disabled={isLocked || sendingMessage || !messageText?.trim()}>
+            Send letter
+          </Button>
+        </div>
       </div>
     </Modal>
   );

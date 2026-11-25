@@ -221,21 +221,23 @@ export default function Home() {
             );
           })}
         </div>
-        <Button
-          disabled={!challengeProfile?.user_email || challengeProfile?.is_demo || sendMessage.isPending}
-          onClick={async () => {
-            if (!challengeProfile?.user_email || challengeProfile.is_demo) return;
-            const option = COMPATIBILITY_CHALLENGE.options.find((item) => item.id === challengeAnswer);
-            await sendMessage.mutateAsync({
-              toEmail: challengeProfile.user_email,
-              content: `Compatibility challenge: ${COMPATIBILITY_CHALLENGE.question}\nMy answer: ${option?.label || challengeAnswer}`,
-              forceRequest: true,
-            });
-            setChallengeProfile(null);
-          }}
-        >
-          Send challenge
-        </Button>
+        <div className="modal-shell__footer">
+          <Button
+            disabled={!challengeProfile?.user_email || challengeProfile?.is_demo || sendMessage.isPending}
+            onClick={async () => {
+              if (!challengeProfile?.user_email || challengeProfile.is_demo) return;
+              const option = COMPATIBILITY_CHALLENGE.options.find((item) => item.id === challengeAnswer);
+              await sendMessage.mutateAsync({
+                toEmail: challengeProfile.user_email,
+                content: `Compatibility challenge: ${COMPATIBILITY_CHALLENGE.question}\nMy answer: ${option?.label || challengeAnswer}`,
+                forceRequest: true,
+              });
+              setChallengeProfile(null);
+            }}
+          >
+            Send challenge
+          </Button>
+        </div>
       </Modal>
 
       <Modal
@@ -250,15 +252,17 @@ export default function Home() {
           value={`${window.location.origin}?profile=${shareProfile?.id || ''}`}
           readOnly
         />
-        <Button
-          onClick={async () => {
-            await navigator.clipboard.writeText(`${window.location.origin}?profile=${shareProfile?.id}`);
-            push('Link copied!', 'success');
-            setShareProfile(null);
-          }}
-        >
-          Copy link
-        </Button>
+        <div className="modal-shell__footer">
+          <Button
+            onClick={async () => {
+              await navigator.clipboard.writeText(`${window.location.origin}?profile=${shareProfile?.id}`);
+              push('Link copied!', 'success');
+              setShareProfile(null);
+            }}
+          >
+            Copy link
+          </Button>
+        </div>
       </Modal>
     </>
   );
