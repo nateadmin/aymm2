@@ -14,6 +14,7 @@ import {
   mockSaveProfile,
 } from '@/lib/mockAuth';
 import { isRealAppPreviewForced } from '@/lib/stagingPreview';
+import { queryClient } from '@/lib/queryClient';
 
 const AuthContext = createContext(null);
 
@@ -119,6 +120,9 @@ export function AuthProvider({ children }) {
       const data = await authApi.login(email, password);
       setStoredToken(data.token);
       setAuthError(null);
+      await queryClient.invalidateQueries({ queryKey: ['Connection'] });
+      await queryClient.invalidateQueries({ queryKey: ['Message'] });
+      await queryClient.invalidateQueries({ queryKey: ['Profile'] });
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },

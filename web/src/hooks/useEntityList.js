@@ -17,5 +17,7 @@ export function useEntityList(entityName, filters = {}, options = {}) {
       return client.list(options.sort, options.limit);
     },
     enabled: options.enabled ?? true,
+    staleTime: options.staleTime,
+    refetchOnMount: options.staleTime === 0 ? 'always' : true,
   });
 }

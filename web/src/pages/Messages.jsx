@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import { ArrowLeft, Check, Send, X } from 'lucide-react';
 import PageShell from '@/components/PageShell';
@@ -15,6 +16,7 @@ import { formatRelativeTime } from '@/lib/format';
 
 export default function Messages() {
   const location = useLocation();
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const tabFromSearch = new URLSearchParams(location.search).get('tab');
   const tabFromState = location.state?.tab;
@@ -49,6 +51,13 @@ export default function Messages() {
       autoTabApplied.current = true;
     }
   }, [isLoading, letterRequests.length, pendingIncoming.length, tabFromSearch, tabFromState]);
+
+  useEffect(() => {
+    if (activeTab === 'connections') {
+      queryClient.invalidateQueries({ queryKey: ['Connection'] });
+    }
+  }, [activeTab, queryClient]);
+
   const { acceptConnection, declineConnection } = useConnectionActions();
   const sendMessage = useSendMessage();
   const { getProfile } = useProfileMap();

@@ -4,12 +4,9 @@ import { useEntityList } from './useEntityList';
 
 export function useConnections() {
   const { user } = useAuth();
-  const sentQuery = useEntityList('Connection', { from_email: user?.email }, {
-    enabled: Boolean(user?.email),
-  });
-  const receivedQuery = useEntityList('Connection', { to_email: user?.email }, {
-    enabled: Boolean(user?.email),
-  });
+  const listOptions = { enabled: Boolean(user?.email), staleTime: 0 };
+  const sentQuery = useEntityList('Connection', { from_email: user?.email }, listOptions);
+  const receivedQuery = useEntityList('Connection', { to_email: user?.email }, listOptions);
 
   const connections = useMemo(
     () => [...(sentQuery.data || []), ...(receivedQuery.data || [])],
