@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AuthPage from '@/components/mobile/AuthPage';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
@@ -11,6 +11,8 @@ function isValidEmail(email) {
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = location.state?.returnTo || '/EmailLogin';
   const { requestPasswordReset } = useAuth();
   const { push } = useToast();
   const [channel, setChannel] = useState('email');
@@ -52,7 +54,7 @@ export default function ForgotPassword() {
   return (
     <AuthPage
       as="form"
-      backTo="/EmailLogin"
+      backTo={returnTo}
       align="start"
       onSubmit={handleSubmit}
       header={(

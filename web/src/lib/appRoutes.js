@@ -27,3 +27,16 @@ export function resolveAppRoute(kind, session = {}) {
 export function resolveLettersRoute(session = {}) {
   return resolveAppRoute('letters', session);
 }
+
+function appendSearchParam(path, key, value) {
+  if (path.includes(`${key}=`)) return path;
+  const sep = path.includes('?') ? '&' : '?';
+  return `${path}${sep}${key}=${encodeURIComponent(value)}`;
+}
+
+/** Live or fixture letters route with optional Messages tab (`requests` | `open` | `connections`). */
+export function resolveMessagesPath(session = {}, { tab } = {}) {
+  const base = resolveAppRoute('letters', session);
+  if (!tab || !base.startsWith('/Messages')) return base;
+  return appendSearchParam(base, 'tab', tab);
+}

@@ -118,9 +118,11 @@ export default function Messages() {
   };
 
   const badgeCounts = {
-    open: openUnreadCount || undefined,
-    requests: letterRequests.length || undefined,
-    connections: pendingIncoming.length || undefined,
+    open: activeTab !== 'open' && openUnreadCount ? openUnreadCount : undefined,
+    requests: activeTab !== 'requests' && letterRequests.length ? letterRequests.length : undefined,
+    connections: activeTab !== 'connections' && pendingIncoming.length
+      ? pendingIncoming.length
+      : undefined,
   };
 
   const handleSendReply = async () => {

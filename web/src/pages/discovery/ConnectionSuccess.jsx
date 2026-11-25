@@ -1,12 +1,12 @@
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
-import { resolveAppRoute } from '@/lib/appRoutes';
+import { resolveAppRoute, resolveMessagesPath } from '@/lib/appRoutes';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import HeartLogo from '@/components/brand/HeartLogo';
 import Button from '@/components/ui/Button';
 import { DAUGHTER_PROFILE } from '@/lib/discoveryProfiles';
-import { withPreviewQuery } from '@/lib/screenCatalog';
+import { withNavPreviewQuery } from '@/lib/screenCatalog';
 
 export default function ConnectionSuccess() {
   const navigate = useNavigate();
@@ -53,12 +53,22 @@ export default function ConnectionSuccess() {
         </div>
 
         <div className="connection-success__actions">
-          <Button onClick={() => navigate(withPreviewQuery(resolveAppRoute('home', reviewSession)))}>
+          <Button
+            onClick={() => navigate(
+              withNavPreviewQuery(resolveAppRoute('home', reviewSession), reviewSession, { native: false }),
+            )}
+          >
             Keep Browsing
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate(withPreviewQuery('/Messages'), { state: { tab: 'requests' } })}
+            onClick={() => navigate(
+              withNavPreviewQuery(
+                resolveMessagesPath(reviewSession, { tab: 'requests' }),
+                reviewSession,
+                { native: false },
+              ),
+            )}
           >
             Go to Letters
           </Button>

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveAppRoute, resolveLettersRoute } from './appRoutes.js';
+import { resolveAppRoute, resolveLettersRoute, resolveMessagesPath } from './appRoutes.js';
 
 test('resolveAppRoute returns live paths for real sessions', () => {
   const session = {
@@ -28,4 +28,13 @@ test('resolveAppRoute returns fixture paths for design demo', () => {
   };
   assert.equal(resolveAppRoute('home', session), '/Prototype/home');
   assert.equal(resolveAppRoute('tables', session), '/Community/family-table-listing');
+});
+
+test('resolveMessagesPath adds tab query for live Messages', () => {
+  const session = {
+    user: { email: 'phase2.sarah+demo@aymm.app' },
+    profile: { setup_complete: true },
+    token: 'real-token',
+  };
+  assert.equal(resolveMessagesPath(session, { tab: 'requests' }), '/Messages?tab=requests');
 });

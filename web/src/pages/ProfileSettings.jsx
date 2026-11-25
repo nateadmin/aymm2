@@ -34,7 +34,11 @@ function settingsRowAction(label) {
     case 'Help Center':
       return { type: 'connections' };
     case 'Change Password':
-      return { type: 'navigate', to: '/ForgotPassword' };
+      return {
+        type: 'navigate',
+        to: '/ForgotPassword',
+        state: { returnTo: '/Profile/settings', mode: 'change' },
+      };
     case 'Phone Number':
     case 'Email Address':
       return { type: 'contact' };
@@ -121,7 +125,9 @@ export default function ProfileSettings() {
     const action = settingsRowAction(label);
     if (!action) return;
     if (action.type === 'navigate') {
-      navigate(withPreviewQuery(action.to, { native: false, preview: '0' }));
+      navigate(withPreviewQuery(action.to, { native: false, preview: '0' }), {
+        state: action.state,
+      });
       return;
     }
     if (action.type === 'logout') {
@@ -170,6 +176,7 @@ export default function ProfileSettings() {
                     <Link
                       key={item}
                       to={withPreviewQuery(action.to, { native: false, preview: '0' })}
+                      state={action.state}
                       className="prototype-settings__row"
                     >
                       <span>{item}</span>
