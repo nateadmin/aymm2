@@ -1,3 +1,5 @@
+import { shouldUseDesignReviewShell } from './session.js';
+
 /**
  * Wireframe screen map (53 screens, 4 phases).
  * Short demo paths (append to staging host): see DEMO_LINKS.
@@ -243,6 +245,12 @@ export function buildLiveTestPath(route) {
   const options = { ...LIVE_TEST_PREVIEW };
   if (routeNeedsFixtureShell(route)) options.fixture = '1';
   return withPreviewQuery(route, options);
+}
+
+/** Primary nav: keep `preview=0` for signed-in live QA (default query is `preview=1`). */
+export function withNavPreviewQuery(route, session, { native = false } = {}) {
+  const live = session?.user && !shouldUseDesignReviewShell(session);
+  return withPreviewQuery(route, live ? { native, preview: '0' } : { native });
 }
 
 /** In-app navigation from the screen catalog (matches Live test query). */

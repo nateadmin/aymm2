@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getVisibleNavItems } from '@/lib/navigation';
 import { resolveAppRoute } from '@/lib/appRoutes';
-import { withPreviewQuery } from '@/lib/screenCatalog';
+import { withNavPreviewQuery } from '@/lib/screenCatalog';
 import { useAuth } from '@/lib/auth';
 
 function reviewPath(path, session) {
@@ -27,7 +27,7 @@ export default function BottomNav() {
           return (
             <Link
               key={path}
-              to={withPreviewQuery(reviewPath(path, reviewSession), { native: false })}
+              to={withNavPreviewQuery(reviewPath(path, reviewSession), reviewSession, { native: false })}
               className={`bottom-nav__link${active ? ' bottom-nav__link--active' : ''}`}
             >
               <Icon size={20} strokeWidth={active ? 2.25 : 1.75} />
