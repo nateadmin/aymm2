@@ -12,6 +12,15 @@ test('resolveAppRoute returns live paths for real sessions', () => {
   assert.equal(resolveLettersRoute(session), '/Messages');
 });
 
+test('resolveAppRoute sends family accounts to FamilyTables instead of Home', () => {
+  const session = {
+    user: { email: 'phase2.martinez+demo@aymm.app' },
+    profile: { setup_complete: true, identity_type: 'family' },
+    token: 'real-token',
+  };
+  assert.equal(resolveAppRoute('home', session), '/FamilyTables');
+});
+
 test('resolveAppRoute returns fixture paths for design demo', () => {
   const session = {
     user: { email: 'design@aymm.app' },

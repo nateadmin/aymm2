@@ -14,6 +14,7 @@ import {
   mockSaveProfile,
 } from '@/lib/mockAuth';
 import { isRealAppPreviewForced } from '@/lib/stagingPreview';
+import { isFamilyProfile } from '@/lib/session';
 import { queryClient } from '@/lib/queryClient';
 
 const AuthContext = createContext(null);
@@ -106,7 +107,7 @@ export function AuthProvider({ children }) {
     isLoading,
     authError,
     isAdmin: user?.role === 'admin' || user?.role === 'super_admin',
-    isFamily: profile?.identity_type === 'family',
+    isFamily: isFamilyProfile(profile),
     hasProfile: Boolean(profile?.setup_complete),
     isBlocked: Boolean(user?.is_blocked),
     refresh: bootstrap,

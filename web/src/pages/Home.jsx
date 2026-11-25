@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Check } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import HomeHubLayout, { timeOfDayGreeting } from '@/components/home/HomeHubLayout';
 import QuickActionList from '@/components/home/QuickActionList';
@@ -36,7 +36,7 @@ export default function Home() {
   const navigate = useNavigate();
   const profilesSectionRef = useRef(null);
   const { push } = useToast();
-  const { profile: authProfile, user, hasProfile } = useAuth();
+  const { profile: authProfile, user, hasProfile, isFamily } = useAuth();
 
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
   const activeProfile = myProfile || authProfile;
@@ -113,6 +113,10 @@ export default function Home() {
         <div className="app-loading__spinner" aria-label="Loading" />
       </div>
     );
+  }
+
+  if (isFamily) {
+    return <Navigate to="/FamilyTables" replace />;
   }
 
   return (
