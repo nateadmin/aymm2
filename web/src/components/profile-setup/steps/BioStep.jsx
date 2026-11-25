@@ -64,13 +64,15 @@ export default function BioStep() {
           </p>
         </div>
 
-        <Button
-          variant={valid ? 'primary' : 'disabled'}
-          disabled={!valid || saving}
-          onClick={handleContinue}
-        >
-          {editingCompleteProfile ? 'Save' : 'Continue'}
-        </Button>
+        <div className="mobile-onboarding__actions">
+          <Button
+            variant={valid ? 'primary' : 'disabled'}
+            disabled={!valid || saving}
+            onClick={handleContinue}
+          >
+            {editingCompleteProfile ? 'Save' : 'Continue'}
+          </Button>
+        </div>
       </div>
     </MobileScreen>
   );
