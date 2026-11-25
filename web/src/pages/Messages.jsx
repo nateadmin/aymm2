@@ -16,25 +16,31 @@ import { formatRelativeTime } from '@/lib/format';
 export default function Messages() {
   const location = useLocation();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState(() => {
-    const tab = location.state?.tab;
-    return tab === 'requests' || tab === 'open' || tab === 'connections' ? tab : 'open';
-  });
-  const autoTabApplied = useRef(false);
+  const tabFromSearch = new URLSearchParams(location.search).get('tab');
+  const tabFromState = location.state?.tab;
+  const resolvedInitialTab = tabFromSearch || tabFromState;
+
+  const [activeTab, setActiveTab] = useState(() => (
+    resolvedInitialTab === 'requests' || resolvedInitialTab === 'open' || resolvedInitialTab === 'connections'
+      ? resolvedInitialTab
+      : 'open'
+  ));
+  const autoTabApplied = useRef(Boolean(resolvedInitialTab));
 
   useEffect(() => {
-    const tab = location.state?.tab;
+    const tab = tabFromSearch || tabFromState;
     if (tab === 'requests' || tab === 'open' || tab === 'connections') {
       setActiveTab(tab);
+      autoTabApplied.current = true;
     }
-  }, [location.state]);
+  }, [tabFromSearch, tabFromState]);
   const [selectedEmail, setSelectedEmail] = useState(location.state?.selectedConvo || null);
   const [replyText, setReplyText] = useState('');
   const { messages, letterRequests, unreadCount, isLoading } = useMessages();
   const { accepted, pendingIncoming, pendingOutgoing } = useConnections();
 
   useEffect(() => {
-    if (autoTabApplied.current || location.state?.tab || isLoading) return;
+    if (autoTabApplied.current || tabFromSearch || tabFromState || isLoading) return;
     if (letterRequests.length > 0) {
       setActiveTab('requests');
       autoTabApplied.current = true;
@@ -42,7 +48,7 @@ export default function Messages() {
       setActiveTab('connections');
       autoTabApplied.current = true;
     }
-  }, [isLoading, letterRequests.length, pendingIncoming.length, location.state?.tab]);
+  }, [isLoading, letterRequests.length, pendingIncoming.length, tabFromSearch, tabFromState]);
   const { acceptConnection, declineConnection } = useConnectionActions();
   const sendMessage = useSendMessage();
   const { getProfile } = useProfileMap();
