@@ -32,22 +32,24 @@ export default function Messages() {
   const sendMessage = useSendMessage();
   const { getProfile } = useProfileMap();
 
+  const userEmail = user?.email;
+
   const acceptedEmails = useMemo(
     () => accepted.map((item) => (
-      item.from_email === user.email ? item.to_email : item.from_email
+      item.from_email === userEmail ? item.to_email : item.from_email
     )),
-    [accepted, user.email],
+    [accepted, userEmail],
   );
 
   const conversations = useMemo(() => {
     const map = {};
     messages.forEach((message) => {
-      const otherEmail = message.from_email === user.email ? message.to_email : message.from_email;
+      const otherEmail = message.from_email === userEmail ? message.to_email : message.from_email;
       if (!map[otherEmail]) map[otherEmail] = [];
       map[otherEmail].push(message);
     });
     return map;
-  }, [messages, user.email]);
+  }, [messages, userEmail]);
 
   const openConvos = Object.entries(conversations).filter(([email]) => (
     acceptedEmails.includes(email)
@@ -109,7 +111,7 @@ export default function Messages() {
 
         <div className="chat-view__thread">
           {threadMessages.map((message) => {
-            const mine = message.from_email === user.email;
+            const mine = message.from_email === userEmail;
             return (
               <div
                 key={message.id}
@@ -156,7 +158,7 @@ export default function Messages() {
             const lastMsg = [...msgs].sort(
               (a, b) => new Date(b.created_date) - new Date(a.created_date),
             )[0];
-            const hasUnread = msgs.some((item) => item.to_email === user.email && !item.read);
+            const hasUnread = msgs.some((item) => item.to_email === userEmail && !item.read);
             const waiting = pendingOutgoing.some((item) => item.to_email === email);
             return (
               <button
