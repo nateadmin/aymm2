@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.js';
 import entityRoutes from './routes/entities.js';
 import profileRoutes from './routes/profile.js';
 import uploadRoutes from './routes/uploads.js';
+import connectionsRoutes from './routes/connections.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,6 +47,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/entities', entityRoutes);
+app.use('/api/connections', connectionsRoutes);
 app.use('/uploads', express.static(uploadDir));
 
 /** Short paths for demo/login when an older SPA bundle lacks matching routes. */

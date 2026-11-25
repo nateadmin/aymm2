@@ -1,17 +1,19 @@
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/api/client';
 import { useAuth } from '@/lib/auth';
-import { useEntityList } from './useEntityList';
 
 export function useConnections() {
   const { user } = useAuth();
-  const listOptions = { enabled: Boolean(user?.email), staleTime: 0 };
-  const sentQuery = useEntityList('Connection', { from_email: user?.email }, listOptions);
-  const receivedQuery = useEntityList('Connection', { to_email: user?.email }, listOptions);
+  const query = useQuery({
+    queryKey: ['Connection', 'mine', user?.email],
+    queryFn: () => api.get('/api/connections/mine'),
+    enabled: Boolean(user?.email),
+    staleTime: 0,
+    refetchOnMount: 'always',
+  });
 
-  const connections = useMemo(
-    () => [...(sentQuery.data || []), ...(receivedQuery.data || [])],
-    [sentQuery.data, receivedQuery.data],
-  );
+  const connections = useMemo(() => query.data || [], [query.data]);
 
   const accepted = connections.filter((connection) => connection.status === 'accepted');
   const pendingIncoming = connections.filter(
@@ -26,6 +28,6 @@ export function useConnections() {
     accepted,
     pendingIncoming,
     pendingOutgoing,
-    isLoading: sentQuery.isLoading || receivedQuery.isLoading,
+    isLoading: query.isLoading,
   };
 }

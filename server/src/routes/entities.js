@@ -27,6 +27,42 @@ function serializeValue(key, value) {
   return value;
 }
 
+const EMAIL_FILTER_KEYS = new Set([
+  'from_email',
+  'to_email',
+  'user_email',
+  'blocker_email',
+  'blocked_email',
+  'family_email',
+  'requester_email',
+  'author_email',
+  'reporter_email',
+]);
+
+/** Query strings turn '+' into space; demo accounts use plus-addressed emails. */
+function normalizeEmailFilterValue(value) {
+  if (typeof value !== 'string') return value;
+  const trimmed = value.trim().toLowerCase();
+  if (!trimmed.includes('@')) return trimmed;
+  const at = trimmed.indexOf('@');
+  const local = trimmed.slice(0, at);
+  const domain = trimmed.slice(at + 1);
+  if (local.includes(' ')) {
+    return `${local.replace(/\s+/g, '+')}@${domain}`;
+  }
+  return trimmed;
+}
+
+function normalizeEntityFilters(filters) {
+  const normalized = { ...filters };
+  for (const [key, value] of Object.entries(normalized)) {
+    if (EMAIL_FILTER_KEYS.has(key)) {
+      normalized[key] = normalizeEmailFilterValue(value);
+    }
+  }
+  return normalized;
+}
+
 function deserializeRow(row) {
   const entity = rowToEntity(row);
   for (const key of JSON_FIELDS) {
@@ -63,11 +99,28 @@ router.get('/:entity', requireAuth, async (req, res) => {
     return res.status(404).json({ error: 'entity_not_found' });
   }
 
-  const filters = { ...req.query };
+  let filters = { ...req.query };
   delete filters.sort;
   delete filters.limit;
+  filters = normalizeEntityFilters(filters);
 
   const rows = await withClient(async (client) => {
+    if (entityName === 'Connection') {
+      const clauses = ['(from_email = $1 OR to_email = $1)'];
+      const values = [req.user.email];
+      let index = 2;
+      for (const [key, value] of Object.entries(filters)) {
+        clauses.push(`${key} = $${index}`);
+        values.push(value);
+        index += 1;
+      }
+      const { column, direction } = parseSort(req.query.sort || config.sortDefault);
+      const limitClause = req.query.limit ? `LIMIT ${Number(req.query.limit)}` : '';
+      const sql = `SELECT * FROM ${config.table} WHERE ${clauses.join(' AND ')} ORDER BY ${column} ${direction} ${limitClause}`;
+      const result = await client.query(sql, values);
+      return result.rows.map(deserializeRow);
+    }
+
     if (entityName === 'Message') {
       const clauses = ['(from_email = $1 OR to_email = $1)'];
       const values = [req.user.email];
