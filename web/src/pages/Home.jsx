@@ -19,6 +19,7 @@ import { useToast } from '@/lib/toast';
 import { formatLabel } from '@/lib/format';
 import { PLACEHOLDER_AVATAR } from '@/lib/constants';
 import { COMPATIBILITY_CHALLENGE } from '@/lib/prototypeContent';
+import { isConnected } from '@/lib/connections';
 
 function profileLocation(profile) {
   const parts = [profile.city, profile.state].filter(Boolean);
@@ -43,6 +44,7 @@ export default function Home() {
     sendConnection,
     withdrawConnection,
     isPendingOutgoing,
+    connections,
   } = useConnectionActions();
   const sendMessage = useSendMessage();
   const { messages } = useMessages();
@@ -61,11 +63,15 @@ export default function Home() {
     return name ? `${salutation}, ${name.split(' ')[0]}` : salutation;
   }, [activeProfile?.display_name]);
 
-  const pendingMessageRequest = messageProfile
+  const messageTargetEmail = messageProfile?.user_email;
+  const chatConnected = messageTargetEmail && user?.email
+    ? isConnected(connections, user.email, messageTargetEmail)
+    : false;
+  const priorLetterRequest = messageTargetEmail
     ? messages.some(
       (item) =>
         item.from_email === user?.email
-        && item.to_email === messageProfile.user_email
+        && item.to_email === messageTargetEmail
         && item.is_request,
     )
     : false;
@@ -184,7 +190,9 @@ export default function Home() {
         messageText={messageText}
         onMessageTextChange={setMessageText}
         onSend={handleSendMessage}
-        isLocked={pendingMessageRequest}
+        connected={chatConnected}
+        priorLetterRequest={priorLetterRequest}
+        composerDisabled={Boolean(messageProfile?.is_demo)}
         sendingMessage={sendMessage.isPending}
       />
 

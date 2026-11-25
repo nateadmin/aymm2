@@ -453,6 +453,15 @@
   padding: 0.5rem 0 1rem;
 }
 
+.profile-chat-modal__helper {
+  margin: 0 0 var(--space-md);
+  line-height: 1.45;
+}
+
+.profile-chat-modal__form {
+  gap: var(--space-md);
+}
+
 .messages-empty__link {
   justify-self: start;
   padding: 0;
