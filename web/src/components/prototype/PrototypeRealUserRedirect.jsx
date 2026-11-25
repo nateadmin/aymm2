@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
 import { routeNeedsFixtureShell, withPreviewQuery } from '@/lib/screenCatalog';
 import { isCatalogFixtureReview } from '@/lib/stagingPreview';
-import { shouldUseDesignReviewShell } from '@/lib/session';
+import { getPostAuthPath, shouldUseDesignReviewShell } from '@/lib/session';
 
 /** Prototype routes show design fixtures (e.g. Sarah). Real accounts use live app shells. */
 export default function PrototypeRealUserRedirect({ children }) {
@@ -29,7 +29,7 @@ export default function PrototypeRealUserRedirect({ children }) {
 
     const target = path.includes('/my-profile') || path.includes('/settings')
       ? '/Profile'
-      : '/Home';
+      : getPostAuthPath({ user, profile, hasProfile });
     navigate(withPreviewQuery(target, { native: false, preview: '0' }), { replace: true });
   }, [user, profile, hasProfile, location.pathname, location.search, navigate]);
 
