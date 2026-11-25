@@ -447,6 +447,26 @@
   margin-bottom: var(--space-md);
 }
 
+.modal-shell__body {
+  display: grid;
+  gap: var(--space-md);
+}
+
+/* Primary CTAs in modals span the panel (avoids narrow left-aligned buttons). */
+.modal-shell__body > .aymm-button,
+.modal-shell__body > .page-shell__grid > .aymm-button,
+.modal-shell__body .profile-detail > .aymm-button,
+.modal-shell__body .modal-shell__footer > .aymm-button {
+  width: 100%;
+  max-width: none;
+}
+
+.modal-shell__footer {
+  display: grid;
+  gap: var(--space-sm);
+  padding-top: var(--space-xs);
+}
+
 .messages-empty {
   display: grid;
   gap: 0.75rem;

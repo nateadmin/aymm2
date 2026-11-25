@@ -41,12 +41,14 @@ export default function ProfileChatModal({
           placeholder="Write your letter..."
           disabled={composerDisabled}
         />
-        <Button
-          onClick={onSend}
-          disabled={composerDisabled || sendingMessage || !messageText?.trim()}
-        >
-          Send letter
-        </Button>
+        <div className="modal-shell__footer">
+          <Button
+            onClick={onSend}
+            disabled={composerDisabled || sendingMessage || !messageText?.trim()}
+          >
+            Send letter
+          </Button>
+        </div>
       </div>
     </Modal>
   );
