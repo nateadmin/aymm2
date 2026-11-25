@@ -7,7 +7,7 @@ import BackButton from '@/components/mobile/BackButton';
 import PrimaryActionLabel from '@/components/brand/PrimaryActionLabel';
 import Button from '@/components/ui/Button';
 import { labelForIdentity, labelForReligion } from '@/lib/constants';
-import { withPreviewQuery } from '@/lib/screenCatalog';
+import { withNavPreviewQuery, withPreviewQuery } from '@/lib/screenCatalog';
 
 export default function DiscoveryProfileScreen({ profile, backTo = '/screens' }) {
   const navigate = useNavigate();
@@ -63,7 +63,11 @@ export default function DiscoveryProfileScreen({ profile, backTo = '/screens' })
             <button
               type="button"
               className="discovery-profile__action"
-              onClick={() => navigate(withPreviewQuery(resolveLettersRoute(reviewSession)))}
+              onClick={() => navigate(withNavPreviewQuery(
+                resolveLettersRoute(reviewSession),
+                reviewSession,
+                { native: false },
+              ))}
             >
               <MessageCircle size={22} strokeWidth={1.75} />
               <span>Message</span>

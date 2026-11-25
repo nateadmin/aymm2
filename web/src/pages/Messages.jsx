@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import { ArrowLeft, Check, Send, X } from 'lucide-react';
 import PageShell from '@/components/PageShell';
@@ -12,47 +13,92 @@ import { useSendMessage } from '@/hooks/useSendMessage';
 import { useProfileMap } from '@/hooks/useProfileMap';
 import { useAuth } from '@/lib/auth';
 import { formatRelativeTime } from '@/lib/format';
+import { emailsMatch, normalizeParticipantEmail } from '@/lib/connections';
 
 export default function Messages() {
   const location = useLocation();
+  const queryClient = useQueryClient();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('open');
+  const tabFromSearch = new URLSearchParams(location.search).get('tab');
+  const tabFromState = location.state?.tab;
+  const resolvedInitialTab = tabFromSearch || tabFromState;
+
+  const [activeTab, setActiveTab] = useState(() => (
+    resolvedInitialTab === 'requests' || resolvedInitialTab === 'open' || resolvedInitialTab === 'connections'
+      ? resolvedInitialTab
+      : 'open'
+  ));
+  const autoTabApplied = useRef(Boolean(resolvedInitialTab));
 
   useEffect(() => {
-    const tab = location.state?.tab;
+    const tab = tabFromSearch || tabFromState;
     if (tab === 'requests' || tab === 'open' || tab === 'connections') {
       setActiveTab(tab);
+      autoTabApplied.current = true;
     }
-  }, [location.state]);
+  }, [tabFromSearch, tabFromState]);
   const [selectedEmail, setSelectedEmail] = useState(location.state?.selectedConvo || null);
   const [replyText, setReplyText] = useState('');
-  const { messages, letterRequests, unreadCount, isLoading } = useMessages();
+  const { messages, letterRequests, openUnreadCount, isLoading } = useMessages();
   const { accepted, pendingIncoming, pendingOutgoing } = useConnections();
+
+  useEffect(() => {
+    if (autoTabApplied.current || tabFromSearch || tabFromState || isLoading) return;
+    if (letterRequests.length > 0) {
+      setActiveTab('requests');
+      autoTabApplied.current = true;
+    } else if (pendingIncoming.length > 0) {
+      setActiveTab('connections');
+      autoTabApplied.current = true;
+    }
+  }, [isLoading, letterRequests.length, pendingIncoming.length, tabFromSearch, tabFromState]);
+
+  useEffect(() => {
+    if (activeTab === 'connections') {
+      queryClient.invalidateQueries({ queryKey: ['Connection'] });
+    }
+  }, [activeTab, queryClient]);
+
   const { acceptConnection, declineConnection } = useConnectionActions();
   const sendMessage = useSendMessage();
   const { getProfile } = useProfileMap();
 
+  const userEmail = user?.email;
+
   const acceptedEmails = useMemo(
     () => accepted.map((item) => (
-      item.from_email === user.email ? item.to_email : item.from_email
+      emailsMatch(item.from_email, userEmail) ? item.to_email : item.from_email
     )),
-    [accepted, user.email],
+    [accepted, userEmail],
   );
 
   const conversations = useMemo(() => {
     const map = {};
     messages.forEach((message) => {
-      const otherEmail = message.from_email === user.email ? message.to_email : message.from_email;
+      const otherEmail = message.from_email === userEmail ? message.to_email : message.from_email;
       if (!map[otherEmail]) map[otherEmail] = [];
       map[otherEmail].push(message);
     });
     return map;
-  }, [messages, user.email]);
+  }, [messages, userEmail]);
 
-  const openConvos = Object.entries(conversations).filter(([email]) => (
-    acceptedEmails.includes(email)
-    || pendingOutgoing.some((item) => item.to_email === email)
-  ));
+  const openConvos = useMemo(() => {
+    const rows = new Map();
+    Object.entries(conversations).forEach(([email, msgs]) => {
+      const connected = acceptedEmails.some((peer) => emailsMatch(peer, email));
+      const waitingOnThem = pendingOutgoing.some((item) => emailsMatch(item.to_email, email));
+      if (connected || waitingOnThem) {
+        rows.set(normalizeParticipantEmail(email), { email, msgs });
+      }
+    });
+    acceptedEmails.forEach((peer) => {
+      const key = normalizeParticipantEmail(peer);
+      if (!rows.has(key)) {
+        rows.set(key, { email: peer, msgs: [] });
+      }
+    });
+    return [...rows.values()];
+  }, [conversations, acceptedEmails, pendingOutgoing]);
 
   const threadMessages = selectedEmail
     ? [...(conversations[selectedEmail] || [])].sort(
@@ -61,13 +107,22 @@ export default function Messages() {
     : [];
 
   const isApproved = selectedEmail
-    ? acceptedEmails.includes(selectedEmail)
+    ? acceptedEmails.some((peer) => emailsMatch(peer, selectedEmail))
     : false;
 
+  const handleAcceptConnection = async (connection) => {
+    await acceptConnection.mutateAsync(connection);
+    const partnerEmail = connection.from_email;
+    setActiveTab('open');
+    setSelectedEmail(partnerEmail);
+  };
+
   const badgeCounts = {
-    open: unreadCount || undefined,
-    requests: letterRequests.length || undefined,
-    connections: pendingIncoming.length || undefined,
+    open: activeTab !== 'open' && openUnreadCount ? openUnreadCount : undefined,
+    requests: activeTab !== 'requests' && letterRequests.length ? letterRequests.length : undefined,
+    connections: activeTab !== 'connections' && pendingIncoming.length
+      ? pendingIncoming.length
+      : undefined,
   };
 
   const handleSendReply = async () => {
@@ -109,7 +164,7 @@ export default function Messages() {
 
         <div className="chat-view__thread">
           {threadMessages.map((message) => {
-            const mine = message.from_email === user.email;
+            const mine = message.from_email === userEmail;
             return (
               <div
                 key={message.id}
@@ -151,13 +206,14 @@ export default function Messages() {
 
       {activeTab === 'open' ? (
         <div className="conversation-list">
-          {openConvos.length ? openConvos.map(([email, msgs]) => {
+          {openConvos.length ? openConvos.map(({ email, msgs }) => {
             const profile = getProfile(email);
             const lastMsg = [...msgs].sort(
               (a, b) => new Date(b.created_date) - new Date(a.created_date),
             )[0];
-            const hasUnread = msgs.some((item) => item.to_email === user.email && !item.read);
-            const waiting = pendingOutgoing.some((item) => item.to_email === email);
+            const hasUnread = msgs.some((item) => item.to_email === userEmail && !item.read);
+            const waiting = pendingOutgoing.some((item) => emailsMatch(item.to_email, email))
+              && !acceptedEmails.some((peer) => emailsMatch(peer, email));
             return (
               <button
                 key={email}
@@ -176,11 +232,28 @@ export default function Messages() {
                     {waiting ? <span className="conversation-card__chip">Pending approval</span> : null}
                     {hasUnread ? <span className="conversation-card__dot" /> : null}
                   </div>
-                  <p className="conversation-card__preview">{lastMsg?.content}</p>
+                  <p className="conversation-card__preview">
+                    {lastMsg?.content || (acceptedEmails.some((peer) => emailsMatch(peer, email))
+                      ? 'Connected — write your first letter'
+                      : 'Pending approval')}
+                  </p>
                 </div>
               </button>
             );
-          }) : <p className="aymm-muted">No open chats yet.</p>}
+          }) : (
+            <div className="messages-empty">
+              <p className="aymm-muted">No open chats yet.</p>
+              {letterRequests.length ? (
+                <button
+                  type="button"
+                  className="messages-empty__link"
+                  onClick={() => setActiveTab('requests')}
+                >
+                  You have {letterRequests.length} letter request{letterRequests.length === 1 ? '' : 's'} — view Requests
+                </button>
+              ) : null}
+            </div>
+          )}
         </div>
       ) : null}
 
@@ -223,7 +296,7 @@ export default function Messages() {
                 </div>
                 <div className="connection-card__actions">
                   <Button
-                    onClick={() => acceptConnection.mutate(connection)}
+                    onClick={() => handleAcceptConnection(connection)}
                     disabled={acceptConnection.isPending}
                   >
                     <Check size={16} />

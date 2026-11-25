@@ -1,5 +1,5 @@
 import { isCatalogFixtureReview } from './stagingPreview';
-import { shouldUseDesignReviewShell } from './session';
+import { isFamilyProfile, shouldUseDesignReviewShell } from './session';
 
 const APP_ROUTES = {
   home: { live: '/Home', fixture: '/Prototype/home' },
@@ -17,9 +17,26 @@ export function isFixtureReviewMode(session = {}) {
 export function resolveAppRoute(kind, session = {}) {
   const routes = APP_ROUTES[kind];
   if (!routes) return '/Home';
-  return isFixtureReviewMode(session) ? routes.fixture : routes.live;
+  if (!isFixtureReviewMode(session)) {
+    if (kind === 'home' && isFamilyProfile(session?.profile)) return '/FamilyTables';
+    return routes.live;
+  }
+  return routes.fixture;
 }
 
 export function resolveLettersRoute(session = {}) {
   return resolveAppRoute('letters', session);
+}
+
+function appendSearchParam(path, key, value) {
+  if (path.includes(`${key}=`)) return path;
+  const sep = path.includes('?') ? '&' : '?';
+  return `${path}${sep}${key}=${encodeURIComponent(value)}`;
+}
+
+/** Live or fixture letters route with optional Messages tab (`requests` | `open` | `connections`). */
+export function resolveMessagesPath(session = {}, { tab } = {}) {
+  const base = resolveAppRoute('letters', session);
+  if (!tab || !base.startsWith('/Messages')) return base;
+  return appendSearchParam(base, 'tab', tab);
 }

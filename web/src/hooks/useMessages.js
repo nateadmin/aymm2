@@ -26,10 +26,19 @@ export function useMessages() {
     (message) => !message.read && message.to_email === user?.email,
   ).length;
 
+  /** Unread in Open-tab conversations only (excludes letter requests). */
+  const openUnreadCount = messages.filter(
+    (message) =>
+      !message.read
+      && message.to_email === user?.email
+      && !message.is_request,
+  ).length;
+
   return {
     messages,
     letterRequests,
     unreadCount,
+    openUnreadCount,
     isLoading: sentQuery.isLoading || receivedQuery.isLoading,
   };
 }

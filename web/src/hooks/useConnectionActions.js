@@ -15,8 +15,10 @@ export function useConnectionActions() {
   const { push } = useToast();
   const { connections, pendingOutgoing } = useConnections();
 
-  const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: ['Connection'] });
+  const refreshConnections = async () => {
+    await queryClient.invalidateQueries({ queryKey: ['Connection'] });
+    await queryClient.refetchQueries({ queryKey: ['Connection', 'mine'] });
+    await queryClient.invalidateQueries({ queryKey: ['Message'] });
   };
 
   const sendConnection = useMutation({
@@ -38,8 +40,8 @@ export function useConnectionActions() {
       });
       return { sent: true };
     },
-    onSuccess: (result) => {
-      invalidate();
+    onSuccess: async (result) => {
+      await refreshConnections();
       if (result?.accepted) {
         push('Your request has been accepted!', 'success');
       } else if (result?.sent) {
@@ -56,24 +58,24 @@ export function useConnectionActions() {
         await entities.Connection.delete(pending.id);
       }
     },
-    onSuccess: () => {
-      invalidate();
+    onSuccess: async () => {
+      await refreshConnections();
       push('Request withdrawn.', 'success');
     },
   });
 
   const acceptConnection = useMutation({
     mutationFn: (connection) => entities.Connection.update(connection.id, { status: 'accepted' }),
-    onSuccess: () => {
-      invalidate();
+    onSuccess: async () => {
+      await refreshConnections();
       push('Connection accepted. Chat is now open.', 'success');
     },
   });
 
   const declineConnection = useMutation({
     mutationFn: (connection) => entities.Connection.update(connection.id, { status: 'declined' }),
-    onSuccess: () => {
-      invalidate();
+    onSuccess: async () => {
+      await refreshConnections();
       push('Request declined.', 'success');
     },
   });

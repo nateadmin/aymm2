@@ -1,27 +1,27 @@
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/api/client';
 import { useAuth } from '@/lib/auth';
-import { useEntityList } from './useEntityList';
+import { emailsMatch } from '@/lib/connections';
 
 export function useConnections() {
   const { user } = useAuth();
-  const sentQuery = useEntityList('Connection', { from_email: user?.email }, {
+  const query = useQuery({
+    queryKey: ['Connection', 'mine', user?.email],
+    queryFn: () => api.get('/api/connections/mine'),
     enabled: Boolean(user?.email),
-  });
-  const receivedQuery = useEntityList('Connection', { to_email: user?.email }, {
-    enabled: Boolean(user?.email),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 
-  const connections = useMemo(
-    () => [...(sentQuery.data || []), ...(receivedQuery.data || [])],
-    [sentQuery.data, receivedQuery.data],
-  );
+  const connections = useMemo(() => query.data || [], [query.data]);
 
   const accepted = connections.filter((connection) => connection.status === 'accepted');
   const pendingIncoming = connections.filter(
-    (connection) => connection.status === 'pending' && connection.to_email === user?.email,
+    (connection) => connection.status === 'pending' && emailsMatch(connection.to_email, user?.email),
   );
   const pendingOutgoing = connections.filter(
-    (connection) => connection.status === 'pending' && connection.from_email === user?.email,
+    (connection) => connection.status === 'pending' && emailsMatch(connection.from_email, user?.email),
   );
 
   return {
@@ -29,6 +29,6 @@ export function useConnections() {
     accepted,
     pendingIncoming,
     pendingOutgoing,
-    isLoading: sentQuery.isLoading || receivedQuery.isLoading,
+    isLoading: query.isLoading,
   };
 }

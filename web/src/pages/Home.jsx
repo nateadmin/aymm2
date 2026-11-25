@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Check } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import HomeHubLayout, { timeOfDayGreeting } from '@/components/home/HomeHubLayout';
 import QuickActionList from '@/components/home/QuickActionList';
@@ -19,6 +19,7 @@ import { useToast } from '@/lib/toast';
 import { formatLabel } from '@/lib/format';
 import { PLACEHOLDER_AVATAR } from '@/lib/constants';
 import { COMPATIBILITY_CHALLENGE } from '@/lib/prototypeContent';
+import { isConnected } from '@/lib/connections';
 
 function profileLocation(profile) {
   const parts = [profile.city, profile.state].filter(Boolean);
@@ -35,7 +36,7 @@ export default function Home() {
   const navigate = useNavigate();
   const profilesSectionRef = useRef(null);
   const { push } = useToast();
-  const { profile: authProfile, user, hasProfile } = useAuth();
+  const { profile: authProfile, user, hasProfile, isFamily } = useAuth();
 
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
   const activeProfile = myProfile || authProfile;
@@ -43,6 +44,7 @@ export default function Home() {
     sendConnection,
     withdrawConnection,
     isPendingOutgoing,
+    connections,
   } = useConnectionActions();
   const sendMessage = useSendMessage();
   const { messages } = useMessages();
@@ -61,8 +63,17 @@ export default function Home() {
     return name ? `${salutation}, ${name.split(' ')[0]}` : salutation;
   }, [activeProfile?.display_name]);
 
-  const pendingMessageRequest = messageProfile
-    ? messages.some((item) => item.from_email && item.to_email === messageProfile.user_email && item.is_request)
+  const messageTargetEmail = messageProfile?.user_email;
+  const chatConnected = messageTargetEmail && user?.email
+    ? isConnected(connections, user.email, messageTargetEmail)
+    : false;
+  const priorLetterRequest = messageTargetEmail
+    ? messages.some(
+      (item) =>
+        item.from_email === user?.email
+        && item.to_email === messageTargetEmail
+        && item.is_request,
+    )
     : false;
 
   const handlePrimaryAction = (profile) => {
@@ -102,6 +113,10 @@ export default function Home() {
         <div className="app-loading__spinner" aria-label="Loading" />
       </div>
     );
+  }
+
+  if (isFamily) {
+    return <Navigate to="/FamilyTables" replace />;
   }
 
   return (
@@ -179,7 +194,9 @@ export default function Home() {
         messageText={messageText}
         onMessageTextChange={setMessageText}
         onSend={handleSendMessage}
-        isLocked={pendingMessageRequest}
+        connected={chatConnected}
+        priorLetterRequest={priorLetterRequest}
+        composerDisabled={Boolean(messageProfile?.is_demo)}
         sendingMessage={sendMessage.isPending}
       />
 
@@ -221,21 +238,23 @@ export default function Home() {
             );
           })}
         </div>
-        <Button
-          disabled={!challengeProfile?.user_email || challengeProfile?.is_demo || sendMessage.isPending}
-          onClick={async () => {
-            if (!challengeProfile?.user_email || challengeProfile.is_demo) return;
-            const option = COMPATIBILITY_CHALLENGE.options.find((item) => item.id === challengeAnswer);
-            await sendMessage.mutateAsync({
-              toEmail: challengeProfile.user_email,
-              content: `Compatibility challenge: ${COMPATIBILITY_CHALLENGE.question}\nMy answer: ${option?.label || challengeAnswer}`,
-              forceRequest: true,
-            });
-            setChallengeProfile(null);
-          }}
-        >
-          Send challenge
-        </Button>
+        <div className="modal-shell__footer">
+          <Button
+            disabled={!challengeProfile?.user_email || challengeProfile?.is_demo || sendMessage.isPending}
+            onClick={async () => {
+              if (!challengeProfile?.user_email || challengeProfile.is_demo) return;
+              const option = COMPATIBILITY_CHALLENGE.options.find((item) => item.id === challengeAnswer);
+              await sendMessage.mutateAsync({
+                toEmail: challengeProfile.user_email,
+                content: `Compatibility challenge: ${COMPATIBILITY_CHALLENGE.question}\nMy answer: ${option?.label || challengeAnswer}`,
+                forceRequest: true,
+              });
+              setChallengeProfile(null);
+            }}
+          >
+            Send challenge
+          </Button>
+        </div>
       </Modal>
 
       <Modal
@@ -250,15 +269,17 @@ export default function Home() {
           value={`${window.location.origin}?profile=${shareProfile?.id || ''}`}
           readOnly
         />
-        <Button
-          onClick={async () => {
-            await navigator.clipboard.writeText(`${window.location.origin}?profile=${shareProfile?.id}`);
-            push('Link copied!', 'success');
-            setShareProfile(null);
-          }}
-        >
-          Copy link
-        </Button>
+        <div className="modal-shell__footer">
+          <Button
+            onClick={async () => {
+              await navigator.clipboard.writeText(`${window.location.origin}?profile=${shareProfile?.id}`);
+              push('Link copied!', 'success');
+              setShareProfile(null);
+            }}
+          >
+            Copy link
+          </Button>
+        </div>
       </Modal>
     </>
   );

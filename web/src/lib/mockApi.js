@@ -31,6 +31,15 @@ export function tryMockApi(path, method = 'GET', body, token) {
 
   const upperMethod = method.toUpperCase();
 
+  if (path === '/api/connections/mine' && upperMethod === 'GET') {
+    const session = loadMockSession();
+    const email = session?.user?.email;
+    if (!email) return [];
+    return listMockConnections({ from_email: email }).concat(
+      listMockConnections({ to_email: email }),
+    );
+  }
+
   if (path === '/api/profile/me' && upperMethod === 'GET') {
     const session = loadMockSession();
     return { profile: session?.profile ?? null };

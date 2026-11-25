@@ -14,6 +14,8 @@ import {
   mockSaveProfile,
 } from '@/lib/mockAuth';
 import { isRealAppPreviewForced } from '@/lib/stagingPreview';
+import { isFamilyProfile } from '@/lib/session';
+import { queryClient } from '@/lib/queryClient';
 
 const AuthContext = createContext(null);
 
@@ -105,7 +107,7 @@ export function AuthProvider({ children }) {
     isLoading,
     authError,
     isAdmin: user?.role === 'admin' || user?.role === 'super_admin',
-    isFamily: profile?.identity_type === 'family',
+    isFamily: isFamilyProfile(profile),
     hasProfile: Boolean(profile?.setup_complete),
     isBlocked: Boolean(user?.is_blocked),
     refresh: bootstrap,
@@ -119,6 +121,9 @@ export function AuthProvider({ children }) {
       const data = await authApi.login(email, password);
       setStoredToken(data.token);
       setAuthError(null);
+      await queryClient.invalidateQueries({ queryKey: ['Connection'] });
+      await queryClient.invalidateQueries({ queryKey: ['Message'] });
+      await queryClient.invalidateQueries({ queryKey: ['Profile'] });
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },

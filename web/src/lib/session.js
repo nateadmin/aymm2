@@ -20,6 +20,10 @@ export function hasCompletedProfile(profile) {
   return Boolean(profile?.setup_complete);
 }
 
+export function isFamilyProfile(profile) {
+  return profile?.identity_type === 'family';
+}
+
 function sessionEmail(session) {
   return (session?.user?.email || session?.profile?.user_email || '').trim().toLowerCase();
 }
@@ -54,7 +58,7 @@ export function getPostAuthPath(session) {
   const complete = hasCompletedProfile(session?.profile) || session?.hasProfile;
   if (!complete) return '/ProfileSetup/upload-photo';
   if (shouldUseDesignHome(session)) return DESIGN_HOME_ROUTE;
-  if (session?.profile?.identity_type === 'family') return '/FamilyTables';
+  if (isFamilyProfile(session?.profile)) return '/FamilyTables';
   return '/Home';
 }
 

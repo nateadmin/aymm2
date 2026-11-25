@@ -13,7 +13,7 @@ export default function AppLayout() {
 
   useEffect(() => {
     if (isFamily && location.pathname === '/Home') {
-      navigate('/Newsfeed', { replace: true });
+      navigate('/FamilyTables', { replace: true });
     }
   }, [isFamily, location.pathname, navigate]);
 

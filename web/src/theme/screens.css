@@ -1020,10 +1020,19 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
     width: 100%;
     max-width: var(--button-max-width);
     align-self: stretch;
+  }
+
+  .screen-pad--handheld > .mobile-onboarding__actions,
+  .screen-pad--handheld > .connection-success__actions,
+  .auth-page > .auth-page__footer {
     padding-top: var(--space-md);
     padding-bottom: var(--space-screen-footer);
     background: var(--aymm-white);
     box-shadow: 0 -10px 24px -20px rgb(63 33 77 / 35%);
+  }
+
+  .screen-pad--handheld > .aymm-button {
+    padding-bottom: var(--space-screen-footer);
   }
 
   .mobile-onboarding--scroll {
@@ -3414,10 +3423,18 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
     width: 100%;
     max-width: var(--button-max-width);
     align-self: stretch;
+  }
+
+  .mobile-canvas .screen-pad--handheld > .mobile-onboarding__actions,
+  .mobile-canvas .screen-pad--handheld > .connection-success__actions {
     padding-top: var(--space-md);
     padding-bottom: var(--space-screen-footer);
     background: var(--aymm-white);
     box-shadow: 0 -10px 24px -20px rgb(63 33 77 / 35%);
+  }
+
+  .mobile-canvas .screen-pad--handheld > .aymm-button {
+    padding-bottom: var(--space-screen-footer);
   }
 }
 
