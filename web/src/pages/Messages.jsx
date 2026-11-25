@@ -36,7 +36,7 @@ export default function Messages() {
   }, [tabFromSearch, tabFromState]);
   const [selectedEmail, setSelectedEmail] = useState(location.state?.selectedConvo || null);
   const [replyText, setReplyText] = useState('');
-  const { messages, letterRequests, unreadCount, isLoading } = useMessages();
+  const { messages, letterRequests, openUnreadCount, isLoading } = useMessages();
   const { accepted, pendingIncoming, pendingOutgoing } = useConnections();
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export default function Messages() {
     : false;
 
   const badgeCounts = {
-    open: unreadCount || undefined,
+    open: openUnreadCount || undefined,
     requests: letterRequests.length || undefined,
     connections: pendingIncoming.length || undefined,
   };
