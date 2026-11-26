@@ -9,6 +9,18 @@ const EXACT_PREVIEW_HOSTS = new Set([
   '127.0.0.1',
 ]);
 
+/** Public production host — live app by default; design/mock only with ?preview=1 */
+const PRODUCTION_BRANDED_HOSTS = new Set([
+  'aymm.app',
+  'www.aymm.app',
+  'aymmapp.com',
+  'www.aymmapp.com',
+]);
+
+export function isProductionBrandedHost(hostname = typeof window !== 'undefined' ? window.location.hostname : '') {
+  return Boolean(hostname) && PRODUCTION_BRANDED_HOSTS.has(hostname);
+}
+
 /** Hosts used by StackBlitz, WebContainers, Codespaces, etc. */
 const PREVIEW_HOST_SUFFIXES = [
   '.webcontainer.io',
@@ -55,11 +67,15 @@ export function isStagingHost() {
 /** Call before React mounts so the first route guard sees preview mode. */
 export function initStagingPreview() {
   const param = readPreviewParam();
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
   if (param === '1' || param === '0' || isDesignReviewHost()) {
     try {
       if (param === '1') {
         sessionStorage.removeItem(STORAGE_KEY);
       } else if (param === '0') {
+        sessionStorage.setItem(STORAGE_KEY, 'off');
+      } else if (isProductionBrandedHost(hostname)) {
+        // aymm.app: real signup/login by default (no ?preview=0 required on every link)
         sessionStorage.setItem(STORAGE_KEY, 'off');
       }
     } catch {
@@ -72,7 +88,8 @@ export function initStagingPreview() {
  * Skip login for design review.
  * - `?preview=1` forces bypass on any host (StackBlitz, staging, etc.)
  * - `?preview=0` forces login even on review hosts
- * - On review hosts, bypass is on by default unless turned off in session
+ * - On aymm.app / aymmapp.com: **live app by default** (mock only when `?preview=1`)
+ * - Other review hosts: bypass on by default unless session is off
  */
 export function isStagingPreviewEnabled() {
   const param = readPreviewParam();
@@ -80,6 +97,11 @@ export function isStagingPreviewEnabled() {
   if (param === '0') return false;
 
   if (!isDesignReviewHost()) return false;
+
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+  if (isProductionBrandedHost(hostname)) {
+    return false;
+  }
 
   try {
     return sessionStorage.getItem(STORAGE_KEY) !== 'off';
