@@ -17,7 +17,7 @@ import {
 import { isPhase2LiveDemoEmail } from '@/lib/phase2LiveDemoAccounts';
 import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 import { isFamilyProfile } from '@/lib/session';
-import { queryClient } from '@/lib/queryClient';
+import { clearClientCaches, clearEphemeralUserData } from '@/lib/clientSessionReset';
 
 const AuthContext = createContext(null);
 
@@ -97,6 +97,7 @@ export function AuthProvider({ children }) {
         setUser(null);
         setProfile(null);
         setAuthError({ type: 'auth_required' });
+        await clearClientCaches();
       } else {
         setAuthError({ type: 'bootstrap_failed' });
       }
@@ -125,7 +126,7 @@ export function AuthProvider({ children }) {
       const normalizedEmail = email.trim().toLowerCase();
       const forceRealApi = isPhase2LiveDemoEmail(normalizedEmail) || isRealAppPreviewForced();
       const priorToken = getStoredToken();
-      clearMockSession();
+      clearEphemeralUserData();
       if (priorToken && !isMockToken(priorToken)) {
         try {
           await authApi.logout();
@@ -137,7 +138,7 @@ export function AuthProvider({ children }) {
       if (shouldUseMockCredentials() && !forceRealApi) {
         const session = mockLogin(email, password);
         setStoredToken(session.token);
-        await queryClient.clear();
+        await clearClientCaches();
         return applySession(session);
       }
 
@@ -145,16 +146,25 @@ export function AuthProvider({ children }) {
       setStoredToken(data.token);
       setAuthError(null);
       applySession({ user: data.user, profile: null });
-      await queryClient.clear();
+      await clearClientCaches();
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },
     register: async (email, password) => {
-      clearMockSession();
+      const priorToken = getStoredToken();
+      clearEphemeralUserData();
+      if (priorToken && !isMockToken(priorToken)) {
+        try {
+          await authApi.logout();
+        } catch {
+          // continue — new account must not inherit the previous session
+        }
+      }
+
       if (shouldUseMockCredentials()) {
         const session = mockRegister(email, password);
         setStoredToken(session.token);
-        await queryClient.clear();
+        await clearClientCaches();
         return applySession(session);
       }
 
@@ -162,7 +172,7 @@ export function AuthProvider({ children }) {
       setStoredToken(data.token);
       setAuthError(null);
       applySession({ user: data.user, profile: null });
-      await queryClient.clear();
+      await clearClientCaches();
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },
@@ -187,11 +197,11 @@ export function AuthProvider({ children }) {
           // ignore logout failures for local cleanup
         }
       }
-      clearMockSession();
       setStoredToken(null);
       setUser(null);
       setProfile(null);
       setAuthError({ type: 'auth_required' });
+      await clearClientCaches();
     },
     setProfileState: (updater) => {
       setProfile((previous) => {
