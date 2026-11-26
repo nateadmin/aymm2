@@ -132,6 +132,7 @@ export function AuthProvider({ children }) {
       const data = await authApi.login(email, password);
       setStoredToken(data.token);
       setAuthError(null);
+      applySession({ user: data.user, profile: null });
       await queryClient.clear();
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };

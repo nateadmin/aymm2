@@ -161,6 +161,12 @@ export default function ProfileSettings() {
             <p className="prototype-settings__name">{profile.display_name}</p>
             <p className="prototype-settings__meta">
               {role}{location ? ` · ${location}` : ''}
+              {user?.email ? (
+                <>
+                  <br />
+                  <span className="aymm-muted">{user.email}</span>
+                </>
+              ) : null}
             </p>
           </div>
         </div>
