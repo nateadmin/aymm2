@@ -5,7 +5,10 @@ import HeartLogo from '@/components/brand/HeartLogo';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 import { getPostAuthPath } from '@/lib/session';
+import { getStoredToken } from '@/api/client';
 import { withPreviewQuery } from '@/lib/screenCatalog';
+import { isMockToken } from '@/lib/mockAuth';
+import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 
 export default function CompleteStep() {
   const navigate = useNavigate();
@@ -48,10 +51,16 @@ export default function CompleteStep() {
         </div>
 
         <Button
-          onClick={() => navigate(
-            withPreviewQuery(getPostAuthPath({ user, profile, hasProfile })),
-            { replace: true },
-          )}
+          onClick={() => {
+            const livePreview = isRealAppPreviewForced() || !isMockToken(getStoredToken()) ? '0' : undefined;
+            navigate(
+              withPreviewQuery(getPostAuthPath({ user, profile, hasProfile }), {
+                native: false,
+                preview: livePreview,
+              }),
+              { replace: true },
+            );
+          }}
         >
           Start Finding Family
         </Button>

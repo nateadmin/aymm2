@@ -5,6 +5,7 @@ import {
   clearMockSession,
   isMockAuthEnabled,
   isMockToken,
+  shouldUseMockCredentials,
   loadMockSession,
   mockLogin,
   mockMe,
@@ -133,7 +134,7 @@ export function AuthProvider({ children }) {
         }
       }
 
-      if (isMockAuthEnabled() && !forceRealApi) {
+      if (shouldUseMockCredentials() && !forceRealApi) {
         const session = mockLogin(email, password);
         setStoredToken(session.token);
         await queryClient.clear();
@@ -149,15 +150,19 @@ export function AuthProvider({ children }) {
       return session || { user: data.user, profile: null, hasProfile: false };
     },
     register: async (email, password) => {
-      if (isMockAuthEnabled()) {
+      clearMockSession();
+      if (shouldUseMockCredentials()) {
         const session = mockRegister(email, password);
         setStoredToken(session.token);
+        await queryClient.clear();
         return applySession(session);
       }
 
       const data = await authApi.register(email, password);
       setStoredToken(data.token);
       setAuthError(null);
+      applySession({ user: data.user, profile: null });
+      await queryClient.clear();
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },

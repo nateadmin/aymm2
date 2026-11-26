@@ -6,12 +6,17 @@ import {
   MOCK_LOGIN_PASSWORD,
   isMockAuthEnabled,
   isMockToken,
+  shouldUseMockCredentials,
   mockLogin,
   mockRegister,
   mockSaveProfile,
   loadMockSession,
   clearMockSession,
 } from './mockAuth.js';
+
+test('shouldUseMockCredentials requires explicit preview=1', () => {
+  assert.equal(shouldUseMockCredentials(), false);
+});
 
 test('isMockAuthEnabled is off on live staging without preview=1', () => {
   assert.equal(isMockAuthEnabled('aymm.app'), false);

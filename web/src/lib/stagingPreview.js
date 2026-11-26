@@ -22,7 +22,7 @@ const PREVIEW_HOST_SUFFIXES = [
   '.trycloudflare.com',
 ];
 
-function readPreviewParam() {
+export function readPreviewParam() {
   try {
     return new URLSearchParams(window.location.search).get('preview');
   } catch {

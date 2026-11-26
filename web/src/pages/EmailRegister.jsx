@@ -6,7 +6,9 @@ import SplashBrand from '@/components/mobile/SplashBrand';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/lib/toast';
-import { isMockAuthEnabled } from '@/lib/mockAuth';
+import { isMockAuthEnabled, shouldUseMockCredentials } from '@/lib/mockAuth';
+import { withPreviewQuery } from '@/lib/screenCatalog';
+import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 
 export default function EmailRegister() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function EmailRegister() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const mockAuth = isMockAuthEnabled();
+  const mockAuth = shouldUseMockCredentials();
 
   const canSubmit = email.trim() && password.trim().length >= 8;
 
@@ -25,7 +27,11 @@ export default function EmailRegister() {
     setSubmitting(true);
     try {
       await register(email.trim(), password);
-      navigate('/ProfileSetup/upload-photo', { replace: true });
+      const livePreview = isRealAppPreviewForced() || !mockAuth ? '0' : undefined;
+      navigate(
+        withPreviewQuery('/ProfileSetup/upload-photo', { native: false, preview: livePreview }),
+        { replace: true },
+      );
     } catch (error) {
       const message = error.payload?.error === 'email_taken'
         ? 'That email is already registered.'
@@ -39,7 +45,7 @@ export default function EmailRegister() {
   return (
     <AuthPage
       as="form"
-      backTo="/demo"
+      backTo={mockAuth ? '/demo' : '/Register'}
       onSubmit={handleSubmit}
       header={(
         <>
