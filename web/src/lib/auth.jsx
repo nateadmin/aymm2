@@ -13,6 +13,7 @@ import {
   mockResetPassword,
   mockSaveProfile,
 } from '@/lib/mockAuth';
+import { isPhase2LiveDemoEmail } from '@/lib/phase2LiveDemoAccounts';
 import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 import { isFamilyProfile } from '@/lib/session';
 import { queryClient } from '@/lib/queryClient';
@@ -58,6 +59,14 @@ export function AuthProvider({ children }) {
 
     if (isMockAuthEnabled() && isMockToken(token)) {
       const mockSession = mockMe(token) || loadMockSession();
+      if (mockSession?.user?.email && isPhase2LiveDemoEmail(mockSession.user.email)) {
+        setStoredToken(null);
+        clearMockSession();
+        setUser(null);
+        setProfile(null);
+        setIsLoading(false);
+        return null;
+      }
       if (mockSession) {
         const session = applySession({
           user: mockSession.user,
@@ -112,6 +121,8 @@ export function AuthProvider({ children }) {
     isBlocked: Boolean(user?.is_blocked),
     refresh: bootstrap,
     login: async (email, password) => {
+      const normalizedEmail = email.trim().toLowerCase();
+      const forceRealApi = isPhase2LiveDemoEmail(normalizedEmail) || isRealAppPreviewForced();
       const priorToken = getStoredToken();
       clearMockSession();
       if (priorToken && !isMockToken(priorToken)) {
@@ -122,7 +133,7 @@ export function AuthProvider({ children }) {
         }
       }
 
-      if (isMockAuthEnabled()) {
+      if (isMockAuthEnabled() && !forceRealApi) {
         const session = mockLogin(email, password);
         setStoredToken(session.token);
         await queryClient.clear();

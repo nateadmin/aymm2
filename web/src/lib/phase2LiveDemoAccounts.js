@@ -8,3 +8,10 @@ export const PHASE2_LIVE_DEMO_ACCOUNTS = [
   { email: 'phase2.james+demo@aymm.app', label: 'Father (James)' },
   { email: 'phase2.martinez+demo@aymm.app', label: 'Family (Martinez)' },
 ];
+
+const PHASE2_LIVE_EMAILS = new Set(PHASE2_LIVE_DEMO_ACCOUNTS.map((a) => a.email));
+
+/** Postgres demo personas — always real API on aymm.app, never in-browser mock auth. */
+export function isPhase2LiveDemoEmail(email) {
+  return PHASE2_LIVE_EMAILS.has(String(email || '').trim().toLowerCase());
+}
