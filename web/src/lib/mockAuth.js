@@ -127,6 +127,7 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
   }
 
   const existing = loadMockSession();
+  const sameAccount = existing?.user?.email === normalized;
   const demoProfile = {
     user_email: normalized,
     display_name: 'Design Review',
@@ -141,10 +142,10 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
         ? discoveryAccount.profile
         : matchesDemo
           ? demoProfile
-          : existing?.profile?.setup_complete
+          : sameAccount && existing?.profile?.setup_complete
             ? existing.profile
             : demoProfile
-      : existing?.profile ?? null,
+      : sameAccount ? existing?.profile ?? null : null,
   };
 
   saveMockSession(session);

@@ -42,6 +42,15 @@ test('mockLogin loads Phase 2 discovery persona profile', () => {
   assert.equal(session.profile.display_name, 'Sarah');
 });
 
+test('mockLogin does not reuse another account profile after switching emails', () => {
+  clearMockSession();
+  mockLogin('daughter.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
+  const mother = mockLogin('mother.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
+  assert.equal(mother.user.email, 'mother.demo@aymm.test');
+  assert.equal(mother.profile.display_name, 'Deborah');
+  assert.notEqual(mother.profile.user_email, 'daughter.demo@aymm.test');
+});
+
 test('mockSaveProfile stores onboarding progress', () => {
   clearMockSession();
   mockRegister('builder@example.com', 'password1');

@@ -1,4 +1,5 @@
 import { shouldUseDesignReviewShell } from './session.js';
+import { isRealAppPreviewForced } from './stagingPreview.js';
 
 /**
  * Wireframe screen map (53 screens, 4 phases).
@@ -209,6 +210,7 @@ function shouldKeepNativePreview({ native } = {}) {
 function resolvePreviewQueryValue(explicit) {
   if (explicit === '0' || explicit === '1') return explicit;
   if (typeof window === 'undefined') return '1';
+  if (isRealAppPreviewForced()) return '0';
   const current = new URLSearchParams(window.location.search).get('preview');
   if (current === '0' || current === '1') return current;
   return '1';

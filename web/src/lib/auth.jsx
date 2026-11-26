@@ -112,18 +112,27 @@ export function AuthProvider({ children }) {
     isBlocked: Boolean(user?.is_blocked),
     refresh: bootstrap,
     login: async (email, password) => {
+      const priorToken = getStoredToken();
+      clearMockSession();
+      if (priorToken && !isMockToken(priorToken)) {
+        try {
+          await authApi.logout();
+        } catch {
+          // continue with new sign-in even if the old session is already gone
+        }
+      }
+
       if (isMockAuthEnabled()) {
         const session = mockLogin(email, password);
         setStoredToken(session.token);
+        await queryClient.clear();
         return applySession(session);
       }
 
       const data = await authApi.login(email, password);
       setStoredToken(data.token);
       setAuthError(null);
-      await queryClient.invalidateQueries({ queryKey: ['Connection'] });
-      await queryClient.invalidateQueries({ queryKey: ['Message'] });
-      await queryClient.invalidateQueries({ queryKey: ['Profile'] });
+      await queryClient.clear();
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },

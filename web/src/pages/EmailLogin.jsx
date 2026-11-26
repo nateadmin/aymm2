@@ -9,6 +9,7 @@ import { getPostAuthPath } from '@/lib/session';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 import { useToast } from '@/lib/toast';
 import { isMockAuthEnabled, MOCK_LOGIN_EMAIL, MOCK_LOGIN_PASSWORD } from '@/lib/mockAuth';
+import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 
 export default function EmailLogin() {
   const navigate = useNavigate();
@@ -27,7 +28,11 @@ export default function EmailLogin() {
     setSubmitting(true);
     try {
       const session = await login(email.trim(), password);
-      navigate(withPreviewQuery(getPostAuthPath(session), { native: false }), { replace: true });
+      const livePreview = isRealAppPreviewForced() ? '0' : undefined;
+      navigate(
+        withPreviewQuery(getPostAuthPath(session), { native: false, preview: livePreview }),
+        { replace: true },
+      );
     } catch (error) {
       const message = error.payload?.error === 'invalid_credentials'
         ? 'Email or password is incorrect.'
