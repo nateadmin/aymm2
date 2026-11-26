@@ -19,7 +19,7 @@ import { useToast } from '@/lib/toast';
 import { formatLabel } from '@/lib/format';
 import { PLACEHOLDER_AVATAR } from '@/lib/constants';
 import { COMPATIBILITY_CHALLENGE } from '@/lib/prototypeContent';
-import { isConnected } from '@/lib/connections';
+import { emailsMatch, isConnected } from '@/lib/connections';
 
 function profileLocation(profile) {
   const parts = [profile.city, profile.state].filter(Boolean);
@@ -39,7 +39,14 @@ export default function Home() {
   const { profile: authProfile, user, hasProfile, isFamily } = useAuth();
 
   const { myProfile, browseProfiles, isLoading, isEmpty } = useBrowseProfiles();
-  const activeProfile = myProfile || authProfile;
+  const activeProfile = useMemo(() => {
+    const candidate = myProfile || authProfile;
+    if (!candidate || !user?.email) return candidate;
+    if (candidate.user_email && !emailsMatch(candidate.user_email, user.email)) {
+      return null;
+    }
+    return candidate;
+  }, [myProfile, authProfile, user?.email]);
   const {
     sendConnection,
     withdrawConnection,

@@ -5,6 +5,7 @@ import {
   clearMockSession,
   isMockAuthEnabled,
   isMockToken,
+  shouldUseMockCredentials,
   loadMockSession,
   mockLogin,
   mockMe,
@@ -13,9 +14,10 @@ import {
   mockResetPassword,
   mockSaveProfile,
 } from '@/lib/mockAuth';
+import { isPhase2LiveDemoEmail } from '@/lib/phase2LiveDemoAccounts';
 import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 import { isFamilyProfile } from '@/lib/session';
-import { queryClient } from '@/lib/queryClient';
+import { clearClientCaches, clearEphemeralUserData } from '@/lib/clientSessionReset';
 
 const AuthContext = createContext(null);
 
@@ -58,6 +60,14 @@ export function AuthProvider({ children }) {
 
     if (isMockAuthEnabled() && isMockToken(token)) {
       const mockSession = mockMe(token) || loadMockSession();
+      if (mockSession?.user?.email && isPhase2LiveDemoEmail(mockSession.user.email)) {
+        setStoredToken(null);
+        clearMockSession();
+        setUser(null);
+        setProfile(null);
+        setIsLoading(false);
+        return null;
+      }
       if (mockSession) {
         const session = applySession({
           user: mockSession.user,
@@ -87,6 +97,7 @@ export function AuthProvider({ children }) {
         setUser(null);
         setProfile(null);
         setAuthError({ type: 'auth_required' });
+        await clearClientCaches();
       } else {
         setAuthError({ type: 'bootstrap_failed' });
       }
@@ -112,31 +123,56 @@ export function AuthProvider({ children }) {
     isBlocked: Boolean(user?.is_blocked),
     refresh: bootstrap,
     login: async (email, password) => {
-      if (isMockAuthEnabled()) {
+      const normalizedEmail = email.trim().toLowerCase();
+      const forceRealApi = isPhase2LiveDemoEmail(normalizedEmail) || isRealAppPreviewForced();
+      const priorToken = getStoredToken();
+      clearEphemeralUserData();
+      if (priorToken && !isMockToken(priorToken)) {
+        try {
+          await authApi.logout();
+        } catch {
+          // continue with new sign-in even if the old session is already gone
+        }
+      }
+
+      if (shouldUseMockCredentials() && !forceRealApi) {
         const session = mockLogin(email, password);
         setStoredToken(session.token);
+        await clearClientCaches();
         return applySession(session);
       }
 
       const data = await authApi.login(email, password);
       setStoredToken(data.token);
       setAuthError(null);
-      await queryClient.invalidateQueries({ queryKey: ['Connection'] });
-      await queryClient.invalidateQueries({ queryKey: ['Message'] });
-      await queryClient.invalidateQueries({ queryKey: ['Profile'] });
+      applySession({ user: data.user, profile: null });
+      await clearClientCaches();
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },
     register: async (email, password) => {
-      if (isMockAuthEnabled()) {
+      const priorToken = getStoredToken();
+      clearEphemeralUserData();
+      if (priorToken && !isMockToken(priorToken)) {
+        try {
+          await authApi.logout();
+        } catch {
+          // continue — new account must not inherit the previous session
+        }
+      }
+
+      if (shouldUseMockCredentials()) {
         const session = mockRegister(email, password);
         setStoredToken(session.token);
+        await clearClientCaches();
         return applySession(session);
       }
 
       const data = await authApi.register(email, password);
       setStoredToken(data.token);
       setAuthError(null);
+      applySession({ user: data.user, profile: null });
+      await clearClientCaches();
       const session = await bootstrap();
       return session || { user: data.user, profile: null, hasProfile: false };
     },
@@ -161,11 +197,11 @@ export function AuthProvider({ children }) {
           // ignore logout failures for local cleanup
         }
       }
-      clearMockSession();
       setStoredToken(null);
       setUser(null);
       setProfile(null);
       setAuthError({ type: 'auth_required' });
+      await clearClientCaches();
     },
     setProfileState: (updater) => {
       setProfile((previous) => {

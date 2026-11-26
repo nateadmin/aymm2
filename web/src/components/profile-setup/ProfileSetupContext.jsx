@@ -8,8 +8,11 @@ import React, {
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
+import { getStoredToken } from '@/api/client';
 import { profileApi } from '@/api/profile';
 import { useAuth } from '@/lib/auth';
+import { isMockToken } from '@/lib/mockAuth';
+import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 import { useToast } from '@/lib/toast';
 import {
   ONBOARDING_STEPS,
@@ -176,8 +179,12 @@ export function ProfileSetupProvider({ children }) {
     if (isProfileEditPath(location.pathname)) return;
 
     if (isOnboardingEntryPath(location.pathname)) {
+      const livePreview = isRealAppPreviewForced() || !isMockToken(getStoredToken()) ? '0' : undefined;
       navigate(
-        withPreviewQuery(getPostAuthPath({ user, profile: authProfile, hasProfile })),
+        withPreviewQuery(getPostAuthPath({ user, profile: authProfile, hasProfile }), {
+          native: false,
+          preview: livePreview,
+        }),
         { replace: true },
       );
     }

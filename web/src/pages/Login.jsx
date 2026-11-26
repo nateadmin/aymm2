@@ -1,5 +1,7 @@
 import { Mail, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { withPreviewQuery } from '@/lib/screenCatalog';
+import { isRealAppPreviewForced } from '@/lib/stagingPreview';
 import AuthPage from '@/components/mobile/AuthPage';
 import HeartLogo from '@/components/brand/HeartLogo';
 import SocialAuthButton from '@/components/ui/SocialAuthButton';
@@ -52,7 +54,15 @@ export default function Login() {
         <SocialAuthButton icon={<FacebookIcon />}>Continue with Facebook</SocialAuthButton>
         <SocialAuthButton icon={<InstagramIcon />}>Continue with Instagram</SocialAuthButton>
         <div className="auth-divider">or</div>
-        <SocialAuthButton icon={<Mail size={18} />} onClick={() => navigate('/EmailLogin')}>
+        <SocialAuthButton
+          icon={<Mail size={18} />}
+          onClick={() => navigate(
+            withPreviewQuery(
+              '/EmailLogin',
+              { native: false, preview: isRealAppPreviewForced() ? '0' : undefined },
+            ),
+          )}
+        >
           Continue with Email
         </SocialAuthButton>
         <SocialAuthButton icon={<Phone size={18} />} onClick={() => navigate('/PhoneLogin')}>

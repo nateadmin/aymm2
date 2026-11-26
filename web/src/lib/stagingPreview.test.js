@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isDesignReviewHost, isRealAppPreviewForced } from './stagingPreview.js';
+import {
+  isDesignReviewHost,
+  isProductionBrandedHost,
+  isStagingPreviewEnabled,
+} from './stagingPreview.js';
 
 test('isDesignReviewHost matches staging and review environments', () => {
   assert.equal(isDesignReviewHost('aymm.app'), true);
@@ -12,4 +16,9 @@ test('isDesignReviewHost matches staging and review environments', () => {
   assert.equal(isDesignReviewHost('nateadmin.github.io'), true);
   assert.equal(isDesignReviewHost('demo.trycloudflare.com'), true);
   assert.equal(isDesignReviewHost('example.com'), false);
+});
+
+test('production branded host defaults to live app mode', () => {
+  assert.equal(isProductionBrandedHost('aymm.app'), true);
+  assert.equal(isProductionBrandedHost('localhost'), false);
 });

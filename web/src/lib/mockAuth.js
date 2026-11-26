@@ -3,7 +3,12 @@ import {
   MOCK_DISCOVERY_PASSWORD,
 } from './mockDiscoveryAccounts.js';
 import { clearMockConnections } from './mockConnections.js';
-import { isDesignReviewHost, isRealAppPreviewForced, isStagingPreviewEnabled } from './stagingPreview.js';
+import {
+  isDesignReviewHost,
+  isRealAppPreviewForced,
+  isStagingPreviewEnabled,
+  readPreviewParam,
+} from './stagingPreview.js';
 
 const MOCK_TOKEN_PREFIX = 'mock:';
 const MOCK_SESSION_KEY = 'aymm_mock_session';
@@ -36,6 +41,16 @@ export function isMockAuthEnabled(hostname = typeof window !== 'undefined' ? win
 
 export function isMockToken(token) {
   return typeof token === 'string' && token.startsWith(MOCK_TOKEN_PREFIX);
+}
+
+/**
+ * Mock login/register only when the URL explicitly requests design preview (`?preview=1`).
+ * On aymm.app without that flag, sign-up and sign-in use the real API.
+ */
+export function shouldUseMockCredentials() {
+  if (isRealAppPreviewForced()) return false;
+  if (!isMockAuthEnabled()) return false;
+  return readPreviewParam() === '1';
 }
 
 function saveMockSession(session) {
@@ -127,6 +142,7 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
   }
 
   const existing = loadMockSession();
+  const sameAccount = existing?.user?.email === normalized;
   const demoProfile = {
     user_email: normalized,
     display_name: 'Design Review',
@@ -141,10 +157,10 @@ export function mockLogin(email, password, { completeProfile = true } = {}) {
         ? discoveryAccount.profile
         : matchesDemo
           ? demoProfile
-          : existing?.profile?.setup_complete
+          : sameAccount && existing?.profile?.setup_complete
             ? existing.profile
             : demoProfile
-      : existing?.profile ?? null,
+      : sameAccount ? existing?.profile ?? null : null,
   };
 
   saveMockSession(session);

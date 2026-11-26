@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import BackButton from '@/components/mobile/BackButton';
@@ -70,14 +70,33 @@ export default function ProfileSettings() {
   const [showReport, setShowReport] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [reportText, setReportText] = useState('');
-  const [notificationPrefs, setNotificationPrefs] = useState(() => {
-    try {
-      const raw = localStorage.getItem('aymm_notification_prefs');
-      return raw ? JSON.parse(raw) : { messages: true, tables: true, marketing: false };
-    } catch {
-      return { messages: true, tables: true, marketing: false };
-    }
+  const notificationPrefsKey = user?.email
+    ? `aymm_notification_prefs_${user.email.trim().toLowerCase()}`
+    : null;
+  const [notificationPrefs, setNotificationPrefs] = useState({
+    messages: true,
+    tables: true,
+    marketing: false,
   });
+
+  useEffect(() => {
+    if (!notificationPrefsKey) return;
+    try {
+      const raw = localStorage.getItem(notificationPrefsKey);
+      if (raw) {
+        setNotificationPrefs(JSON.parse(raw));
+        return;
+      }
+      const legacy = localStorage.getItem('aymm_notification_prefs');
+      if (legacy) {
+        const parsed = JSON.parse(legacy);
+        setNotificationPrefs(parsed);
+        localStorage.setItem(notificationPrefsKey, legacy);
+      }
+    } catch {
+      setNotificationPrefs({ messages: true, tables: true, marketing: false });
+    }
+  }, [notificationPrefsKey]);
 
   const blocksQuery = useEntityList('Block', { blocker_email: user?.email }, {
     enabled: Boolean(user?.email),
@@ -145,7 +164,9 @@ export default function ProfileSettings() {
 
   const saveNotificationPrefs = (next) => {
     setNotificationPrefs(next);
-    localStorage.setItem('aymm_notification_prefs', JSON.stringify(next));
+    if (notificationPrefsKey) {
+      localStorage.setItem(notificationPrefsKey, JSON.stringify(next));
+    }
   };
 
   return (
@@ -161,6 +182,12 @@ export default function ProfileSettings() {
             <p className="prototype-settings__name">{profile.display_name}</p>
             <p className="prototype-settings__meta">
               {role}{location ? ` · ${location}` : ''}
+              {user?.email ? (
+                <>
+                  <br />
+                  <span className="aymm-muted">{user.email}</span>
+                </>
+              ) : null}
             </p>
           </div>
         </div>

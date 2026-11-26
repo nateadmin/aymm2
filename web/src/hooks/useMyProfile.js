@@ -1,8 +1,9 @@
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { profileApi } from '@/api/profile';
 import { useAuth } from '@/lib/auth';
+import { emailsMatch } from '@/lib/connections';
 import { resolveProfileBio } from '@/lib/profileDisplay';
-import { mergeProfileState } from '@/lib/session';
 
 export function useMyProfile() {
   const { user, profile: authProfile } = useAuth();
@@ -17,16 +18,32 @@ export function useMyProfile() {
   });
 
   const fromMe = query.data ?? null;
-  const merged = fromMe && authProfile
-    ? mergeProfileState(fromMe, authProfile)
-    : fromMe ?? authProfile ?? null;
-  const profile = merged
-    ? { ...merged, bio: resolveProfileBio(authProfile, merged) || merged.bio }
-    : null;
+  const profile = useMemo(() => {
+    const accountEmail = user?.email;
+    const authMatches = authProfile && accountEmail
+      && emailsMatch(authProfile.user_email, accountEmail);
+    const meMatches = fromMe && accountEmail && emailsMatch(fromMe.user_email, accountEmail);
+
+    const base = meMatches ? fromMe : authMatches ? authProfile : fromMe ?? authProfile ?? null;
+    if (!base) return null;
+  if (accountEmail && base.user_email && !emailsMatch(base.user_email, accountEmail)) {
+      return null;
+    }
+    return {
+      ...base,
+      bio: resolveProfileBio(authProfile, base) || base.bio,
+    };
+  }, [fromMe, authProfile, user?.email]);
+
+  const profileMismatch = Boolean(
+    user?.email
+    && authProfile?.user_email
+    && !emailsMatch(authProfile.user_email, user.email),
+  );
 
   return {
     ...query,
     profile,
-    isLoading: query.isLoading && !authProfile,
+    isLoading: (query.isLoading && !profile) || profileMismatch,
   };
 }

@@ -4,6 +4,7 @@ import BrandLockup from '@/components/brand/BrandLockup';
 import { useAuth } from '@/lib/auth';
 import AppNavLinks from './AppNavLinks';
 import BottomNav from './BottomNav';
+import RealSessionPreviewGuard from './RealSessionPreviewGuard';
 import RightSidebarShell from './RightSidebarShell';
 
 export default function AppLayout() {
@@ -19,6 +20,7 @@ export default function AppLayout() {
 
   return (
     <div className="app-layout">
+      <RealSessionPreviewGuard />
       <aside className="app-sidebar" aria-label="Primary navigation">
         <div className="app-sidebar__brand">
           <BrandLockup compact showSubtitle={false} />

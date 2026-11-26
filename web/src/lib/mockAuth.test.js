@@ -6,12 +6,17 @@ import {
   MOCK_LOGIN_PASSWORD,
   isMockAuthEnabled,
   isMockToken,
+  shouldUseMockCredentials,
   mockLogin,
   mockRegister,
   mockSaveProfile,
   loadMockSession,
   clearMockSession,
 } from './mockAuth.js';
+
+test('shouldUseMockCredentials requires explicit preview=1', () => {
+  assert.equal(shouldUseMockCredentials(), false);
+});
 
 test('isMockAuthEnabled is off on live staging without preview=1', () => {
   assert.equal(isMockAuthEnabled('aymm.app'), false);
@@ -40,6 +45,15 @@ test('mockLogin loads Phase 2 discovery persona profile', () => {
   const session = mockLogin('daughter.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
   assert.equal(session.profile.identity_type, 'daughter');
   assert.equal(session.profile.display_name, 'Sarah');
+});
+
+test('mockLogin does not reuse another account profile after switching emails', () => {
+  clearMockSession();
+  mockLogin('daughter.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
+  const mother = mockLogin('mother.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
+  assert.equal(mother.user.email, 'mother.demo@aymm.test');
+  assert.equal(mother.profile.display_name, 'Linda');
+  assert.notEqual(mother.profile.user_email, 'daughter.demo@aymm.test');
 });
 
 test('mockSaveProfile stores onboarding progress', () => {
