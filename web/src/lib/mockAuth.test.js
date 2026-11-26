@@ -47,7 +47,7 @@ test('mockLogin does not reuse another account profile after switching emails', 
   mockLogin('daughter.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
   const mother = mockLogin('mother.demo@aymm.test', MOCK_DISCOVERY_PASSWORD);
   assert.equal(mother.user.email, 'mother.demo@aymm.test');
-  assert.equal(mother.profile.display_name, 'Deborah');
+  assert.equal(mother.profile.display_name, 'Linda');
   assert.notEqual(mother.profile.user_email, 'daughter.demo@aymm.test');
 });
 
