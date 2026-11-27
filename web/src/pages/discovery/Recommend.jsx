@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { RECOMMEND_CHANNELS } from '@/lib/discoveryContent';
 import { RECOMMEND_PROFILE } from '@/lib/discoveryProfiles';
@@ -93,16 +94,18 @@ export default function Recommend() {
           ) : null}
         </div>
 
-        <Button
-          variant={canSend ? 'primary' : 'disabled'}
-          disabled={!canSend}
-          onClick={() => {
-            push('Recommendation ready to send.', 'success');
-            navigate(withNavPreviewQuery('/Discovery/daughter-profile', reviewSession, { native: false }));
-          }}
-        >
-          Send Recommendation
-        </Button>
+        <MobileHandheldFooter>
+          <Button
+            variant={canSend ? 'primary' : 'disabled'}
+            disabled={!canSend}
+            onClick={() => {
+              push('Recommendation ready to send.', 'success');
+              navigate(withNavPreviewQuery('/Discovery/daughter-profile', reviewSession, { native: false }));
+            }}
+          >
+            Send Recommendation
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

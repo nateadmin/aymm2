@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/auth';
 import { resolveAppRoute, resolveMessagesPath } from '@/lib/appRoutes';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import HeartLogo from '@/components/brand/HeartLogo';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { DAUGHTER_PROFILE } from '@/lib/discoveryProfiles';
 import { withNavPreviewQuery } from '@/lib/screenCatalog';
@@ -52,7 +53,7 @@ export default function ConnectionSuccess() {
           </ul>
         </div>
 
-        <div className="connection-success__actions">
+        <MobileHandheldFooter variant="connection">
           <Button
             onClick={() => navigate(
               withNavPreviewQuery(resolveAppRoute('home', reviewSession), reviewSession, { native: false }),
@@ -72,7 +73,7 @@ export default function ConnectionSuccess() {
           >
             Go to Letters
           </Button>
-        </div>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

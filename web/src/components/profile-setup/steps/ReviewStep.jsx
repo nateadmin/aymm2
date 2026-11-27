@@ -9,6 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
@@ -123,9 +124,11 @@ export default function ReviewStep() {
           </div>
         </div>
 
-        <Button disabled={saving} onClick={completeOnboarding}>
-          {saving ? 'Submitting...' : 'Submit Profile'}
-        </Button>
+        <MobileHandheldFooter>
+          <Button disabled={saving} onClick={completeOnboarding}>
+            {saving ? 'Submitting...' : 'Submit Profile'}
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

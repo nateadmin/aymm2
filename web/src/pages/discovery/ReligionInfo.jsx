@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { RELIGION_INFO_OPTIONS } from '@/lib/discoveryContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -49,9 +50,11 @@ export default function ReligionInfo() {
           </div>
         </div>
 
-        <Button onClick={() => navigate(withPreviewQuery('/Discovery/recommend'))}>
-          Continue
-        </Button>
+        <MobileHandheldFooter>
+          <Button onClick={() => navigate(withPreviewQuery('/Discovery/recommend'))}>
+            Continue
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

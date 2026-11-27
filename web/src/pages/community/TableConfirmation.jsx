@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import CommunityScreen from '@/components/community/CommunityScreen';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { withPreviewQuery } from '@/lib/screenCatalog';
 
@@ -45,9 +46,11 @@ export default function TableConfirmation() {
           </ul>
         </div>
 
-        <Button onClick={() => navigate(withPreviewQuery('/Community/family-table-listing'))}>
-          Back to Family Tables
-        </Button>
+        <MobileHandheldFooter variant="connection">
+          <Button onClick={() => navigate(withPreviewQuery('/Community/family-table-listing'))}>
+            Back to Family Tables
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </CommunityScreen>
   );

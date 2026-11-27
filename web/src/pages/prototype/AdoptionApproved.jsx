@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PrototypeScreen from '@/components/prototype/PrototypeScreen';
 import HeartLogo from '@/components/brand/HeartLogo';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { ADOPTION_APPROVED } from '@/lib/prototypeContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -47,7 +48,7 @@ export default function AdoptionApproved() {
           </ul>
         </div>
 
-        <div className="connection-success__actions">
+        <MobileHandheldFooter variant="connection">
           <Button onClick={() => navigate(withPreviewQuery('/Community/open-conversation'))}>
             Send a Message
           </Button>
@@ -57,7 +58,7 @@ export default function AdoptionApproved() {
           <Button variant="outline" onClick={() => navigate(withPreviewQuery('/Prototype/home'))}>
             Return Home
           </Button>
-        </div>
+        </MobileHandheldFooter>
       </div>
     </PrototypeScreen>
   );
