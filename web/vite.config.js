@@ -14,7 +14,7 @@ export default defineConfig({
     host: true,
     allowedHosts: true,
     proxy: {
-      '/api': 'http://127.0.0.1:3000',
+      '/api': process.env.AYMM_API_PROXY || 'http://127.0.0.1:3000',
     },
   },
   preview: {
