@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import HeartLogo from '@/components/brand/HeartLogo';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth';
 import { getPostAuthPath } from '@/lib/session';
@@ -50,20 +51,22 @@ export default function CompleteStep() {
           </ul>
         </div>
 
-        <Button
-          onClick={() => {
-            const livePreview = isRealAppPreviewForced() || !isMockToken(getStoredToken()) ? '0' : undefined;
-            navigate(
-              withPreviewQuery(getPostAuthPath({ user, profile, hasProfile }), {
-                native: false,
-                preview: livePreview,
-              }),
-              { replace: true },
-            );
-          }}
-        >
-          Start Finding Family
-        </Button>
+        <MobileHandheldFooter>
+          <Button
+            onClick={() => {
+              const livePreview = isRealAppPreviewForced() || !isMockToken(getStoredToken()) ? '0' : undefined;
+              navigate(
+                withPreviewQuery(getPostAuthPath({ user, profile, hasProfile }), {
+                  native: false,
+                  preview: livePreview,
+                }),
+                { replace: true },
+              );
+            }}
+          >
+            Start Finding Family
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

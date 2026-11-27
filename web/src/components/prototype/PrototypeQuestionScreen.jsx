@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import { useState } from 'react';
 import PrototypeScreen from './PrototypeScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 
 export default function PrototypeQuestionScreen({
@@ -64,13 +65,15 @@ export default function PrototypeQuestionScreen({
           </div>
         </div>
 
-        <Button
-          variant={complete ? 'primary' : 'disabled'}
-          disabled={!complete}
-          onClick={onContinue}
-        >
-          Continue
-        </Button>
+        <MobileHandheldFooter>
+          <Button
+            variant={complete ? 'primary' : 'disabled'}
+            disabled={!complete}
+            onClick={onContinue}
+          >
+            Continue
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </PrototypeScreen>
   );

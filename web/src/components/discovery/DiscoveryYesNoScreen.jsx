@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 
 function YesNoToggle({ value, onChange, label }) {
@@ -70,13 +71,15 @@ export default function DiscoveryYesNoScreen({
           </div>
         </div>
 
-        <Button
-          variant={allAnswered ? 'primary' : 'disabled'}
-          disabled={!allAnswered}
-          onClick={() => navigate(continueTo)}
-        >
-          Continue
-        </Button>
+        <MobileHandheldFooter>
+          <Button
+            variant={allAnswered ? 'primary' : 'disabled'}
+            disabled={!allAnswered}
+            onClick={() => navigate(continueTo)}
+          >
+            Continue
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

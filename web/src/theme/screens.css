@@ -1029,10 +1029,26 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
     padding-bottom: var(--space-screen-footer);
     background: var(--aymm-white);
     box-shadow: 0 -10px 24px -20px rgb(63 33 77 / 35%);
+    box-sizing: border-box;
+    margin-left: calc(-1 * var(--space-screen-x));
+    margin-right: calc(-1 * var(--space-screen-x));
+    padding-left: var(--space-screen-x);
+    padding-right: var(--space-screen-x);
+    width: calc(100% + 2 * var(--space-screen-x));
+    max-width: none;
   }
 
-  .screen-pad--handheld > .aymm-button {
+  .screen-pad--handheld > .mobile-onboarding__actions .aymm-button,
+  .screen-pad--handheld > .connection-success__actions .aymm-button {
+    max-width: none;
+  }
+
+  .screen-pad--handheld > .aymm-button:last-child {
+    flex: 0 0 auto;
+    margin-top: auto;
     padding-bottom: var(--space-screen-footer);
+    max-width: none;
+    align-self: stretch;
   }
 
   .mobile-onboarding--scroll {
@@ -3431,11 +3447,60 @@ html[data-keyboard-open] .screen-pad--handheld > .connection-success__actions {
     padding-bottom: var(--space-screen-footer);
     background: var(--aymm-white);
     box-shadow: 0 -10px 24px -20px rgb(63 33 77 / 35%);
+    box-sizing: border-box;
+    margin-left: calc(-1 * var(--space-screen-x));
+    margin-right: calc(-1 * var(--space-screen-x));
+    padding-left: var(--space-screen-x);
+    padding-right: var(--space-screen-x);
+    width: calc(100% + 2 * var(--space-screen-x));
+    max-width: none;
   }
+}
 
-  .mobile-canvas .screen-pad--handheld > .aymm-button {
-    padding-bottom: var(--space-screen-footer);
-  }
+/* Real phones (live aymm.app): same pinned footer as narrow layout. */
+html[data-real-device] .mobile-screen__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+html[data-real-device] .mobile-screen__body > .screen-pad--handheld,
+html[data-real-device] .mobile-screen__body > .screen-pad--auth {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+html[data-real-device] .screen-pad--handheld.mobile-onboarding--scroll > .mobile-onboarding__content,
+html[data-real-device] .screen-pad--handheld:not(.mobile-onboarding--scroll) > .mobile-onboarding__content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+html[data-real-device] .screen-pad--handheld > .aymm-button:last-child,
+html[data-real-device] .screen-pad--handheld > .mobile-onboarding__actions,
+html[data-real-device] .screen-pad--handheld > .connection-success__actions {
+  flex: 0 0 auto;
+  margin-top: auto;
+}
+
+html[data-real-device] .screen-pad--handheld > .mobile-onboarding__actions,
+html[data-real-device] .screen-pad--handheld > .connection-success__actions {
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-screen-footer);
+  background: var(--aymm-white);
+  box-shadow: 0 -10px 24px -20px rgb(63 33 77 / 35%);
+  box-sizing: border-box;
+  margin-left: calc(-1 * var(--space-screen-x));
+  margin-right: calc(-1 * var(--space-screen-x));
+  padding-left: var(--space-screen-x);
+  padding-right: var(--space-screen-x);
+  width: calc(100% + 2 * var(--space-screen-x));
+  max-width: none;
 }
 
 /* ?native=1 — interactive review as on a real phone (no desktop frame mock). */

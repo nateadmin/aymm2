@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getStoredToken } from '@/api/client';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import MobileOnboardingProgress from '@/components/profile-setup/MobileOnboardingProgress';
 import { useProfileSetup } from '@/components/profile-setup/ProfileSetupContext';
@@ -83,7 +84,7 @@ export default function UploadVideoStep() {
           </div>
         </div>
 
-        <div className="mobile-onboarding__actions">
+        <MobileHandheldFooter>
           {hasVideo ? (
             <Button disabled={saving || uploading} onClick={() => handleContinue(false)}>
               Continue
@@ -96,7 +97,7 @@ export default function UploadVideoStep() {
           >
             Skip for now
           </Button>
-        </div>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import PrototypeScreen from '@/components/prototype/PrototypeScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { MESSAGE_REQUEST_DETAIL } from '@/lib/prototypeContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -41,14 +42,14 @@ export default function MessageRequestDetail() {
           </p>
         </div>
 
-        <div className="prototype-message-request__actions">
+        <MobileHandheldFooter>
           <Button onClick={() => navigate(withPreviewQuery('/Community/open-conversation'))}>
             Accept Request
           </Button>
           <Button variant="outline" onClick={() => navigate(withPreviewQuery('/Community/message-requests'))}>
             Decline
           </Button>
-        </div>
+        </MobileHandheldFooter>
       </div>
     </PrototypeScreen>
   );

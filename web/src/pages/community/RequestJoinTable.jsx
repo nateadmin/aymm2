@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CommunityScreen from '@/components/community/CommunityScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { JOHNSON_TABLE } from '@/lib/communityContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -45,9 +46,11 @@ export default function RequestJoinTable() {
           </label>
         </div>
 
-        <Button onClick={() => navigate(withPreviewQuery('/Community/table-confirmation'))}>
-          Send Request
-        </Button>
+        <MobileHandheldFooter>
+          <Button onClick={() => navigate(withPreviewQuery('/Community/table-confirmation'))}>
+            Send Request
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </CommunityScreen>
   );

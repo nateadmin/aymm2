@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PrototypeScreen from '@/components/prototype/PrototypeScreen';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { FAMILY_MATCH } from '@/lib/prototypeContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -43,14 +44,14 @@ export default function AymmFamilyMatch() {
           </ul>
         </div>
 
-        <div className="connection-success__actions">
+        <MobileHandheldFooter variant="connection">
           <Button onClick={() => navigate(withPreviewQuery('/Community/open-conversation'))}>
             Send a Message
           </Button>
           <Button variant="outline" onClick={() => navigate(withPreviewQuery('/Community/family-table-listing'))}>
             View Family Table
           </Button>
-        </div>
+        </MobileHandheldFooter>
       </div>
     </PrototypeScreen>
   );

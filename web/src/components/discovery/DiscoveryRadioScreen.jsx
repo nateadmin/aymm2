@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileScreen from '@/components/mobile/MobileScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 
 export default function DiscoveryRadioScreen({
@@ -49,13 +50,15 @@ export default function DiscoveryRadioScreen({
           </div>
         </div>
 
-        <Button
-          variant={selected ? 'primary' : 'disabled'}
-          disabled={!selected}
-          onClick={() => navigate(continueTo)}
-        >
-          Continue
-        </Button>
+        <MobileHandheldFooter>
+          <Button
+            variant={selected ? 'primary' : 'disabled'}
+            disabled={!selected}
+            onClick={() => navigate(continueTo)}
+          >
+            Continue
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </MobileScreen>
   );

@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PrototypeScreen from '@/components/prototype/PrototypeScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { RELIGION_OPTIONS } from '@/lib/prototypeContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -60,9 +61,11 @@ export default function ReligionSelector() {
           </div>
         </div>
 
-        <Button onClick={() => navigate(withPreviewQuery('/Prototype/profile-carousel'))}>
-          Continue
-        </Button>
+        <MobileHandheldFooter>
+          <Button onClick={() => navigate(withPreviewQuery('/Prototype/profile-carousel'))}>
+            Continue
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </PrototypeScreen>
   );

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CommunityScreen from '@/components/community/CommunityScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import FamilyTableHostForm from '@/components/community/FamilyTableHostForm';
 import {
@@ -42,13 +43,15 @@ export default function RegisterTable() {
           <FamilyTableHostForm value={form} onChange={setForm} />
         </div>
 
-        <Button
-          variant={valid ? 'primary' : 'disabled'}
-          disabled={!valid}
-          onClick={registerTable}
-        >
-          Register Table
-        </Button>
+        <MobileHandheldFooter>
+          <Button
+            variant={valid ? 'primary' : 'disabled'}
+            disabled={!valid}
+            onClick={registerTable}
+          >
+            Register Table
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </CommunityScreen>
   );

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PrototypeScreen from '@/components/prototype/PrototypeScreen';
 import BackButton from '@/components/mobile/BackButton';
+import MobileHandheldFooter from '@/components/mobile/MobileHandheldFooter';
 import Button from '@/components/ui/Button';
 import { COMPATIBILITY_CHALLENGE } from '@/lib/prototypeContent';
 import { withPreviewQuery } from '@/lib/screenCatalog';
@@ -50,9 +51,11 @@ export default function CompatibilityChallenge() {
           </div>
         </div>
 
-        <Button onClick={() => navigate(backTarget)}>
-          Continue
-        </Button>
+        <MobileHandheldFooter>
+          <Button onClick={() => navigate(backTarget)}>
+            Continue
+          </Button>
+        </MobileHandheldFooter>
       </div>
     </PrototypeScreen>
   );
